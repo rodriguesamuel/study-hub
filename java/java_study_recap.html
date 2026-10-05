@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Java Study Recap</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+  <style>
+    :root {
+      --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      --font-mono: 'Cascadia Code', 'Fira Code', 'JetBrains Mono', Menlo, Consolas, monospace;
+      --border: #e2e8f0;
+      --border-strong: #cbd5e1;
+      --text-primary: #0f172a;
+      --text-secondary: #475569;
+      --text-muted: #94a3b8;
+      --text-accent: #1a56db;
+      --surface-0: #f8fafc;
+      --surface-1: #f1f5f9;
+      --surface-2: #ffffff;
+    }
+    html { background: #f1f5f9; min-height: 100vh; }
+    body { max-width: 720px; margin: 0 auto; padding: 2rem; }
+  </style>
+</head>
+<body>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--font-sans); background: transparent; }
+  .wrap { padding: 1rem 0 2rem; max-width: 680px; }
+  .hero { display: flex; align-items: center; gap: 12px; margin-bottom: 1.5rem; border-bottom: 0.5px solid var(--border); padding-bottom: 1rem; }
+  .hero-icon { width: 44px; height: 44px; background: #e8f0fe; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 22px; }
+  .hero h1 { font-size: 20px; font-weight: 500; color: var(--text-primary); }
+  .hero p { font-size: 13px; color: var(--text-secondary); margin-top: 2px; }
+  .tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 1.25rem; }
+  .tab { padding: 6px 14px; border-radius: 20px; border: 0.5px solid var(--border-strong); font-size: 13px; cursor: pointer; background: var(--surface-1); color: var(--text-secondary); transition: all 0.15s; }
+  .tab:hover { background: var(--surface-2); color: var(--text-primary); }
+  .tab.active { background: #1a56db; color: #fff; border-color: #1a56db; }
+  .section { display: none; }
+  .section.visible { display: block; }
+  .card { background: var(--surface-2); border: 0.5px solid var(--border); border-radius: 12px; padding: 1rem 1.25rem; margin-bottom: 1rem; }
+  .card h3 { font-size: 15px; font-weight: 500; color: var(--text-primary); margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+  .card p { font-size: 14px; color: var(--text-secondary); line-height: 1.65; margin-bottom: 8px; }
+  .card p:last-child { margin-bottom: 0; }
+  pre { background: var(--surface-0); border: 0.5px solid var(--border); border-radius: 8px; padding: 12px 14px; font-family: var(--font-mono); font-size: 12.5px; color: var(--text-primary); overflow-x: auto; margin: 8px 0; line-height: 1.6; }
+  .kw { color: #2563eb; }
+  .cm { color: var(--text-muted); font-style: italic; }
+  .st { color: #16a34a; }
+  .num { color: #d97706; }
+  .badge { display: inline-block; font-size: 11px; padding: 2px 8px; border-radius: 20px; font-weight: 500; margin-left: 6px; }
+  .badge-blue { background: #dbeafe; color: #1e40af; }
+  .badge-green { background: #dcfce7; color: #166534; }
+  .badge-amber { background: #fef3c7; color: #92400e; }
+  .badge-red { background: #fee2e2; color: #991b1b; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .tip { background: #eff6ff; border-left: 3px solid #3b82f6; border-radius: 0 8px 8px 0; padding: 10px 12px; margin: 8px 0; font-size: 13px; color: #1e3a8a; }
+  .warn { background: #fffbeb; border-left: 3px solid #f59e0b; border-radius: 0 8px 8px 0; padding: 10px 12px; margin: 8px 0; font-size: 13px; color: #78350f; }
+  .progress-bar { height: 3px; background: var(--border); border-radius: 3px; margin-bottom: 1.5rem; }
+  .progress-fill { height: 100%; background: #1a56db; border-radius: 3px; transition: width 0.3s; }
+  .topic-label { font-size: 12px; color: var(--text-muted); margin-bottom: 6px; }
+  .collapse-btn { cursor: pointer; background: none; border: none; font-size: 13px; color: var(--text-accent, #1a56db); padding: 0; margin-top: 6px; }
+  .collapse-content { overflow: hidden; max-height: 0; transition: max-height 0.3s ease; }
+  .collapse-content.open { max-height: 600px; }
+  h2.section-title { font-size: 16px; font-weight: 500; color: var(--text-primary); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+  .tag-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+  .tag { font-size: 12px; padding: 3px 10px; border-radius: 20px; background: var(--surface-1); border: 0.5px solid var(--border); color: var(--text-secondary); }
+</style>
+
+<div class="wrap">
+  <div class="hero">
+    <div class="hero-icon">☕</div>
+    <div>
+      <h1>Java study recap</h1>
+      <p>Core concepts every Java developer needs to know</p>
+    </div>
+  </div>
+
+  <div class="progress-bar"><div class="progress-fill" id="prog" style="width:14%"></div></div>
+  <div class="topic-label" id="prog-label">Topic 1 of 7 — OOP fundamentals</div>
+
+  <div class="tabs">
+    <div class="tab active" onclick="show(0)">OOP</div>
+    <div class="tab" onclick="show(1)">Data types</div>
+    <div class="tab" onclick="show(2)">Collections</div>
+    <div class="tab" onclick="show(3)">Exceptions</div>
+    <div class="tab" onclick="show(4)">Concurrency</div>
+    <div class="tab" onclick="show(5)">Streams</div>
+    <div class="tab" onclick="show(6)">Key patterns</div>
+  </div>
+
+  <!-- OOP -->
+  <div class="section visible" id="s0">
+    <h2 class="section-title"><i class="ti ti-building-arch" aria-hidden="true"></i> OOP fundamentals</h2>
+    <div class="card">
+      <h3>The 4 pillars</h3>
+      <div class="grid2">
+        <div><span class="badge badge-blue">Encapsulation</span><p style="margin-top:6px">Hiding state behind private fields + public getters/setters.</p></div>
+        <div><span class="badge badge-green">Inheritance</span><p style="margin-top:6px">A class extends another, reusing and extending behavior.</p></div>
+        <div><span class="badge badge-amber">Polymorphism</span><p style="margin-top:6px">Same method call behaves differently based on the object's real type.</p></div>
+        <div><span class="badge badge-red">Abstraction</span><p style="margin-top:6px">Expose only what's needed; hide the implementation via interfaces or abstract classes.</p></div>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Class vs. interface vs. abstract class</h3>
+      <pre><span class="kw">interface</span> Drawable {
+  <span class="kw">void</span> draw(); <span class="cm">// implicitly public abstract</span>
+  <span class="kw">default void</span> log() { System.out.println(<span class="st">"drawn"</span>); }
+}
+
+<span class="kw">abstract class</span> Shape {
+  <span class="kw">abstract double</span> area(); <span class="cm">// must override</span>
+  <span class="kw">void</span> describe() { System.out.println(<span class="st">"I am a shape"</span>); }
+}
+
+<span class="kw">class</span> Circle <span class="kw">extends</span> Shape <span class="kw">implements</span> Drawable {
+  <span class="kw">double</span> r;
+  Circle(<span class="kw">double</span> r) { <span class="kw">this</span>.r = r; }
+  <span class="kw">public double</span> area() { <span class="kw">return</span> Math.PI * r * r; }
+  <span class="kw">public void</span> draw() { System.out.println(<span class="st">"⬤"</span>); }
+}</pre>
+      <div class="tip">Prefer interfaces over abstract classes. A class can implement many interfaces but only extend one class.</div>
+    </div>
+    <div class="card">
+      <h3>Key keywords</h3>
+      <div class="tag-row">
+        <span class="tag"><code>static</code> — belongs to class, not instance</span>
+        <span class="tag"><code>final</code> — can't be overridden / reassigned</span>
+        <span class="tag"><code>super</code> — call parent method/constructor</span>
+        <span class="tag"><code>this</code> — current instance</span>
+        <span class="tag"><code>instanceof</code> — runtime type check</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Data types -->
+  <div class="section" id="s1">
+    <h2 class="section-title"><i class="ti ti-database" aria-hidden="true"></i> Data types &amp; memory</h2>
+    <div class="card">
+      <h3>Primitives vs. wrapper classes</h3>
+      <pre><span class="kw">int</span> a = <span class="num">5</span>;          <span class="cm">// primitive — stack, fast</span>
+Integer b = <span class="num">5</span>;      <span class="cm">// wrapper — heap, nullable</span>
+Integer c = a;       <span class="cm">// autoboxing (int → Integer)</span>
+<span class="kw">int</span> d = b;           <span class="cm">// unboxing (Integer → int)</span></pre>
+      <div class="warn">Avoid unboxing when the wrapper could be null — NullPointerException incoming.</div>
+      <div class="tag-row">
+        <span class="tag">byte / Byte</span><span class="tag">short / Short</span>
+        <span class="tag">int / Integer</span><span class="tag">long / Long</span>
+        <span class="tag">float / Float</span><span class="tag">double / Double</span>
+        <span class="tag">char / Character</span><span class="tag">boolean / Boolean</span>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Strings — immutable!</h3>
+      <pre>String s = <span class="st">"hello"</span>;
+s.concat(<span class="st">" world"</span>);   <span class="cm">// new object — s unchanged</span>
+s = s + <span class="st">" world"</span>;    <span class="cm">// creates new String each time</span>
+
+StringBuilder sb = <span class="kw">new</span> StringBuilder();
+sb.append(<span class="st">"hello"</span>).append(<span class="st">" world"</span>); <span class="cm">// mutable, faster in loops</span>
+String result = sb.toString();</pre>
+      <div class="tip">Use <code>StringBuilder</code> for string concatenation inside loops. <code>StringJoiner</code> / <code>String.join()</code> for joining with delimiters.</div>
+    </div>
+    <div class="card">
+      <h3>Stack vs. heap</h3>
+      <p><strong>Stack</strong> — stores primitives and references (fast, limited size, LIFO). Each thread has its own stack.</p>
+      <p><strong>Heap</strong> — stores objects. Shared across threads. Managed by the Garbage Collector (GC).</p>
+    </div>
+  </div>
+
+  <!-- Collections -->
+  <div class="section" id="s2">
+    <h2 class="section-title"><i class="ti ti-list" aria-hidden="true"></i> Collections framework</h2>
+    <div class="card">
+      <h3>Choose the right collection</h3>
+      <pre><span class="cm">// List — ordered, allows duplicates</span>
+List&lt;String&gt; list = <span class="kw">new</span> ArrayList&lt;&gt;();   <span class="cm">// fast get</span>
+List&lt;String&gt; linked = <span class="kw">new</span> LinkedList&lt;&gt;(); <span class="cm">// fast insert/remove</span>
+
+<span class="cm">// Set — unique elements</span>
+Set&lt;String&gt; hs = <span class="kw">new</span> HashSet&lt;&gt;();        <span class="cm">// O(1), no order</span>
+Set&lt;String&gt; ts = <span class="kw">new</span> TreeSet&lt;&gt;();        <span class="cm">// sorted, O(log n)</span>
+
+<span class="cm">// Map — key-value pairs</span>
+Map&lt;String,Integer&gt; map = <span class="kw">new</span> HashMap&lt;&gt;();   <span class="cm">// O(1) lookup</span>
+Map&lt;String,Integer&gt; tm  = <span class="kw">new</span> TreeMap&lt;&gt;();   <span class="cm">// sorted keys</span></pre>
+    </div>
+    <div class="card">
+      <h3>Useful Map patterns</h3>
+      <pre>map.getOrDefault(<span class="st">"key"</span>, <span class="num">0</span>);          <span class="cm">// safe get</span>
+map.putIfAbsent(<span class="st">"key"</span>, <span class="num">1</span>);           <span class="cm">// won't overwrite</span>
+map.computeIfAbsent(<span class="st">"key"</span>, k -> <span class="kw">new</span> ArrayList&lt;&gt;()).add(<span class="st">"v"</span>);
+map.merge(<span class="st">"key"</span>, <span class="num">1</span>, Integer::sum);   <span class="cm">// frequency count</span>
+map.forEach((k, v) -> System.out.println(k + <span class="st">" → "</span> + v));</pre>
+      <div class="tip">For thread-safe maps use <code>ConcurrentHashMap</code>, not <code>Hashtable</code>.</div>
+    </div>
+    <div class="card">
+      <h3>Complexity cheat sheet</h3>
+      <div class="grid2">
+        <div><p><strong>ArrayList</strong></p><p>get O(1) · add O(1)* · remove O(n)</p></div>
+        <div><p><strong>LinkedList</strong></p><p>get O(n) · add/remove O(1) at ends</p></div>
+        <div><p><strong>HashMap</strong></p><p>get/put/remove O(1) avg</p></div>
+        <div><p><strong>TreeMap/Set</strong></p><p>get/put/remove O(log n)</p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Exceptions -->
+  <div class="section" id="s3">
+    <h2 class="section-title"><i class="ti ti-alert-triangle" aria-hidden="true"></i> Exception handling</h2>
+    <div class="card">
+      <h3>Hierarchy</h3>
+      <p><strong>Throwable</strong> → <strong>Error</strong> (don't catch: OutOfMemoryError) · <strong>Exception</strong></p>
+      <p><strong>Checked</strong> — must be declared or caught (IOException, SQLException)</p>
+      <p><strong>Unchecked</strong> (RuntimeException) — NullPointerException, ArrayIndexOutOfBoundsException, IllegalArgumentException</p>
+    </div>
+    <div class="card">
+      <h3>Try-with-resources</h3>
+      <pre><span class="cm">// AutoCloseable is closed automatically</span>
+<span class="kw">try</span> (BufferedReader br = <span class="kw">new</span> BufferedReader(<span class="kw">new</span> FileReader(<span class="st">"f.txt"</span>))) {
+  String line;
+  <span class="kw">while</span> ((line = br.readLine()) != <span class="kw">null</span>) {
+    System.out.println(line);
+  }
+} <span class="kw">catch</span> (IOException e) {
+  e.printStackTrace();
+} <span class="cm">// br.close() called even if exception thrown</span></pre>
+    </div>
+    <div class="card">
+      <h3>Custom exceptions</h3>
+      <pre><span class="kw">class</span> InsufficientFundsException <span class="kw">extends</span> RuntimeException {
+  <span class="kw">private final double</span> amount;
+  InsufficientFundsException(<span class="kw">double</span> amount) {
+    <span class="kw">super</span>(<span class="st">"Need "</span> + amount + <span class="st">" more"</span>);
+    <span class="kw">this</span>.amount = amount;
+  }
+  <span class="kw">public double</span> getAmount() { <span class="kw">return</span> amount; }
+}</pre>
+      <div class="warn">Never catch <code>Exception</code> or <code>Throwable</code> silently — always log or rethrow.</div>
+    </div>
+  </div>
+
+  <!-- Concurrency -->
+  <div class="section" id="s4">
+    <h2 class="section-title"><i class="ti ti-topology-star" aria-hidden="true"></i> Concurrency</h2>
+    <div class="card">
+      <h3>Thread basics</h3>
+      <pre><span class="cm">// Option 1 — Runnable lambda</span>
+Thread t = <span class="kw">new</span> Thread(() -> System.out.println(<span class="st">"hi"</span>));
+t.start();
+
+<span class="cm">// Option 2 — ExecutorService (preferred)</span>
+ExecutorService exec = Executors.newFixedThreadPool(<span class="num">4</span>);
+exec.submit(() -> doWork());
+exec.shutdown();</pre>
+    </div>
+    <div class="card">
+      <h3>Key concepts</h3>
+      <p><strong>synchronized</strong> — one thread at a time in a block/method.</p>
+      <p><strong>volatile</strong> — ensures visibility across threads (not atomicity).</p>
+      <p><strong>AtomicInteger</strong> — lock-free, thread-safe counter.</p>
+      <pre><span class="kw">synchronized</span> (<span class="kw">this</span>) { count++; }   <span class="cm">// or</span>
+AtomicInteger ai = <span class="kw">new</span> AtomicInteger(<span class="num">0</span>);
+ai.incrementAndGet();</pre>
+      <div class="tip">Use <code>java.util.concurrent</code> utilities (CountDownLatch, Semaphore, CompletableFuture) instead of raw thread coordination.</div>
+    </div>
+    <div class="card">
+      <h3>CompletableFuture (Java 8+)</h3>
+      <pre>CompletableFuture.supplyAsync(() -> fetchData())
+  .thenApply(data -> process(data))
+  .thenAccept(result -> save(result))
+  .exceptionally(ex -> { log(ex); <span class="kw">return null</span>; });</pre>
+    </div>
+  </div>
+
+  <!-- Streams -->
+  <div class="section" id="s5">
+    <h2 class="section-title"><i class="ti ti-filter" aria-hidden="true"></i> Streams &amp; lambdas</h2>
+    <div class="card">
+      <h3>Stream pipeline</h3>
+      <pre>List&lt;String&gt; names = List.of(<span class="st">"Ana"</span>, <span class="st">"Bob"</span>, <span class="st">"Alice"</span>, <span class="st">"Carlos"</span>);
+
+List&lt;String&gt; result = names.stream()
+  .filter(n -> n.startsWith(<span class="st">"A"</span>))       <span class="cm">// intermediate</span>
+  .map(String::toUpperCase)              <span class="cm">// intermediate</span>
+  .sorted()                              <span class="cm">// intermediate</span>
+  .collect(Collectors.toList());         <span class="cm">// terminal</span>
+<span class="cm">// → ["ANA", "ALICE"]</span></pre>
+    </div>
+    <div class="card">
+      <h3>Common collectors &amp; operations</h3>
+      <pre><span class="cm">// Group by length</span>
+Map&lt;Integer, List&lt;String&gt;&gt; byLen = names.stream()
+  .collect(Collectors.groupingBy(String::length));
+
+<span class="cm">// Sum / average</span>
+<span class="kw">int</span> total = nums.stream().mapToInt(Integer::intValue).sum();
+
+<span class="cm">// Optional — avoid null</span>
+Optional&lt;String&gt; first = names.stream().filter(...).findFirst();
+first.ifPresent(System.out::println);
+String val = first.orElse(<span class="st">"default"</span>);</pre>
+      <div class="tip">Streams are lazy — intermediate ops run only when a terminal op is called.</div>
+    </div>
+    <div class="card">
+      <h3>Functional interfaces</h3>
+      <div class="tag-row">
+        <span class="tag"><code>Predicate&lt;T&gt;</code> — T → boolean</span>
+        <span class="tag"><code>Function&lt;T,R&gt;</code> — T → R</span>
+        <span class="tag"><code>Consumer&lt;T&gt;</code> — T → void</span>
+        <span class="tag"><code>Supplier&lt;T&gt;</code> — () → T</span>
+        <span class="tag"><code>BiFunction&lt;T,U,R&gt;</code></span>
+        <span class="tag"><code>UnaryOperator&lt;T&gt;</code></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Patterns -->
+  <div class="section" id="s6">
+    <h2 class="section-title"><i class="ti ti-puzzle" aria-hidden="true"></i> Key patterns to know</h2>
+    <div class="card">
+      <h3>Singleton</h3>
+      <pre><span class="kw">class</span> Singleton {
+  <span class="kw">private static volatile</span> Singleton instance;
+  <span class="kw">private</span> Singleton() {}
+  <span class="kw">public static</span> Singleton getInstance() {
+    <span class="kw">if</span> (instance == <span class="kw">null</span>) {
+      <span class="kw">synchronized</span> (Singleton.<span class="kw">class</span>) {
+        <span class="kw">if</span> (instance == <span class="kw">null</span>) instance = <span class="kw">new</span> Singleton();
+      }
+    }
+    <span class="kw">return</span> instance;
+  }
+}</pre>
+    </div>
+    <div class="card">
+      <h3>Builder</h3>
+      <pre>Person p = <span class="kw">new</span> Person.Builder()
+  .name(<span class="st">"Ana"</span>).age(<span class="num">30</span>).email(<span class="st">"a@b.com"</span>).build();</pre>
+      <div class="tip">Great for objects with many optional fields. Use Lombok's <code>@Builder</code> to avoid boilerplate.</div>
+    </div>
+    <div class="card">
+      <h3>Other essentials to study</h3>
+      <div class="tag-row">
+        <span class="tag">equals() + hashCode() contract</span>
+        <span class="tag">Comparable vs Comparator</span>
+        <span class="tag">Generics &lt;T extends Foo&gt;</span>
+        <span class="tag">Enum (with fields &amp; methods)</span>
+        <span class="tag">Record (Java 16+)</span>
+        <span class="tag">Sealed classes (Java 17+)</span>
+        <span class="tag">var (local type inference)</span>
+        <span class="tag">Pattern matching instanceof</span>
+      </div>
+      <div class="warn" style="margin-top:10px">Always override <code>hashCode()</code> when you override <code>equals()</code> — HashSet/HashMap depend on it.</div>
+    </div>
+  </div>
+</div>
+
+<script>
+const labels = ["OOP fundamentals","Data types & memory","Collections framework","Exception handling","Concurrency","Streams & lambdas","Key patterns"];
+function show(i) {
+  document.querySelectorAll('.section').forEach((s,j) => {
+    s.classList.toggle('visible', j === i);
+  });
+  document.querySelectorAll('.tab').forEach((t,j) => {
+    t.classList.toggle('active', j === i);
+  });
+  document.getElementById('prog').style.width = ((i+1)/7*100) + '%';
+  document.getElementById('prog-label').textContent = 'Topic ' + (i+1) + ' of 7 — ' + labels[i];
+}
+</script>
+</body>
+</html>

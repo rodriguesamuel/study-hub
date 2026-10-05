@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Angular Study Recap</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+  <style>
+    :root {
+      --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      --font-mono: 'Cascadia Code', 'Fira Code', 'JetBrains Mono', Menlo, Consolas, monospace;
+      --border: #e2e8f0;
+      --border-strong: #cbd5e1;
+      --text-primary: #0f172a;
+      --text-secondary: #475569;
+      --text-muted: #94a3b8;
+      --text-accent: #1a56db;
+      --surface-0: #f8fafc;
+      --surface-1: #f1f5f9;
+      --surface-2: #ffffff;
+    }
+    html { background: #f1f5f9; min-height: 100vh; }
+    body { max-width: 720px; margin: 0 auto; padding: 2rem; font-family: var(--font-sans); }
+  </style>
+</head>
+<body>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  .wrap { padding: 1rem 0 2rem; max-width: 680px; font-family: var(--font-sans); }
+  .hero { display: flex; align-items: center; gap: 12px; margin-bottom: 1.5rem; border-bottom: 0.5px solid var(--border); padding-bottom: 1rem; }
+  .hero-icon { width: 44px; height: 44px; background: #fde8e8; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 22px; color: #c2185b; font-weight: 500; }
+  .hero h1 { font-size: 20px; font-weight: 500; color: var(--text-primary); }
+  .hero p { font-size: 13px; color: var(--text-secondary); margin-top: 2px; }
+  .tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 1.25rem; }
+  .tab { padding: 6px 14px; border-radius: 20px; border: 0.5px solid var(--border-strong); font-size: 13px; cursor: pointer; background: var(--surface-1); color: var(--text-secondary); transition: background 0.15s, color 0.15s; }
+  .tab:hover { background: var(--surface-2); color: var(--text-primary); }
+  .tab.active { background: #c2185b; color: #fff; border-color: #c2185b; }
+  .section { display: none; }
+  .section.visible { display: block; }
+  .card { background: var(--surface-2); border: 0.5px solid var(--border); border-radius: 12px; padding: 1rem 1.25rem; margin-bottom: 1rem; }
+  .card h3 { font-size: 15px; font-weight: 500; color: var(--text-primary); margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+  .card p { font-size: 14px; color: var(--text-secondary); line-height: 1.65; margin-bottom: 8px; }
+  .card p:last-child { margin-bottom: 0; }
+  pre { background: var(--surface-0); border: 0.5px solid var(--border); border-radius: 8px; padding: 12px 14px; font-family: var(--font-mono); font-size: 12.5px; color: var(--text-primary); overflow-x: auto; margin: 8px 0; line-height: 1.6; white-space: pre; }
+  .kw { color: #c2185b; }
+  .dec { color: #7b1fa2; }
+  .cm { color: var(--text-muted); font-style: italic; }
+  .st { color: #2e7d32; }
+  .prop { color: #1565c0; }
+  .badge { display: inline-block; font-size: 11px; padding: 2px 8px; border-radius: 20px; font-weight: 500; margin: 2px 2px 2px 0; }
+  .b-red { background: #fce4ec; color: #880e4f; }
+  .b-purple { background: #f3e5f5; color: #4a148c; }
+  .b-blue { background: #e3f2fd; color: #0d47a1; }
+  .b-green { background: #e8f5e9; color: #1b5e20; }
+  .b-amber { background: #fff8e1; color: #e65100; }
+  .grid2 { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 10px; }
+  .tip { background: #e8f5e9; border-left: 3px solid #43a047; border-radius: 0 8px 8px 0; padding: 10px 12px; margin: 8px 0; font-size: 13px; color: #1b5e20; }
+  .warn { background: #fff3e0; border-left: 3px solid #fb8c00; border-radius: 0 8px 8px 0; padding: 10px 12px; margin: 8px 0; font-size: 13px; color: #e65100; }
+  .progress-bar { height: 3px; background: var(--border); border-radius: 3px; margin-bottom: 1.5rem; }
+  .progress-fill { height: 100%; background: #c2185b; border-radius: 3px; transition: width 0.3s; }
+  .topic-label { font-size: 12px; color: var(--text-muted); margin-bottom: 6px; }
+  .tag-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+  .tag { font-size: 12px; padding: 3px 10px; border-radius: 20px; background: var(--surface-1); border: 0.5px solid var(--border); color: var(--text-secondary); }
+  h2.st { font-size: 16px; font-weight: 500; color: var(--text-primary); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+  .inline-code { font-family: var(--font-mono); font-size: 12.5px; background: var(--surface-1); border: 0.5px solid var(--border); border-radius: 4px; padding: 1px 5px; color: var(--text-primary); }
+</style>
+
+<div class="wrap">
+  <h2 class="sr-only" style="position:absolute;width:1px;height:1px;overflow:hidden">Angular study recap — 8 topics covering components, templates, services, routing, forms, RxJS, state, and performance</h2>
+  <div class="hero">
+    <div class="hero-icon">▲</div>
+    <div>
+      <h1>Angular study recap</h1>
+      <p>Core concepts every Angular developer needs to know</p>
+    </div>
+  </div>
+
+  <div class="progress-bar"><div class="progress-fill" id="prog" style="width:12.5%"></div></div>
+  <div class="topic-label" id="prog-label">Topic 1 of 8 — Components</div>
+
+  <div class="tabs">
+    <div class="tab active" onclick="show(0)">Components</div>
+    <div class="tab" onclick="show(1)">Templates</div>
+    <div class="tab" onclick="show(2)">Services & DI</div>
+    <div class="tab" onclick="show(3)">Routing</div>
+    <div class="tab" onclick="show(4)">Forms</div>
+    <div class="tab" onclick="show(5)">RxJS</div>
+    <div class="tab" onclick="show(6)">State</div>
+    <div class="tab" onclick="show(7)">Performance</div>
+  </div>
+
+  <!-- COMPONENTS -->
+  <div class="section visible" id="s0">
+    <h2 class="st"><i class="ti ti-components" aria-hidden="true"></i> Components</h2>
+    <div class="card">
+      <h3>Anatomy of a component</h3>
+      <pre><span class="dec">@Component</span>({
+  selector: <span class="st">'app-hero'</span>,
+  templateUrl: <span class="st">'./hero.component.html'</span>,
+  styleUrls: [<span class="st">'./hero.component.scss'</span>],
+  standalone: <span class="kw">true</span>,        <span class="cm">// Angular 17+ default</span>
+  imports: [CommonModule],
+})
+<span class="kw">export class</span> HeroComponent <span class="kw">implements</span> OnInit {
+  <span class="dec">@Input</span>() name = <span class="st">''</span>;             <span class="cm">// receive data from parent</span>
+  <span class="dec">@Output</span>() selected = <span class="kw">new</span> EventEmitter&lt;<span class="kw">string</span>&gt;();
+
+  ngOnInit() { <span class="cm">/* runs after inputs are set */</span> }
+}</pre>
+    </div>
+    <div class="card">
+      <h3>Lifecycle hooks — order matters</h3>
+      <div class="tag-row">
+        <span class="badge b-purple">ngOnChanges</span>
+        <span class="badge b-red">ngOnInit</span>
+        <span class="badge b-blue">ngDoCheck</span>
+        <span class="badge b-blue">ngAfterContentInit</span>
+        <span class="badge b-blue">ngAfterContentChecked</span>
+        <span class="badge b-green">ngAfterViewInit</span>
+        <span class="badge b-green">ngAfterViewChecked</span>
+        <span class="badge b-amber">ngOnDestroy</span>
+      </div>
+      <div class="tip" style="margin-top:10px">Use <span class="inline-code">ngOnDestroy</span> to unsubscribe from observables and clear timers — memory leaks come from forgetting this.</div>
+    </div>
+    <div class="card">
+      <h3>Content projection</h3>
+      <pre><span class="cm">&lt;!-- parent --&gt;</span>
+&lt;app-card&gt;&lt;p&gt;Projected content&lt;/p&gt;&lt;/app-card&gt;
+
+<span class="cm">&lt;!-- card.component.html --&gt;</span>
+&lt;div class=<span class="st">"card"</span>&gt;
+  &lt;ng-content&gt;&lt;/ng-content&gt;
+&lt;/div&gt;</pre>
+      <p>Use <span class="inline-code">ng-content select="[slot]"</span> for multi-slot projection.</p>
+    </div>
+  </div>
+
+  <!-- TEMPLATES -->
+  <div class="section" id="s1">
+    <h2 class="st"><i class="ti ti-code" aria-hidden="true"></i> Templates and directives</h2>
+    <div class="card">
+      <h3>Data binding syntax</h3>
+      <pre><span class="cm">&lt;!-- interpolation --&gt;</span>
+&lt;p&gt;{{ title }}&lt;/p&gt;
+
+<span class="cm">&lt;!-- property binding --&gt;</span>
+&lt;img [src]=<span class="st">"imageUrl"</span> [alt]=<span class="st">"name"</span>&gt;
+
+<span class="cm">&lt;!-- event binding --&gt;</span>
+&lt;button (click)=<span class="st">"save($event)"</span>&gt;Save&lt;/button&gt;
+
+<span class="cm">&lt;!-- two-way (requires FormsModule) --&gt;</span>
+&lt;input [(ngModel)]=<span class="st">"username"</span>&gt;</pre>
+    </div>
+    <div class="card">
+      <h3>Control flow (Angular 17+) vs. structural directives</h3>
+      <pre><span class="cm">&lt;!-- New block syntax (preferred) --&gt;</span>
+@if (user) { &lt;p&gt;{{ user.name }}&lt;/p&gt; }
+@else { &lt;p&gt;Guest&lt;/p&gt; }
+
+@for (item of items; track item.id) {
+  &lt;li&gt;{{ item.name }}&lt;/li&gt;
+}
+
+<span class="cm">&lt;!-- Classic directives (still valid) --&gt;</span>
+&lt;div *ngIf=<span class="st">"show"</span>&gt;...&lt;/div&gt;
+&lt;li *ngFor=<span class="st">"let x of list; trackBy: trackFn"</span>&gt;</pre>
+      <div class="tip">Always use <span class="inline-code">track</span> / <span class="inline-code">trackBy</span> in loops — Angular reuses DOM nodes instead of recreating them.</div>
+    </div>
+    <div class="card">
+      <h3>Pipes</h3>
+      <pre>{{ price | currency:'EUR' }}
+{{ date | date:'dd/MM/yyyy' }}
+{{ name | uppercase }}
+{{ obj | json }}              <span class="cm">// debug</span>
+{{ obs$ | async }}            <span class="cm">// subscribe + auto-unsubscribe</span></pre>
+      <div class="tag-row">
+        <span class="tag">Pure pipe — memoized, runs only when input ref changes</span>
+        <span class="tag">Impure pipe — runs every change detection cycle (avoid)</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- SERVICES & DI -->
+  <div class="section" id="s2">
+    <h2 class="st"><i class="ti ti-plug" aria-hidden="true"></i> Services and dependency injection</h2>
+    <div class="card">
+      <h3>Creating and injecting a service</h3>
+      <pre><span class="dec">@Injectable</span>({ providedIn: <span class="st">'root'</span> }) <span class="cm">// singleton app-wide</span>
+<span class="kw">export class</span> AuthService {
+  <span class="kw">private</span> user$ = <span class="kw">new</span> BehaviorSubject&lt;User | null&gt;(<span class="kw">null</span>);
+  login(u: User) { <span class="kw">this</span>.user$.next(u); }
+}
+
+<span class="cm">// In a component (modern inject() function)</span>
+<span class="kw">export class</span> NavComponent {
+  auth = inject(AuthService);  <span class="cm">// Angular 14+</span>
+  user$ = <span class="kw">this</span>.auth.user$;
+}</pre>
+    </div>
+    <div class="card">
+      <h3>Provider scopes</h3>
+      <div class="grid2">
+        <div><span class="badge b-red">providedIn: 'root'</span><p style="margin-top:6px">One singleton for the whole app. Most common choice.</p></div>
+        <div><span class="badge b-purple">Component providers</span><p style="margin-top:6px">New instance per component. Useful for stateful UI services.</p></div>
+        <div><span class="badge b-blue">Module providers</span><p style="margin-top:6px">Shared within a lazy-loaded module.</p></div>
+        <div><span class="badge b-green">InjectionToken</span><p style="margin-top:6px">Inject non-class values (config, env).</p></div>
+      </div>
+    </div>
+    <div class="card">
+      <h3>HttpClient</h3>
+      <pre><span class="cm">// Provide in app.config.ts</span>
+provideHttpClient(withInterceptors([authInterceptor]))
+
+<span class="cm">// In service</span>
+<span class="kw">private</span> http = inject(HttpClient);
+getUsers() {
+  <span class="kw">return this</span>.http.get&lt;User[]&gt;(<span class="st">'/api/users'</span>);
+}</pre>
+      <div class="warn">HttpClient returns cold Observables — nothing happens until you subscribe (or use <span class="inline-code">async</span> pipe).</div>
+    </div>
+  </div>
+
+  <!-- ROUTING -->
+  <div class="section" id="s3">
+    <h2 class="st"><i class="ti ti-route" aria-hidden="true"></i> Routing</h2>
+    <div class="card">
+      <h3>Route configuration</h3>
+      <pre><span class="kw">export const</span> routes: Routes = [
+  { path: <span class="st">''</span>, component: HomeComponent },
+  { path: <span class="st">'users/:id'</span>, component: UserComponent },
+  {
+    path: <span class="st">'admin'</span>,
+    canActivate: [authGuard],
+    loadChildren: () => import(<span class="st">'./admin/routes'</span>)
+      .then(m => m.adminRoutes)   <span class="cm">// lazy loading</span>
+  },
+  { path: <span class="st">'**'</span>, redirectTo: <span class="st">''</span> }
+];</pre>
+    </div>
+    <div class="card">
+      <h3>Reading params and navigating</h3>
+      <pre><span class="kw">export class</span> UserComponent {
+  route = inject(ActivatedRoute);
+  router = inject(Router);
+
+  id$ = <span class="kw">this</span>.route.paramMap.pipe(
+    map(p => p.get(<span class="st">'id'</span>))
+  );
+
+  goHome() { <span class="kw">this</span>.router.navigate([<span class="st">'/'</span>]); }
+}</pre>
+      <div class="tip">Prefer <span class="inline-code">route.paramMap</span> (observable) over <span class="inline-code">route.snapshot.params</span> so the component reacts when params change without full re-creation.</div>
+    </div>
+    <div class="card">
+      <h3>Guards (functional style, Angular 14+)</h3>
+      <pre><span class="kw">export const</span> authGuard: CanActivateFn = (route, state) => {
+  <span class="kw">const</span> auth = inject(AuthService);
+  <span class="kw">return</span> auth.isLoggedIn() || inject(Router).createUrlTree([<span class="st">'/login'</span>]);
+};</pre>
+    </div>
+  </div>
+
+  <!-- FORMS -->
+  <div class="section" id="s4">
+    <h2 class="st"><i class="ti ti-forms" aria-hidden="true"></i> Forms</h2>
+    <div class="card">
+      <h3>Reactive forms (preferred)</h3>
+      <pre><span class="kw">export class</span> LoginComponent {
+  fb = inject(FormBuilder);
+
+  form = <span class="kw">this</span>.fb.group({
+    email: [<span class="st">''</span>, [Validators.required, Validators.email]],
+    password: [<span class="st">''</span>, Validators.minLength(<span class="prop">8</span>)],
+  });
+
+  submit() {
+    <span class="kw">if</span> (<span class="kw">this</span>.form.valid) {
+      console.log(<span class="kw">this</span>.form.value);
+    }
+  }
+}</pre>
+      <pre><span class="cm">&lt;!-- template --&gt;</span>
+&lt;form [formGroup]=<span class="st">"form"</span> (ngSubmit)=<span class="st">"submit()"</span>&gt;
+  &lt;input formControlName=<span class="st">"email"</span>&gt;
+  &lt;span *ngIf=<span class="st">"form.get('email')?.invalid"</span>&gt;Invalid email&lt;/span&gt;
+&lt;/form&gt;</pre>
+    </div>
+    <div class="card">
+      <h3>Template-driven vs. reactive</h3>
+      <div class="grid2">
+        <div>
+          <span class="badge b-blue">Template-driven</span>
+          <p style="margin-top:6px">Uses <span class="inline-code">ngModel</span>. Simple forms, less boilerplate. Harder to test.</p>
+        </div>
+        <div>
+          <span class="badge b-red">Reactive</span>
+          <p style="margin-top:6px">Form defined in the class. Testable, composable, good for complex logic.</p>
+        </div>
+      </div>
+      <div class="tip" style="margin-top:10px">Use <span class="inline-code">valueChanges</span> observable to react to form input in real time (e.g. live search, dependent fields).</div>
+    </div>
+  </div>
+
+  <!-- RXJS -->
+  <div class="section" id="s5">
+    <h2 class="st"><i class="ti ti-wave-sine" aria-hidden="true"></i> RxJS essentials</h2>
+    <div class="card">
+      <h3>Subjects — multicasting</h3>
+      <pre><span class="kw">new</span> Subject&lt;T&gt;()           <span class="cm">// no initial value, no replay</span>
+<span class="kw">new</span> BehaviorSubject&lt;T&gt;(v)  <span class="cm">// holds current value — use for state</span>
+<span class="kw">new</span> ReplaySubject&lt;T&gt;(n)    <span class="cm">// replays last n values to new subs</span>
+<span class="kw">new</span> AsyncSubject&lt;T&gt;()      <span class="cm">// emits only last value on complete</span></pre>
+    </div>
+    <div class="card">
+      <h3>Must-know operators</h3>
+      <pre>src$.pipe(
+  map(x => x * <span class="prop">2</span>),           <span class="cm">// transform each value</span>
+  filter(x => x > <span class="prop">5</span>),        <span class="cm">// pass only matching values</span>
+  switchMap(id =>            <span class="cm">// cancel prev, switch to new</span>
+    http.get(<span class="st">`/api/${id}`</span>)),
+  mergeMap(x => doWork(x)),  <span class="cm">// parallel, keep all</span>
+  concatMap(x => doWork(x)), <span class="cm">// sequential, queue</span>
+  exhaustMap(x => login(x)), <span class="cm">// ignore new while busy</span>
+  debounceTime(<span class="prop">300</span>),         <span class="cm">// wait 300ms after last emit</span>
+  distinctUntilChanged(),    <span class="cm">// skip duplicate values</span>
+  takeUntilDestroyed(),      <span class="cm">// auto-unsub (Angular 16+)</span>
+  catchError(err => of([]))  <span class="cm">// handle error, keep alive</span>
+)</pre>
+      <div class="warn">Use <span class="inline-code">switchMap</span> for search/navigation, <span class="inline-code">concatMap</span> for ordered writes, <span class="inline-code">mergeMap</span> for parallel independent calls.</div>
+    </div>
+    <div class="card">
+      <h3>Avoid memory leaks</h3>
+      <div class="tag-row">
+        <span class="tag">async pipe — auto-unsubscribes</span>
+        <span class="tag">takeUntilDestroyed() — Angular 16+</span>
+        <span class="tag">takeUntil(destroy$) — manual</span>
+        <span class="tag">store in subscription, call .unsubscribe()</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- STATE -->
+  <div class="section" id="s6">
+    <h2 class="st"><i class="ti ti-database" aria-hidden="true"></i> State management</h2>
+    <div class="card">
+      <h3>Signals (Angular 17+)</h3>
+      <pre><span class="kw">import</span> { signal, computed, effect } from <span class="st">'@angular/core'</span>;
+
+count = signal(<span class="prop">0</span>);
+doubled = computed(() => <span class="kw">this</span>.count() * <span class="prop">2</span>);
+
+increment() { <span class="kw">this</span>.count.update(v => v + <span class="prop">1</span>); }
+
+effect(() => {
+  console.log(<span class="st">'count changed:'</span>, <span class="kw">this</span>.count()); <span class="cm">// reactive side-effect</span>
+});</pre>
+      <div class="tip">Signals are synchronous and granular — Angular knows exactly which component to re-render without running the full change detection tree.</div>
+    </div>
+    <div class="card">
+      <h3>Service + BehaviorSubject pattern</h3>
+      <pre><span class="dec">@Injectable</span>({ providedIn: <span class="st">'root'</span> })
+<span class="kw">export class</span> CartService {
+  <span class="kw">private</span> _items = <span class="kw">new</span> BehaviorSubject&lt;Item[]&gt;([]);
+  items$ = <span class="kw">this</span>._items.asObservable(); <span class="cm">// read-only outside</span>
+  add(item: Item) {
+    <span class="kw">this</span>._items.next([...<span class="kw">this</span>._items.value, item]);
+  }
+}</pre>
+    </div>
+    <div class="card">
+      <h3>When to reach for a library</h3>
+      <div class="grid2">
+        <div><span class="badge b-red">NgRx Store</span><p style="margin-top:6px">Redux pattern. Best for large apps with complex shared state.</p></div>
+        <div><span class="badge b-blue">NgRx Signal Store</span><p style="margin-top:6px">Signals-based, less boilerplate. Angular 17+ recommended.</p></div>
+        <div><span class="badge b-purple">Akita / Elf</span><p style="margin-top:6px">Simpler alternatives to NgRx.</p></div>
+        <div><span class="badge b-green">Service + Signal</span><p style="margin-top:6px">Great for small/medium apps — no extra deps.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PERFORMANCE -->
+  <div class="section" id="s7">
+    <h2 class="st"><i class="ti ti-rocket" aria-hidden="true"></i> Performance</h2>
+    <div class="card">
+      <h3>Change detection strategies</h3>
+      <pre><span class="dec">@Component</span>({
+  changeDetection: ChangeDetectionStrategy.OnPush
+})</pre>
+      <p>OnPush only re-renders when: an <span class="inline-code">@Input</span> reference changes, an event fires inside the component, or an observable used via <span class="inline-code">async</span> pipe emits. Much faster for large trees.</p>
+      <div class="tip">Pair OnPush with immutable data — always create new objects/arrays instead of mutating them.</div>
+    </div>
+    <div class="card">
+      <h3>Lazy loading and preloading</h3>
+      <pre><span class="cm">// app.config.ts</span>
+provideRouter(routes, withPreloading(PreloadAllModules))
+
+<span class="cm">// routes.ts — lazy route</span>
+{
+  path: <span class="st">'dashboard'</span>,
+  loadComponent: () => import(<span class="st">'./dashboard.component'</span>)
+    .then(m => m.DashboardComponent)
+}</pre>
+    </div>
+    <div class="card">
+      <h3>Other key optimizations</h3>
+      <div class="tag-row">
+        <span class="tag">track / trackBy in loops</span>
+        <span class="tag">Pure pipes over methods in templates</span>
+        <span class="tag">Deferrable views @defer</span>
+        <span class="tag">Virtual scrolling (CDK)</span>
+        <span class="tag">OnPush everywhere possible</span>
+        <span class="tag">takeUntilDestroyed() to prevent leaks</span>
+        <span class="tag">SSR with Angular Universal</span>
+        <span class="tag">Standalone components (smaller bundles)</span>
+      </div>
+      <div class="warn" style="margin-top:10px">Avoid calling functions in templates (e.g. <span class="inline-code">{{ compute() }}</span>) — they run on every change detection cycle. Use computed signals or pure pipes instead.</div>
+    </div>
+  </div>
+</div>
+
+<script>
+const labels = ["Components","Templates and directives","Services and dependency injection","Routing","Forms","RxJS essentials","State management","Performance"];
+function show(i) {
+  document.querySelectorAll('.section').forEach((s,j) => s.classList.toggle('visible', j===i));
+  document.querySelectorAll('.tab').forEach((t,j) => t.classList.toggle('active', j===i));
+  document.getElementById('prog').style.width = ((i+1)/8*100) + '%';
+  document.getElementById('prog-label').textContent = 'Topic ' + (i+1) + ' of 8 — ' + labels[i];
+}
+</script>
+</body>
+</html>

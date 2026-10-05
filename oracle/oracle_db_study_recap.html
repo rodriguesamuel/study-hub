@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Oracle DB Study Recap</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+  <style>
+    :root {
+      --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      --font-mono: 'Cascadia Code', 'Fira Code', 'JetBrains Mono', Menlo, Consolas, monospace;
+      --border: #e2e8f0;
+      --border-strong: #cbd5e1;
+      --text-primary: #0f172a;
+      --text-secondary: #475569;
+      --text-muted: #94a3b8;
+      --text-accent: #1a56db;
+      --surface-0: #f8fafc;
+      --surface-1: #f1f5f9;
+      --surface-2: #ffffff;
+    }
+    html { background: #f1f5f9; min-height: 100vh; }
+    body { max-width: 720px; margin: 0 auto; padding: 2rem; font-family: var(--font-sans); }
+  </style>
+</head>
+<body>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+.wrap { padding: 1rem 0 2rem; font-family: var(--font-sans); }
+.hero { display: flex; align-items: center; gap: 12px; margin-bottom: 1.5rem; border-bottom: 0.5px solid var(--border); padding-bottom: 1rem; }
+.hero-icon { width: 44px; height: 44px; background: #fff3e0; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 500; color: #e65100; }
+.hero h1 { font-size: 20px; font-weight: 500; color: var(--text-primary); }
+.hero p { font-size: 13px; color: var(--text-secondary); margin-top: 2px; }
+.tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 1.25rem; }
+.tab { padding: 6px 14px; border-radius: 20px; border: 0.5px solid var(--border-strong); font-size: 13px; cursor: pointer; background: var(--surface-1); color: var(--text-secondary); transition: background 0.15s, color 0.15s; }
+.tab:hover { background: var(--surface-2); color: var(--text-primary); }
+.tab.active { background: #c84b00; color: #fff; border-color: #c84b00; }
+.section { display: none; }
+.section.visible { display: block; }
+.card { background: var(--surface-2); border: 0.5px solid var(--border); border-radius: 12px; padding: 1rem 1.25rem; margin-bottom: 1rem; }
+.card h3 { font-size: 15px; font-weight: 500; color: var(--text-primary); margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+.card p { font-size: 14px; color: var(--text-secondary); line-height: 1.65; margin-bottom: 8px; }
+.card p:last-child { margin-bottom: 0; }
+pre { background: var(--surface-0); border: 0.5px solid var(--border); border-radius: 8px; padding: 12px 14px; font-family: var(--font-mono); font-size: 12.5px; color: var(--text-primary); overflow-x: auto; margin: 8px 0; line-height: 1.65; white-space: pre; }
+.kw { color: #c84b00; font-weight: 500; }
+.fn { color: #1565c0; }
+.cm { color: var(--text-muted); font-style: italic; }
+.st { color: #2e7d32; }
+.num { color: #6a1b9a; }
+.tip { background: #e8f5e9; border-left: 3px solid #43a047; border-radius: 0 8px 8px 0; padding: 10px 12px; margin: 8px 0; font-size: 13px; color: #1b5e20; }
+.warn { background: #fff3e0; border-left: 3px solid #fb8c00; border-radius: 0 8px 8px 0; padding: 10px 12px; margin: 8px 0; font-size: 13px; color: #bf360c; }
+.grid2 { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 10px; }
+.badge { display: inline-block; font-size: 11px; padding: 2px 8px; border-radius: 20px; font-weight: 500; margin: 2px 2px 2px 0; }
+.b-or { background: #fff3e0; color: #bf360c; }
+.b-bl { background: #e3f2fd; color: #0d47a1; }
+.b-gr { background: #e8f5e9; color: #1b5e20; }
+.b-pu { background: #f3e5f5; color: #4a148c; }
+.b-re { background: #fce4ec; color: #880e4f; }
+.tag-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.tag { font-size: 12px; padding: 3px 10px; border-radius: 20px; background: var(--surface-1); border: 0.5px solid var(--border); color: var(--text-secondary); }
+.ic { font-family: var(--font-mono); font-size: 12.5px; background: var(--surface-1); border: 0.5px solid var(--border); border-radius: 4px; padding: 1px 5px; color: var(--text-primary); }
+h2.sh { font-size: 16px; font-weight: 500; color: var(--text-primary); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+.prog-bar { height: 3px; background: var(--border); border-radius: 3px; margin-bottom: 1.5rem; }
+.prog-fill { height: 100%; background: #c84b00; border-radius: 3px; transition: width 0.3s; }
+.prog-lbl { font-size: 12px; color: var(--text-muted); margin-bottom: 6px; }
+</style>
+
+<div class="wrap">
+  <div class="hero">
+    <div class="hero-icon">ORA</div>
+    <div>
+      <h1>Oracle DB study recap</h1>
+      <p>Core concepts every Oracle developer and DBA needs to know</p>
+    </div>
+  </div>
+
+  <div class="prog-bar"><div class="prog-fill" id="prog" style="width:12.5%"></div></div>
+  <div class="prog-lbl" id="prog-lbl">Topic 1 of 8 — SQL essentials</div>
+
+  <div class="tabs">
+    <div class="tab active" onclick="show(0)">SQL</div>
+    <div class="tab" onclick="show(1)">Joins and subqueries</div>
+    <div class="tab" onclick="show(2)">Functions</div>
+    <div class="tab" onclick="show(3)">PL/SQL</div>
+    <div class="tab" onclick="show(4)">Indexes</div>
+    <div class="tab" onclick="show(5)">Transactions</div>
+    <div class="tab" onclick="show(6)">Objects</div>
+    <div class="tab" onclick="show(7)">Performance</div>
+  </div>
+
+  <!-- SQL ESSENTIALS -->
+  <div class="section visible" id="s0">
+    <h2 class="sh"><i class="ti ti-table" aria-hidden="true"></i> SQL essentials</h2>
+    <div class="card">
+      <h3>DDL — defining structure</h3>
+      <pre><span class="kw">CREATE TABLE</span> employees (
+  emp_id    <span class="fn">NUMBER</span>(<span class="num">10</span>)    <span class="kw">GENERATED ALWAYS AS IDENTITY PRIMARY KEY</span>,
+  name      <span class="fn">VARCHAR2</span>(<span class="num">100</span>) <span class="kw">NOT NULL</span>,
+  dept_id   <span class="fn">NUMBER</span>(<span class="num">5</span>),
+  salary    <span class="fn">NUMBER</span>(<span class="num">10</span>,<span class="num">2</span>)  <span class="kw">DEFAULT</span> <span class="num">0</span>,
+  hire_date <span class="fn">DATE</span>          <span class="kw">DEFAULT SYSDATE</span>,
+  <span class="kw">CONSTRAINT</span> fk_dept <span class="kw">FOREIGN KEY</span> (dept_id)
+    <span class="kw">REFERENCES</span> departments(dept_id)
+);
+
+<span class="kw">ALTER TABLE</span> employees <span class="kw">ADD</span> email <span class="fn">VARCHAR2</span>(<span class="num">200</span>);
+<span class="kw">DROP TABLE</span> employees <span class="kw">CASCADE CONSTRAINTS PURGE</span>;</pre>
+      <div class="tip">Oracle uses <span class="ic">VARCHAR2</span> (not <span class="ic">VARCHAR</span>) — always prefer it. <span class="ic">VARCHAR</span> is reserved for future use and behaves the same today, but may not forever.</div>
+    </div>
+    <div class="card">
+      <h3>DML — manipulating data</h3>
+      <pre><span class="kw">INSERT INTO</span> employees (name, dept_id, salary)
+<span class="kw">VALUES</span> (<span class="st">'Ana Costa'</span>, <span class="num">10</span>, <span class="num">5000</span>);
+
+<span class="kw">UPDATE</span> employees
+<span class="kw">SET</span> salary = salary * <span class="num">1.1</span>
+<span class="kw">WHERE</span> dept_id = <span class="num">10</span>;
+
+<span class="kw">DELETE FROM</span> employees
+<span class="kw">WHERE</span> hire_date < <span class="fn">DATE</span> <span class="st">'2020-01-01'</span>;
+
+<span class="kw">MERGE INTO</span> target t <span class="kw">USING</span> source s
+  <span class="kw">ON</span> (t.id = s.id)
+  <span class="kw">WHEN MATCHED THEN UPDATE SET</span> t.val = s.val
+  <span class="kw">WHEN NOT MATCHED THEN INSERT</span> (id, val) <span class="kw">VALUES</span> (s.id, s.val);</pre>
+      <div class="warn"><span class="ic">TRUNCATE</span> is DDL (auto-commits, can't roll back). <span class="ic">DELETE</span> is DML (transactional). Choose carefully.</div>
+    </div>
+    <div class="card">
+      <h3>Oracle-specific SELECT extras</h3>
+      <pre><span class="kw">SELECT</span> * <span class="kw">FROM</span> employees
+<span class="kw">WHERE</span> <span class="fn">ROWNUM</span> <= <span class="num">10</span>;            <span class="cm">-- classic top-N (applied BEFORE ORDER BY!)</span>
+
+<span class="kw">SELECT</span> * <span class="kw">FROM</span> employees
+<span class="kw">ORDER BY</span> salary <span class="kw">DESC</span>
+<span class="fn">FETCH FIRST</span> <span class="num">10</span> <span class="fn">ROWS ONLY</span>;     <span class="cm">-- 12c+, correct way</span>
+
+<span class="kw">SELECT</span> * <span class="kw">FROM</span> employees
+<span class="kw">ORDER BY</span> salary <span class="kw">DESC</span>
+<span class="fn">OFFSET</span> <span class="num">10</span> <span class="fn">ROWS FETCH NEXT</span> <span class="num">5</span> <span class="fn">ROWS ONLY</span>; <span class="cm">-- pagination</span></pre>
+    </div>
+  </div>
+
+  <!-- JOINS AND SUBQUERIES -->
+  <div class="section" id="s1">
+    <h2 class="sh"><i class="ti ti-arrows-join" aria-hidden="true"></i> Joins and subqueries</h2>
+    <div class="card">
+      <h3>Join types</h3>
+      <pre><span class="kw">SELECT</span> e.name, d.dept_name
+<span class="kw">FROM</span> employees e
+<span class="kw">JOIN</span> departments d <span class="kw">ON</span> e.dept_id = d.dept_id;   <span class="cm">-- INNER JOIN</span>
+
+<span class="kw">SELECT</span> e.name, d.dept_name
+<span class="kw">FROM</span> employees e
+<span class="kw">LEFT JOIN</span> departments d <span class="kw">ON</span> e.dept_id = d.dept_id; <span class="cm">-- keeps all employees</span>
+
+<span class="kw">SELECT</span> e.name, d.dept_name
+<span class="kw">FROM</span> employees e, departments d               <span class="cm">-- Oracle (+) syntax</span>
+<span class="kw">WHERE</span> e.dept_id = d.dept_id(+);               <span class="cm">-- (+) = optional side</span></pre>
+      <div class="tip">Prefer ANSI JOIN syntax (<span class="ic">JOIN ... ON</span>) over the old Oracle comma syntax — it's clearer and easier to maintain.</div>
+    </div>
+    <div class="card">
+      <h3>Subqueries and WITH (CTE)</h3>
+      <pre><span class="cm">-- Correlated subquery</span>
+<span class="kw">SELECT</span> name, salary
+<span class="kw">FROM</span> employees e
+<span class="kw">WHERE</span> salary > (<span class="kw">SELECT</span> <span class="fn">AVG</span>(salary)
+                <span class="kw">FROM</span> employees
+                <span class="kw">WHERE</span> dept_id = e.dept_id);
+
+<span class="cm">-- CTE (WITH clause) — much more readable</span>
+<span class="kw">WITH</span> dept_avg <span class="kw">AS</span> (
+  <span class="kw">SELECT</span> dept_id, <span class="fn">AVG</span>(salary) avg_sal
+  <span class="kw">FROM</span> employees <span class="kw">GROUP BY</span> dept_id
+)
+<span class="kw">SELECT</span> e.name, e.salary, d.avg_sal
+<span class="kw">FROM</span> employees e
+<span class="kw">JOIN</span> dept_avg d <span class="kw">ON</span> e.dept_id = d.dept_id
+<span class="kw">WHERE</span> e.salary > d.avg_sal;</pre>
+    </div>
+    <div class="card">
+      <h3>Analytic (window) functions</h3>
+      <pre><span class="kw">SELECT</span> name, dept_id, salary,
+  <span class="fn">RANK</span>()        <span class="kw">OVER</span> (<span class="kw">PARTITION BY</span> dept_id <span class="kw">ORDER BY</span> salary <span class="kw">DESC</span>) rnk,
+  <span class="fn">DENSE_RANK</span>()  <span class="kw">OVER</span> (<span class="kw">PARTITION BY</span> dept_id <span class="kw">ORDER BY</span> salary <span class="kw">DESC</span>) drnk,
+  <span class="fn">ROW_NUMBER</span>()  <span class="kw">OVER</span> (<span class="kw">ORDER BY</span> salary <span class="kw">DESC</span>) rn,
+  <span class="fn">LAG</span>(salary)   <span class="kw">OVER</span> (<span class="kw">ORDER BY</span> hire_date) prev_sal,
+  <span class="fn">SUM</span>(salary)   <span class="kw">OVER</span> (<span class="kw">PARTITION BY</span> dept_id) dept_total
+<span class="kw">FROM</span> employees;</pre>
+      <div class="tip"><span class="ic">RANK</span> skips numbers on ties (1,1,3). <span class="ic">DENSE_RANK</span> does not (1,1,2). <span class="ic">ROW_NUMBER</span> never ties.</div>
+    </div>
+  </div>
+
+  <!-- FUNCTIONS -->
+  <div class="section" id="s2">
+    <h2 class="sh"><i class="ti ti-math-function" aria-hidden="true"></i> Built-in functions</h2>
+    <div class="card">
+      <h3>String functions</h3>
+      <pre><span class="fn">SUBSTR</span>(<span class="st">'Hello World'</span>, <span class="num">1</span>, <span class="num">5</span>)     <span class="cm">-- 'Hello'  (1-based!)</span>
+<span class="fn">INSTR</span>(<span class="st">'Hello World'</span>, <span class="st">'o'</span>)       <span class="cm">-- 5</span>
+<span class="fn">LENGTH</span>(<span class="st">'Hello'</span>)                <span class="cm">-- 5</span>
+<span class="fn">UPPER</span>(<span class="st">'hello'</span>)                 <span class="cm">-- 'HELLO'</span>
+<span class="fn">TRIM</span>(<span class="st">'  hello  '</span>)             <span class="cm">-- 'hello'</span>
+<span class="fn">REPLACE</span>(<span class="st">'abc'</span>, <span class="st">'b'</span>, <span class="st">'X'</span>)      <span class="cm">-- 'aXc'</span>
+<span class="fn">REGEXP_LIKE</span>(email, <span class="st">'^[A-Z]'</span>, <span class="st">'i'</span>) <span class="cm">-- regex match</span>
+<span class="fn">LISTAGG</span>(name, <span class="st">', '</span>) <span class="kw">WITHIN GROUP</span> (<span class="kw">ORDER BY</span> name) <span class="cm">-- string agg</span></pre>
+    </div>
+    <div class="card">
+      <h3>Date and number functions</h3>
+      <pre><span class="fn">SYSDATE</span>                        <span class="cm">-- current date+time (DB server)</span>
+<span class="fn">SYSTIMESTAMP</span>                   <span class="cm">-- with timezone</span>
+<span class="fn">TRUNC</span>(<span class="fn">SYSDATE</span>)                 <span class="cm">-- midnight today</span>
+<span class="fn">ADD_MONTHS</span>(<span class="fn">SYSDATE</span>, <span class="num">3</span>)         <span class="cm">-- 3 months from now</span>
+<span class="fn">MONTHS_BETWEEN</span>(d1, d2)         <span class="cm">-- fractional months</span>
+<span class="fn">TO_DATE</span>(<span class="st">'2024-01-15'</span>, <span class="st">'YYYY-MM-DD'</span>)
+<span class="fn">TO_CHAR</span>(<span class="fn">SYSDATE</span>, <span class="st">'DD/MM/YYYY HH24:MI'</span>)
+
+<span class="fn">ROUND</span>(<span class="num">123.456</span>, <span class="num">2</span>)              <span class="cm">-- 123.46</span>
+<span class="fn">TRUNC</span>(<span class="num">123.456</span>, <span class="num">2</span>)              <span class="cm">-- 123.45 (no rounding)</span>
+<span class="fn">MOD</span>(<span class="num">10</span>, <span class="num">3</span>)                     <span class="cm">-- 1</span>
+<span class="fn">NVL</span>(salary, <span class="num">0</span>)                 <span class="cm">-- replace NULL</span>
+<span class="fn">NVL2</span>(col, val_if_nn, val_if_n)  <span class="cm">-- ternary null check</span>
+<span class="fn">COALESCE</span>(a, b, c)               <span class="cm">-- first non-null</span>
+<span class="fn">DECODE</span>(status, <span class="st">'A'</span>, <span class="st">'Active'</span>, <span class="st">'Inactive'</span>) <span class="cm">-- Oracle switch</span></pre>
+    </div>
+    <div class="card">
+      <h3>Aggregates and GROUP BY</h3>
+      <pre><span class="kw">SELECT</span> dept_id,
+  <span class="fn">COUNT</span>(*),
+  <span class="fn">SUM</span>(salary),
+  <span class="fn">AVG</span>(salary),
+  <span class="fn">MAX</span>(salary),
+  <span class="fn">MIN</span>(hire_date)
+<span class="kw">FROM</span> employees
+<span class="kw">GROUP BY</span> dept_id
+<span class="kw">HAVING</span> <span class="fn">COUNT</span>(*) > <span class="num">5</span>
+<span class="kw">ORDER BY</span> <span class="fn">SUM</span>(salary) <span class="kw">DESC</span>;</pre>
+      <div class="warn"><span class="ic">WHERE</span> filters rows before grouping. <span class="ic">HAVING</span> filters groups after aggregation. Never use an aggregate in a WHERE clause.</div>
+    </div>
+  </div>
+
+  <!-- PL/SQL -->
+  <div class="section" id="s3">
+    <h2 class="sh"><i class="ti ti-code-dots" aria-hidden="true"></i> PL/SQL</h2>
+    <div class="card">
+      <h3>Block structure</h3>
+      <pre><span class="kw">DECLARE</span>
+  v_name   employees.name%<span class="fn">TYPE</span>;       <span class="cm">-- anchored type</span>
+  v_count  <span class="fn">PLS_INTEGER</span> := <span class="num">0</span>;
+  v_rec    employees%<span class="fn">ROWTYPE</span>;          <span class="cm">-- whole row</span>
+<span class="kw">BEGIN</span>
+  <span class="kw">SELECT</span> name <span class="kw">INTO</span> v_name
+  <span class="kw">FROM</span> employees <span class="kw">WHERE</span> emp_id = <span class="num">1</span>;
+
+  <span class="fn">DBMS_OUTPUT</span>.PUT_LINE(<span class="st">'Name: '</span> || v_name);
+<span class="kw">EXCEPTION</span>
+  <span class="kw">WHEN NO_DATA_FOUND THEN</span>
+    <span class="fn">DBMS_OUTPUT</span>.PUT_LINE(<span class="st">'Not found'</span>);
+  <span class="kw">WHEN OTHERS THEN</span>
+    <span class="fn">DBMS_OUTPUT</span>.PUT_LINE(<span class="fn">SQLERRM</span>);
+<span class="kw">END</span>;</pre>
+    </div>
+    <div class="card">
+      <h3>Cursors and loops</h3>
+      <pre><span class="cm">-- Implicit cursor (simplest)</span>
+<span class="kw">FOR</span> rec <span class="kw">IN</span> (<span class="kw">SELECT</span> * <span class="kw">FROM</span> employees <span class="kw">WHERE</span> dept_id = <span class="num">10</span>) <span class="kw">LOOP</span>
+  <span class="fn">DBMS_OUTPUT</span>.PUT_LINE(rec.name);
+<span class="kw">END LOOP</span>;
+
+<span class="cm">-- Explicit cursor (for more control)</span>
+<span class="kw">CURSOR</span> c_emp <span class="kw">IS SELECT</span> * <span class="kw">FROM</span> employees;
+<span class="kw">OPEN</span> c_emp;
+<span class="kw">FETCH</span> c_emp <span class="kw">INTO</span> v_rec;
+<span class="kw">CLOSE</span> c_emp;</pre>
+      <div class="tip">Prefer implicit cursor FOR loops — Oracle handles OPEN, FETCH, and CLOSE automatically, and they're less error-prone.</div>
+    </div>
+    <div class="card">
+      <h3>Stored procedures and functions</h3>
+      <pre><span class="kw">CREATE OR REPLACE PROCEDURE</span> raise_salary(
+  p_emp_id <span class="kw">IN</span>  employees.emp_id%<span class="fn">TYPE</span>,
+  p_pct    <span class="kw">IN</span>  <span class="fn">NUMBER</span>
+) <span class="kw">AS BEGIN</span>
+  <span class="kw">UPDATE</span> employees
+  <span class="kw">SET</span> salary = salary * (<span class="num">1</span> + p_pct/<span class="num">100</span>)
+  <span class="kw">WHERE</span> emp_id = p_emp_id;
+  <span class="kw">COMMIT</span>;
+<span class="kw">END</span>;
+
+<span class="kw">CREATE OR REPLACE FUNCTION</span> get_dept_name(
+  p_id <span class="kw">IN</span> <span class="fn">NUMBER</span>
+) <span class="kw">RETURN VARCHAR2 AS</span>
+  v_name <span class="fn">VARCHAR2</span>(<span class="num">100</span>);
+<span class="kw">BEGIN</span>
+  <span class="kw">SELECT</span> dept_name <span class="kw">INTO</span> v_name
+  <span class="kw">FROM</span> departments <span class="kw">WHERE</span> dept_id = p_id;
+  <span class="kw">RETURN</span> v_name;
+<span class="kw">END</span>;</pre>
+    </div>
+    <div class="card">
+      <h3>Triggers</h3>
+      <pre><span class="kw">CREATE OR REPLACE TRIGGER</span> trg_audit_salary
+<span class="kw">BEFORE UPDATE OF</span> salary <span class="kw">ON</span> employees
+<span class="kw">FOR EACH ROW BEGIN</span>
+  <span class="kw">INSERT INTO</span> salary_audit
+    (emp_id, old_sal, new_sal, changed_at)
+  <span class="kw">VALUES</span>
+    (:OLD.emp_id, :OLD.salary, :NEW.salary, <span class="fn">SYSDATE</span>);
+<span class="kw">END</span>;</pre>
+      <div class="warn">Avoid complex logic in triggers — they fire silently and make debugging hard. Prefer procedures called explicitly.</div>
+    </div>
+  </div>
+
+  <!-- INDEXES -->
+  <div class="section" id="s4">
+    <h2 class="sh"><i class="ti ti-search" aria-hidden="true"></i> Indexes</h2>
+    <div class="card">
+      <h3>Index types</h3>
+      <div class="grid2">
+        <div><span class="badge b-or">B-Tree (default)</span><p style="margin-top:6px">Best for high-cardinality columns and equality/range queries. Created automatically on primary keys.</p></div>
+        <div><span class="badge b-bl">Bitmap</span><p style="margin-top:6px">Best for low-cardinality columns (status, gender). Great for data warehouses, bad for OLTP (lock contention).</p></div>
+        <div><span class="badge b-gr">Function-based</span><p style="margin-top:6px">Index on an expression: <span class="ic">UPPER(name)</span>. Query must use the same expression to benefit.</p></div>
+        <div><span class="badge b-pu">Composite</span><p style="margin-top:6px">Index on multiple columns. Column order matters — leading column must appear in the WHERE clause.</p></div>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Creating indexes</h3>
+      <pre><span class="kw">CREATE INDEX</span> idx_emp_name   <span class="kw">ON</span> employees(name);
+<span class="kw">CREATE UNIQUE INDEX</span> idx_email <span class="kw">ON</span> employees(email);
+<span class="kw">CREATE INDEX</span> idx_upper_name  <span class="kw">ON</span> employees(<span class="fn">UPPER</span>(name));
+<span class="kw">CREATE INDEX</span> idx_comp        <span class="kw">ON</span> employees(dept_id, hire_date);
+<span class="kw">CREATE BITMAP INDEX</span> idx_status <span class="kw">ON</span> employees(status);</pre>
+      <div class="warn">Indexes speed up reads but slow down writes. Don't index every column — profile first with <span class="ic">EXPLAIN PLAN</span>.</div>
+    </div>
+    <div class="card">
+      <h3>When indexes are NOT used</h3>
+      <div class="tag-row">
+        <span class="tag">Function applied to indexed column: UPPER(name) = 'ANA' without function-based index</span>
+        <span class="tag">Leading wildcard: LIKE '%ana'</span>
+        <span class="tag">Implicit type conversion: number col = '123'</span>
+        <span class="tag">IS NULL (B-Tree doesn't store NULLs)</span>
+        <span class="tag">NOT IN / != on indexed column</span>
+        <span class="tag">Query returns too many rows (full scan is cheaper)</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- TRANSACTIONS -->
+  <div class="section" id="s5">
+    <h2 class="sh"><i class="ti ti-lock" aria-hidden="true"></i> Transactions and concurrency</h2>
+    <div class="card">
+      <h3>ACID and transaction control</h3>
+      <pre><span class="kw">BEGIN</span>   <span class="cm">-- Oracle starts a transaction implicitly on first DML</span>
+
+  <span class="kw">INSERT INTO</span> orders ...;
+  <span class="fn">SAVEPOINT</span> sp1;            <span class="cm">-- partial rollback point</span>
+  <span class="kw">UPDATE</span>  inventory ...;
+  <span class="kw">ROLLBACK TO</span> sp1;          <span class="cm">-- undo back to savepoint</span>
+  <span class="kw">COMMIT</span>;                   <span class="cm">-- make all changes permanent</span>
+
+<span class="kw">EXCEPTION</span>
+  <span class="kw">WHEN OTHERS THEN</span>
+    <span class="kw">ROLLBACK</span>;               <span class="cm">-- undo everything</span>
+    <span class="kw">RAISE</span>;
+<span class="kw">END</span>;</pre>
+      <div class="tip">Oracle uses multi-version concurrency (MVCC) — readers never block writers. Each query sees a consistent snapshot of data.</div>
+    </div>
+    <div class="card">
+      <h3>Locking</h3>
+      <pre><span class="cm">-- Explicit row lock before update</span>
+<span class="kw">SELECT</span> * <span class="kw">FROM</span> employees
+<span class="kw">WHERE</span> emp_id = <span class="num">1</span>
+<span class="kw">FOR UPDATE</span>;                 <span class="cm">-- blocks others from updating</span>
+
+<span class="kw">FOR UPDATE SKIP LOCKED</span>;     <span class="cm">-- skip already-locked rows (queue pattern)</span>
+<span class="kw">FOR UPDATE NOWAIT</span>;          <span class="cm">-- fail immediately if locked</span></pre>
+      <div class="warn">Deadlocks happen when two sessions wait on each other's locks. Oracle detects and resolves them automatically by rolling back one session.</div>
+    </div>
+    <div class="card">
+      <h3>Isolation levels</h3>
+      <div class="grid2">
+        <div><span class="badge b-bl">READ COMMITTED (default)</span><p style="margin-top:6px">Each statement sees only committed data. Most common.</p></div>
+        <div><span class="badge b-pu">SERIALIZABLE</span><p style="margin-top:6px">Entire transaction sees a consistent snapshot from its start. Can raise ORA-08177.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- OBJECTS -->
+  <div class="section" id="s6">
+    <h2 class="sh"><i class="ti ti-cube" aria-hidden="true"></i> Database objects</h2>
+    <div class="card">
+      <h3>Views, sequences, and synonyms</h3>
+      <pre><span class="cm">-- View: stored query</span>
+<span class="kw">CREATE OR REPLACE VIEW</span> v_active_emp <span class="kw">AS</span>
+  <span class="kw">SELECT</span> * <span class="kw">FROM</span> employees <span class="kw">WHERE</span> status = <span class="st">'A'</span>;
+
+<span class="cm">-- Sequence: auto-increment values</span>
+<span class="kw">CREATE SEQUENCE</span> emp_seq
+  <span class="kw">START WITH</span> <span class="num">1</span> <span class="kw">INCREMENT BY</span> <span class="num">1</span> <span class="kw">NOCACHE NOCYCLE</span>;
+<span class="fn">emp_seq.NEXTVAL</span>  <span class="cm">-- get next value</span>
+<span class="fn">emp_seq.CURRVAL</span>  <span class="cm">-- current value (within session)</span>
+
+<span class="cm">-- Synonym: alias for an object</span>
+<span class="kw">CREATE SYNONYM</span> emp <span class="kw">FOR</span> hr.employees;</pre>
+    </div>
+    <div class="card">
+      <h3>Packages</h3>
+      <pre><span class="cm">-- Package spec (public API)</span>
+<span class="kw">CREATE OR REPLACE PACKAGE</span> emp_pkg <span class="kw">AS</span>
+  <span class="kw">PROCEDURE</span> hire(p_name <span class="fn">VARCHAR2</span>, p_dept <span class="fn">NUMBER</span>);
+  <span class="kw">FUNCTION</span>  get_count(p_dept <span class="fn">NUMBER</span>) <span class="kw">RETURN NUMBER</span>;
+<span class="kw">END</span> emp_pkg;
+
+<span class="cm">-- Package body (implementation)</span>
+<span class="kw">CREATE OR REPLACE PACKAGE BODY</span> emp_pkg <span class="kw">AS</span>
+  <span class="kw">PROCEDURE</span> hire(p_name <span class="fn">VARCHAR2</span>, p_dept <span class="fn">NUMBER</span>) <span class="kw">IS BEGIN</span>
+    <span class="kw">INSERT INTO</span> employees(name, dept_id) <span class="kw">VALUES</span>(p_name, p_dept);
+  <span class="kw">END</span>;
+  ...
+<span class="kw">END</span> emp_pkg;</pre>
+      <div class="tip">Group related procedures and functions into packages — they load into memory once, share state within a session, and are the standard for Oracle application code.</div>
+    </div>
+    <div class="card">
+      <h3>Other objects to know</h3>
+      <div class="tag-row">
+        <span class="tag">Materialized view — cached query result, refreshed on schedule</span>
+        <span class="tag">Partition — split large tables by range, list, or hash</span>
+        <span class="tag">Database link (DBLINK) — query another Oracle DB</span>
+        <span class="tag">Directory — OS path alias for file I/O (UTL_FILE)</span>
+        <span class="tag">Job (DBMS_SCHEDULER) — scheduled PL/SQL</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- PERFORMANCE -->
+  <div class="section" id="s7">
+    <h2 class="sh"><i class="ti ti-rocket" aria-hidden="true"></i> Performance and tuning</h2>
+    <div class="card">
+      <h3>EXPLAIN PLAN</h3>
+      <pre><span class="fn">EXPLAIN PLAN FOR</span>
+  <span class="kw">SELECT</span> * <span class="kw">FROM</span> employees <span class="kw">WHERE</span> dept_id = <span class="num">10</span>;
+
+<span class="kw">SELECT</span> * <span class="kw">FROM</span> <span class="fn">TABLE</span>(<span class="fn">DBMS_XPLAN.DISPLAY</span>());
+<span class="cm">-- or for a running session:</span>
+<span class="kw">SELECT</span> * <span class="kw">FROM</span> <span class="fn">TABLE</span>(<span class="fn">DBMS_XPLAN.DISPLAY_CURSOR</span>(<span class="kw">FORMAT</span>=><span class="st">'ALLSTATS LAST'</span>));</pre>
+      <div class="tip">Look for <span class="ic">FULL TABLE SCAN</span> on large tables and high <span class="ic">Cost</span> values. An index range scan is usually what you want.</div>
+    </div>
+    <div class="card">
+      <h3>Hints</h3>
+      <pre><span class="kw">SELECT</span> <span class="cm">/*+ INDEX(e idx_emp_name) */</span> *
+<span class="kw">FROM</span> employees e <span class="kw">WHERE</span> name = <span class="st">'Ana'</span>;
+
+<span class="kw">SELECT</span> <span class="cm">/*+ FULL(e) */</span> * <span class="kw">FROM</span> employees e;  <span class="cm">-- force full scan</span>
+<span class="kw">SELECT</span> <span class="cm">/*+ USE_NL(e d) */</span>                  <span class="cm">-- nested loops join</span>
+<span class="kw">SELECT</span> <span class="cm">/*+ PARALLEL(e, 4) */</span>              <span class="cm">-- parallel execution</span></pre>
+      <div class="warn">Hints are a last resort — fix statistics and indexes first. Hints hard-code plans and break when data distribution changes.</div>
+    </div>
+    <div class="card">
+      <h3>Key tuning concepts</h3>
+      <div class="tag-row">
+        <span class="tag">DBMS_STATS.GATHER_TABLE_STATS — keep optimizer stats fresh</span>
+        <span class="tag">Bind variables — prevent hard parsing, reuse execution plans</span>
+        <span class="tag">Bulk collect + FORALL — batch DML, avoids row-by-row context switching</span>
+        <span class="tag">AWR report — workload repository, find top SQL by elapsed time</span>
+        <span class="tag">V$SQL — inspect cached SQL and execution stats</span>
+        <span class="tag">Result cache — cache repeated query results in SGA</span>
+      </div>
+      <pre style="margin-top:10px"><span class="cm">-- Bulk collect example (much faster than row-by-row)</span>
+<span class="kw">DECLARE</span>
+  <span class="kw">TYPE</span> t_ids <span class="kw">IS TABLE OF</span> employees.emp_id%<span class="fn">TYPE</span>;
+  l_ids t_ids;
+<span class="kw">BEGIN</span>
+  <span class="kw">SELECT</span> emp_id <span class="kw">BULK COLLECT INTO</span> l_ids
+  <span class="kw">FROM</span> employees <span class="kw">WHERE</span> dept_id = <span class="num">10</span>;
+
+  <span class="kw">FORALL</span> i <span class="kw">IN</span> l_ids.<span class="fn">FIRST</span>..l_ids.<span class="fn">LAST</span>
+    <span class="kw">UPDATE</span> employees <span class="kw">SET</span> salary = salary * <span class="num">1.1</span>
+    <span class="kw">WHERE</span> emp_id = l_ids(i);
+<span class="kw">END</span>;</pre>
+    </div>
+  </div>
+</div>
+
+<script>
+const labels = ["SQL essentials","Joins and subqueries","Built-in functions","PL/SQL","Indexes","Transactions and concurrency","Database objects","Performance and tuning"];
+function show(i) {
+  document.querySelectorAll('.section').forEach((s,j) => s.classList.toggle('visible', j===i));
+  document.querySelectorAll('.tab').forEach((t,j) => t.classList.toggle('active', j===i));
+  document.getElementById('prog').style.width = ((i+1)/8*100)+'%';
+  document.getElementById('prog-lbl').textContent = 'Topic '+(i+1)+' of 8 — '+labels[i];
+}
+</script>
+</body>
+</html>

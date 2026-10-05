@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Microservices Patterns Recap</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+  <style>
+    :root {
+      --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      --font-mono: 'Cascadia Code', 'Fira Code', 'JetBrains Mono', Menlo, Consolas, monospace;
+      --border: #e2e8f0;
+      --border-strong: #cbd5e1;
+      --text-primary: #0f172a;
+      --text-secondary: #475569;
+      --text-muted: #94a3b8;
+      --text-accent: #1a56db;
+      --surface-0: #f8fafc;
+      --surface-1: #f1f5f9;
+      --surface-2: #ffffff;
+    }
+    html { background: #f1f5f9; min-height: 100vh; }
+    body { max-width: 720px; margin: 0 auto; padding: 2rem; font-family: var(--font-sans); }
+  </style>
+</head>
+<body>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+.wrap { padding: 1rem 0 2rem; font-family: var(--font-sans); }
+.hero { display: flex; align-items: center; gap: 12px; margin-bottom: 1.5rem; border-bottom: 0.5px solid var(--border); padding-bottom: 1rem; }
+.hicon { width: 44px; height: 44px; background: #e8f0fe; border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+.hicon i { font-size: 22px; color: #1a56db; }
+.hero h1 { font-size: 20px; font-weight: 500; color: var(--text-primary); }
+.hero p { font-size: 13px; color: var(--text-secondary); margin-top: 2px; }
+.tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 1.25rem; }
+.tab { padding: 6px 14px; border-radius: 20px; border: 0.5px solid var(--border-strong); font-size: 13px; cursor: pointer; background: var(--surface-1); color: var(--text-secondary); transition: background 0.15s, color 0.15s; }
+.tab:hover { background: var(--surface-2); color: var(--text-primary); }
+.tab.active { background: #1a56db; color: #fff; border-color: #1a56db; }
+.section { display: none; }
+.section.visible { display: block; }
+.card { background: var(--surface-2); border: 0.5px solid var(--border); border-radius: 12px; padding: 1rem 1.25rem; margin-bottom: 1rem; }
+.card h3 { font-size: 15px; font-weight: 500; color: var(--text-primary); margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+.card p { font-size: 14px; color: var(--text-secondary); line-height: 1.65; margin-bottom: 8px; }
+.card p:last-child { margin-bottom: 0; }
+pre { background: var(--surface-0); border: 0.5px solid var(--border); border-radius: 8px; padding: 12px 14px; font-family: var(--font-mono); font-size: 12px; color: var(--text-primary); overflow-x: auto; margin: 8px 0; line-height: 1.65; white-space: pre; }
+.kw { color: #1a56db; font-weight: 500; }
+.cm { color: var(--text-muted); font-style: italic; }
+.st { color: #2e7d32; }
+.an { color: #7b1fa2; }
+.tip { background: #e8f5e9; border-left: 3px solid #43a047; border-radius: 0 8px 8px 0; padding: 10px 12px; margin: 8px 0; font-size: 13px; color: #1b5e20; }
+.warn { background: #fff3e0; border-left: 3px solid #fb8c00; border-radius: 0 8px 8px 0; padding: 10px 12px; margin: 8px 0; font-size: 13px; color: #bf360c; }
+.danger { background: #fce4ec; border-left: 3px solid #e91e63; border-radius: 0 8px 8px 0; padding: 10px 12px; margin: 8px 0; font-size: 13px; color: #880e4f; }
+.grid2 { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 10px; }
+.badge { display: inline-block; font-size: 11px; padding: 2px 8px; border-radius: 20px; font-weight: 500; margin: 2px 2px 2px 0; }
+.b-bl { background: #e3f2fd; color: #0d47a1; }
+.b-gr { background: #e8f5e9; color: #1b5e20; }
+.b-pu { background: #f3e5f5; color: #4a148c; }
+.b-am { background: #fff8e1; color: #e65100; }
+.b-re { background: #fce4ec; color: #880e4f; }
+.b-te { background: #e0f2f1; color: #004d40; }
+.tag-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.tag { font-size: 12px; padding: 3px 10px; border-radius: 20px; background: var(--surface-1); border: 0.5px solid var(--border); color: var(--text-secondary); }
+.ic { font-family: var(--font-mono); font-size: 12px; background: var(--surface-1); border: 0.5px solid var(--border); border-radius: 4px; padding: 1px 5px; color: var(--text-primary); }
+h2.sh { font-size: 16px; font-weight: 500; color: var(--text-primary); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+.prog-bar { height: 3px; background: var(--border); border-radius: 3px; margin-bottom: 1.5rem; }
+.prog-fill { height: 100%; background: #1a56db; border-radius: 3px; transition: width 0.3s; }
+.prog-lbl { font-size: 12px; color: var(--text-muted); margin-bottom: 6px; }
+.diag { background: var(--surface-1); border: 0.5px solid var(--border); border-radius: 8px; padding: 12px; margin: 8px 0; font-size: 12px; font-family: var(--font-mono); color: var(--text-secondary); line-height: 1.8; }
+</style>
+
+<div class="wrap">
+  <h2 style="position:absolute;width:1px;height:1px;overflow:hidden">Microservices patterns study recap — 8 topics covering decomposition, communication, resilience, data, security, observability, deployment, and testing</h2>
+  <div class="hero">
+    <div class="hicon"><i class="ti ti-topology-star-3" aria-hidden="true"></i></div>
+    <div>
+      <h1>Microservices patterns</h1>
+      <p>The essential patterns every microservices architect needs to know</p>
+    </div>
+  </div>
+
+  <div class="prog-bar"><div class="prog-fill" id="prog" style="width:12.5%"></div></div>
+  <div class="prog-lbl" id="prog-lbl">Topic 1 of 8 — Decomposition</div>
+
+  <div class="tabs">
+    <div class="tab active" onclick="show(0)">Decomposition</div>
+    <div class="tab" onclick="show(1)">Communication</div>
+    <div class="tab" onclick="show(2)">Resilience</div>
+    <div class="tab" onclick="show(3)">Data patterns</div>
+    <div class="tab" onclick="show(4)">API gateway</div>
+    <div class="tab" onclick="show(5)">Observability</div>
+    <div class="tab" onclick="show(6)">Security</div>
+    <div class="tab" onclick="show(7)">Deployment</div>
+  </div>
+
+  <!-- DECOMPOSITION -->
+  <div class="section visible" id="s0">
+    <h2 class="sh"><i class="ti ti-scissors" aria-hidden="true"></i> Decomposition patterns</h2>
+    <div class="card">
+      <h3>Decompose by business capability</h3>
+      <p>Split services around what the business <em>does</em>, not around technical layers. Each service owns one business capability end-to-end.</p>
+      <div class="diag">Monolith
+├── OrderService      → handles order lifecycle
+├── InventoryService  → stock and warehouse
+├── PaymentService    → billing and refunds
+├── NotificationService → emails, SMS, push
+└── UserService       → accounts and profiles</div>
+      <div class="tip">A service should be small enough for one team to own, and large enough to deploy independently without tight coupling to others.</div>
+    </div>
+    <div class="card">
+      <h3>Strangler fig pattern</h3>
+      <p>Migrate a monolith incrementally: route new functionality to new microservices while the monolith still handles legacy paths. Strangle it over time — never big-bang rewrite.</p>
+      <div class="diag">Client → API Gateway → [ new: OrderService ]
+                      ↘ [ legacy: Monolith (orders) ] ← shrinks over time</div>
+    </div>
+    <div class="card">
+      <h3>Domain-driven design (DDD) concepts</h3>
+      <div class="grid2">
+        <div><span class="badge b-bl">Bounded context</span><p style="margin-top:6px">A clear boundary where a domain model applies. Maps 1:1 to a service.</p></div>
+        <div><span class="badge b-pu">Aggregate</span><p style="margin-top:6px">A cluster of objects treated as a unit. Each service manages its own aggregates.</p></div>
+        <div><span class="badge b-gr">Domain event</span><p style="margin-top:6px">Something that happened in the domain (e.g. <span class="ic">OrderPlaced</span>). Drives async communication.</p></div>
+        <div><span class="badge b-am">Anti-corruption layer</span><p style="margin-top:6px">Translates between models at service boundaries — prevents domain leakage.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- COMMUNICATION -->
+  <div class="section" id="s1">
+    <h2 class="sh"><i class="ti ti-arrows-exchange" aria-hidden="true"></i> Communication patterns</h2>
+    <div class="card">
+      <h3>Sync vs. async</h3>
+      <div class="grid2">
+        <div>
+          <span class="badge b-bl">Synchronous (REST / gRPC)</span>
+          <p style="margin-top:6px">Caller waits for a response. Simple but creates tight temporal coupling. Use for queries where you need an immediate answer.</p>
+        </div>
+        <div>
+          <span class="badge b-gr">Asynchronous (messaging)</span>
+          <p style="margin-top:6px">Caller fires and forgets. Services are decoupled in time. Use for commands and events where eventual consistency is acceptable.</p>
+        </div>
+      </div>
+      <div class="warn">Avoid long synchronous chains (A → B → C → D). One slow service cascades latency to all callers. Prefer async or cache aggressively.</div>
+    </div>
+    <div class="card">
+      <h3>Event-driven / messaging</h3>
+      <pre><span class="cm">// Producer publishes a domain event</span>
+kafkaTemplate.send(<span class="st">"order-events"</span>, OrderPlacedEvent.builder()
+    .orderId(order.getId())
+    .customerId(order.getCustomerId())
+    .total(order.getTotal())
+    .build());
+
+<span class="cm">// Consumer reacts independently</span>
+<span class="an">@KafkaListener</span>(topics = <span class="st">"order-events"</span>)
+<span class="kw">public void</span> onOrderPlaced(OrderPlacedEvent event) {
+    inventoryService.reserve(event.getOrderId());
+}</pre>
+      <div class="tag-row">
+        <span class="tag">Kafka — high-throughput, durable log</span>
+        <span class="tag">RabbitMQ — flexible routing, AMQP</span>
+        <span class="tag">AWS SQS/SNS — managed, serverless-friendly</span>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Choreography vs. orchestration</h3>
+      <div class="grid2">
+        <div><span class="badge b-pu">Choreography</span><p style="margin-top:6px">Services react to events independently. No central brain. Loose coupling, harder to trace.</p></div>
+        <div><span class="badge b-am">Orchestration (Saga)</span><p style="margin-top:6px">A coordinator (e.g. Saga orchestrator) directs each step. Easier to follow, single point of control.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESILIENCE -->
+  <div class="section" id="s2">
+    <h2 class="sh"><i class="ti ti-shield-check" aria-hidden="true"></i> Resilience patterns</h2>
+    <div class="card">
+      <h3>Circuit breaker</h3>
+      <p>Wraps a remote call. When failures exceed a threshold, the circuit <em>opens</em> and fast-fails requests (no more waiting). After a timeout it tries again (half-open).</p>
+      <pre><span class="an">@CircuitBreaker</span>(name = <span class="st">"inventoryService"</span>, fallbackMethod = <span class="st">"fallback"</span>)
+<span class="kw">public</span> Stock getStock(String productId) {
+    <span class="kw">return</span> inventoryClient.getStock(productId); <span class="cm">// may fail</span>
+}
+
+<span class="kw">public</span> Stock fallback(String productId, Exception ex) {
+    <span class="kw">return</span> Stock.unknown(); <span class="cm">// graceful degradation</span>
+}</pre>
+      <div class="diag">CLOSED → (failures > threshold) → OPEN → (timeout) → HALF-OPEN → (success) → CLOSED
+                                                              ↘ (failure) → OPEN</div>
+    </div>
+    <div class="card">
+      <h3>Retry with exponential backoff</h3>
+      <pre><span class="an">@Retry</span>(name = <span class="st">"paymentService"</span>, fallbackMethod = <span class="st">"fallback"</span>)
+<span class="cm">// resilience4j config:</span>
+<span class="cm">// maxAttempts: 3</span>
+<span class="cm">// waitDuration: 500ms</span>
+<span class="cm">// enableExponentialBackoff: true  → 500ms, 1s, 2s</span>
+<span class="cm">// retryExceptions: [IOException, TimeoutException]</span></pre>
+      <div class="warn">Always add jitter to retries — without it, all instances retry simultaneously and create a <em>retry storm</em> that hammers the failing service even harder.</div>
+    </div>
+    <div class="card">
+      <h3>Bulkhead pattern</h3>
+      <p>Isolate resources (thread pools, connection pools) per dependency. If one downstream service hangs, it only exhausts its own pool — not the whole application.</p>
+      <div class="tag-row">
+        <span class="tag">Thread pool bulkhead — separate thread pool per service</span>
+        <span class="tag">Semaphore bulkhead — limit concurrent calls</span>
+        <span class="tag">Rate limiter — cap requests per second</span>
+        <span class="tag">Timeout — never wait forever</span>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Saga pattern — distributed transactions</h3>
+      <p>Replaces 2-phase commit. A saga is a sequence of local transactions. Each step publishes an event; on failure, compensating transactions undo prior steps.</p>
+      <div class="diag">OrderSaga:
+  1. OrderService.createOrder()       → success → emit OrderCreated
+  2. PaymentService.charge()          → success → emit PaymentCharged
+  3. InventoryService.reserve()       → FAIL    → emit ReservationFailed
+     ↓ compensate backwards
+  2b. PaymentService.refund()
+  1b. OrderService.cancelOrder()</div>
+      <div class="tip">Sagas give you eventual consistency without distributed locks. Design compensating transactions from day one.</div>
+    </div>
+  </div>
+
+  <!-- DATA PATTERNS -->
+  <div class="section" id="s3">
+    <h2 class="sh"><i class="ti ti-database" aria-hidden="true"></i> Data patterns</h2>
+    <div class="card">
+      <h3>Database per service</h3>
+      <p>Each service owns its database — no shared schema, no direct cross-service SQL joins. Services exchange data only through APIs or events.</p>
+      <div class="diag">OrderService    → orders_db    (PostgreSQL)
+InventoryService → inventory_db  (MongoDB)
+UserService      → users_db      (MySQL)
+AnalyticsService → analytics_db  (Redshift)</div>
+      <div class="warn">Cross-service queries become API calls or event joins. This is harder but prevents the tight coupling that shared DBs create.</div>
+    </div>
+    <div class="card">
+      <h3>CQRS — Command Query Responsibility Segregation</h3>
+      <p>Separate the write model (commands that change state) from the read model (queries that return data). Each side can scale, optimise, and evolve independently.</p>
+      <div class="diag">Client → Command Handler → Write DB (normalised, consistent)
+                              ↓ publishes event
+       Query Handler ← Read DB  (denormalised, fast reads)</div>
+    </div>
+    <div class="card">
+      <h3>Event sourcing</h3>
+      <p>Store state as an immutable sequence of events rather than current values. Replay events to rebuild any past or present state.</p>
+      <pre><span class="cm">// Event store (append-only)</span>
+OrderCreated   { orderId, customerId, total }
+ItemAdded      { orderId, productId, qty }
+PaymentCharged { orderId, amount }
+OrderShipped   { orderId, trackingId }
+
+<span class="cm">// Rebuild current state by replaying events</span>
+Order order = eventStore.getEvents(orderId)
+    .reduce(Order.empty(), Order::apply);</pre>
+      <div class="tip">Event sourcing pairs naturally with CQRS and gives you a full audit log and time-travel debugging for free.</div>
+    </div>
+    <div class="card">
+      <h3>Outbox pattern</h3>
+      <p>Atomically save a DB record AND publish an event by writing the event to an <em>outbox</em> table in the same transaction. A separate relay process reads the outbox and publishes to the message broker.</p>
+      <div class="diag">BEGIN TRANSACTION
+  INSERT INTO orders ...
+  INSERT INTO outbox (event_type, payload) VALUES ('OrderPlaced', ...)
+COMMIT
+↓
+Outbox relay → Kafka → consumers</div>
+      <div class="danger">Never write to the DB and publish to a broker in two separate operations — if the broker call fails, you get inconsistency. The outbox pattern solves this.</div>
+    </div>
+  </div>
+
+  <!-- API GATEWAY -->
+  <div class="section" id="s4">
+    <h2 class="sh"><i class="ti ti-topology-star" aria-hidden="true"></i> API gateway and discovery</h2>
+    <div class="card">
+      <h3>API gateway</h3>
+      <p>Single entry point for all clients. Handles cross-cutting concerns so individual services don't have to.</p>
+      <div class="diag">Client → API Gateway → OrderService
+                    ↘ → PaymentService
+                    ↘ → UserService</div>
+      <div class="tag-row">
+        <span class="tag">Routing and load balancing</span>
+        <span class="tag">Authentication and authorization</span>
+        <span class="tag">Rate limiting</span>
+        <span class="tag">SSL termination</span>
+        <span class="tag">Request aggregation (BFF)</span>
+        <span class="tag">Caching</span>
+        <span class="tag">Logging and tracing</span>
+      </div>
+      <div class="tip">Backends for Frontends (BFF): create a dedicated gateway per client type (mobile, web, third-party) to tailor the API surface for each consumer.</div>
+    </div>
+    <div class="card">
+      <h3>Service discovery</h3>
+      <div class="grid2">
+        <div><span class="badge b-bl">Client-side discovery</span><p style="margin-top:6px">Client queries a service registry (e.g. Eureka) and picks an instance. More control, registry dependency in each client.</p></div>
+        <div><span class="badge b-gr">Server-side discovery</span><p style="margin-top:6px">Load balancer (e.g. AWS ALB, Kubernetes Service) handles routing. Clients are registry-unaware. Simpler clients.</p></div>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Service mesh (Istio / Linkerd)</h3>
+      <p>A dedicated infrastructure layer that handles service-to-service communication: mTLS, retries, timeouts, circuit breaking, and observability — without touching application code.</p>
+      <div class="diag">Service A (app) → sidecar proxy ──mTLS──→ sidecar proxy → Service B (app)
+                            ↕ metrics/traces                 ↕
+                         Control plane (Istio / Linkerd)</div>
+    </div>
+  </div>
+
+  <!-- OBSERVABILITY -->
+  <div class="section" id="s5">
+    <h2 class="sh"><i class="ti ti-eye" aria-hidden="true"></i> Observability</h2>
+    <div class="card">
+      <h3>The three pillars</h3>
+      <div class="grid2">
+        <div><span class="badge b-bl">Logs</span><p style="margin-top:6px">Structured event records. Use JSON with a correlation ID in every log entry. Aggregate with ELK, Loki, or CloudWatch.</p></div>
+        <div><span class="badge b-pu">Metrics</span><p style="margin-top:6px">Numeric time-series. Track error rate, latency (p50/p95/p99), throughput, saturation. Prometheus + Grafana.</p></div>
+        <div><span class="badge b-gr">Traces</span><p style="margin-top:6px">End-to-end request journeys across services. Jaeger, Zipkin, or Tempo. Essential for debugging latency in distributed calls.</p></div>
+        <div><span class="badge b-am">Correlation ID</span><p style="margin-top:6px">A unique ID generated at the edge and propagated through every service call — ties logs, metrics, and traces together.</p></div>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Distributed tracing</h3>
+      <pre><span class="cm">// Spring Boot + Micrometer Tracing (auto-propagates headers)</span>
+<span class="an">@GetMapping</span>(<span class="st">"/order/{id}"</span>)
+<span class="kw">public</span> Order getOrder(<span class="an">@PathVariable</span> String id) {
+    <span class="cm">// traceId + spanId auto-added to logs and outgoing HTTP</span>
+    <span class="kw">var</span> items = itemClient.getItems(id);    <span class="cm">// child span</span>
+    <span class="kw">var</span> payment = paymentClient.get(id);   <span class="cm">// child span</span>
+    <span class="kw">return</span> Order.of(items, payment);
+}</pre>
+      <div class="diag">TraceId: abc123
+  [OrderService     ] GET /order/1       0–120ms
+    [ItemService    ] GET /items/1       5–60ms
+    [PaymentService ] GET /payment/1    65–110ms</div>
+    </div>
+    <div class="card">
+      <h3>Health checks and readiness</h3>
+      <pre><span class="cm"># Spring Boot Actuator (auto-exposed)</span>
+GET /actuator/health       → { "status": "UP" }
+GET /actuator/health/liveness   → Kubernetes liveness probe
+GET /actuator/health/readiness  → Kubernetes readiness probe
+GET /actuator/metrics     → Prometheus-compatible metrics</pre>
+      <div class="tip">Separate liveness (is the process alive?) from readiness (is it ready to serve traffic?). A warming-up service should fail readiness but pass liveness — don't kill it, just stop sending it traffic.</div>
+    </div>
+  </div>
+
+  <!-- SECURITY -->
+  <div class="section" id="s6">
+    <h2 class="sh"><i class="ti ti-lock" aria-hidden="true"></i> Security patterns</h2>
+    <div class="card">
+      <h3>JWT and OAuth 2.0 / OIDC flow</h3>
+      <div class="diag">1. User logs in → Auth Server (Keycloak / Auth0)
+2. Auth Server issues Access Token (JWT) + Refresh Token
+3. Client sends: Authorization: Bearer &lt;JWT&gt;
+4. API Gateway validates JWT signature (public key)
+5. Gateway forwards claims (userId, roles) to downstream services
+6. Services trust the gateway — no re-validation needed</div>
+      <div class="tip">Services should never validate tokens themselves in a microservices architecture — delegate to the gateway or a sidecar to avoid duplicated logic and key rotation headaches.</div>
+    </div>
+    <div class="card">
+      <h3>Zero trust — never trust, always verify</h3>
+      <div class="tag-row">
+        <span class="tag">mTLS between services — mutual certificate auth</span>
+        <span class="tag">Service accounts with minimal permissions</span>
+        <span class="tag">Network policies — whitelist allowed traffic only</span>
+        <span class="tag">Secrets management — Vault, AWS Secrets Manager, never env vars in code</span>
+        <span class="tag">Audit logs for all service-to-service calls</span>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Common attack surfaces</h3>
+      <div class="grid2">
+        <div><span class="badge b-re">Broken auth</span><p style="margin-top:6px">Ensure every endpoint validates the JWT and checks scopes/roles.</p></div>
+        <div><span class="badge b-re">Excessive data exposure</span><p style="margin-top:6px">Return only what the client needs — filter server-side, not client-side.</p></div>
+        <div><span class="badge b-re">Injection</span><p style="margin-top:6px">Validate and sanitise all inputs, even internal service calls.</p></div>
+        <div><span class="badge b-re">Mass assignment</span><p style="margin-top:6px">Use DTOs, never bind request body directly to domain objects.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DEPLOYMENT -->
+  <div class="section" id="s7">
+    <h2 class="sh"><i class="ti ti-rocket" aria-hidden="true"></i> Deployment patterns</h2>
+    <div class="card">
+      <h3>Deployment strategies</h3>
+      <div class="grid2">
+        <div><span class="badge b-bl">Blue / green</span><p style="margin-top:6px">Two identical environments. Switch traffic from blue (live) to green (new) instantly. Easy rollback — flip the switch back.</p></div>
+        <div><span class="badge b-gr">Canary release</span><p style="margin-top:6px">Route a small percentage (e.g. 5%) to the new version. Gradually increase. Catches issues before full rollout.</p></div>
+        <div><span class="badge b-pu">Rolling update</span><p style="margin-top:6px">Replace instances one by one. Zero downtime. Default in Kubernetes. Slower rollback.</p></div>
+        <div><span class="badge b-am">Feature flags</span><p style="margin-top:6px">Deploy code but gate features with runtime flags. Decouples deployment from release.</p></div>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Kubernetes essentials for microservices</h3>
+      <pre><span class="cm"># Each service gets its own Deployment + Service</span>
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: order-service
+spec:
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate: { maxUnavailable: 1, maxSurge: 1 }
+  template:
+    spec:
+      containers:
+      - name: order-service
+        image: myregistry/order-service:v2.1.0
+        readinessProbe:
+          httpGet: { path: /actuator/health/readiness, port: 8080 }
+        livenessProbe:
+          httpGet: { path: /actuator/health/liveness, port: 8080 }
+        resources:
+          requests: { cpu: 250m, memory: 256Mi }
+          limits:   { cpu: 500m, memory: 512Mi }</pre>
+    </div>
+    <div class="card">
+      <h3>12-factor principles for microservices</h3>
+      <div class="tag-row">
+        <span class="tag">Config in environment variables, not code</span>
+        <span class="tag">Stateless processes — state in DB or cache</span>
+        <span class="tag">One codebase, many deploys</span>
+        <span class="tag">Explicitly declare dependencies (pom.xml, package.json)</span>
+        <span class="tag">Export services via a port</span>
+        <span class="tag">Disposable — fast startup, graceful shutdown</span>
+        <span class="tag">Dev/prod parity — same stack everywhere</span>
+        <span class="tag">Logs as event streams (stdout only)</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const labels = ["Decomposition","Communication","Resilience","Data patterns","API gateway and discovery","Observability","Security","Deployment"];
+function show(i) {
+  document.querySelectorAll('.section').forEach((s,j) => s.classList.toggle('visible', j===i));
+  document.querySelectorAll('.tab').forEach((t,j) => t.classList.toggle('active', j===i));
+  document.getElementById('prog').style.width = ((i+1)/8*100)+'%';
+  document.getElementById('prog-lbl').textContent = 'Topic '+(i+1)+' of 8 — '+labels[i];
+}
+</script>
+</body>
+</html>

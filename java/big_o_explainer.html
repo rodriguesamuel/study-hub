@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Big O Complexity Explainer</title>
+  <style>
+    :root {
+      --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      --font-mono: 'Cascadia Code', 'Fira Code', 'JetBrains Mono', Menlo, Consolas, monospace;
+      --border: #e2e8f0;
+      --border-strong: #cbd5e1;
+      --text-primary: #0f172a;
+      --text-secondary: #475569;
+      --text-muted: #94a3b8;
+      --text-accent: #1a56db;
+      --surface-0: #f8fafc;
+      --surface-1: #f1f5f9;
+      --surface-2: #ffffff;
+    }
+    html { background: #f1f5f9; min-height: 100vh; }
+    body { max-width: 720px; margin: 0 auto; padding: 2rem; font-family: var(--font-sans); }
+  </style>
+</head>
+<body>
+<div style="padding: 1rem 0; font-family: var(--font-sans);">
+  <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 1rem;">
+    <label style="font-size: 13px; color: var(--text-secondary); white-space: nowrap;">Input size (n)</label>
+    <input type="range" min="1" max="100" value="20" step="1" id="nSlider" style="flex:1;">
+    <span style="font-size: 14px; font-weight: 500; min-width: 28px; color: var(--text-primary);" id="nVal">20</span>
+  </div>
+
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px,1fr)); gap: 10px; margin-bottom: 1.25rem;">
+    <div style="background: var(--surface-2); border: 0.5px solid var(--border); border-radius: 12px; padding: 1rem;">
+      <div style="font-size: 12px; color: #1b5e20; font-weight: 500; margin-bottom: 4px;">O(1)</div>
+      <div style="font-size: 22px; font-weight: 500; color: var(--text-primary);" id="c1">1</div>
+      <div style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">operations</div>
+    </div>
+    <div style="background: var(--surface-2); border: 0.5px solid var(--border); border-radius: 12px; padding: 1rem;">
+      <div style="font-size: 12px; color: #0d47a1; font-weight: 500; margin-bottom: 4px;">O(log n)</div>
+      <div style="font-size: 22px; font-weight: 500; color: var(--text-primary);" id="clog">—</div>
+      <div style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">operations</div>
+    </div>
+    <div style="background: var(--surface-2); border: 0.5px solid var(--border); border-radius: 12px; padding: 1rem;">
+      <div style="font-size: 12px; color: #e65100; font-weight: 500; margin-bottom: 4px;">O(n)</div>
+      <div style="font-size: 22px; font-weight: 500; color: var(--text-primary);" id="cn">—</div>
+      <div style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">operations</div>
+    </div>
+    <div style="background: var(--surface-2); border: 0.5px solid var(--border); border-radius: 12px; padding: 1rem;">
+      <div style="font-size: 12px; color: #880e4f; font-weight: 500; margin-bottom: 4px;">O(n²)</div>
+      <div style="font-size: 22px; font-weight: 500; color: var(--text-primary);" id="cn2">—</div>
+      <div style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">operations</div>
+    </div>
+  </div>
+
+  <div style="position: relative; width: 100%; height: 260px;">
+    <canvas id="chart" role="img" aria-label="Line chart showing how O(1), O(log n), O(n) and O(n squared) grow as input size increases">Growth curves for four complexities: O(1) stays flat, O(log n) grows slowly, O(n) grows linearly, O(n squared) grows steeply.</canvas>
+  </div>
+
+  <div style="display: flex; flex-wrap: wrap; gap: 16px; margin-top: 12px; font-size: 12px; color: var(--text-secondary);">
+    <span style="display:flex;align-items:center;gap:5px;"><span style="width:18px;height:3px;background:#008300;display:inline-block;border-radius:2px;"></span> O(1) — constant</span>
+    <span style="display:flex;align-items:center;gap:5px;"><span style="width:18px;height:3px;background:#2a78d6;display:inline-block;border-radius:2px;"></span> O(log n) — logarithmic</span>
+    <span style="display:flex;align-items:center;gap:5px;"><span style="width:18px;height:3px;background:#eb6834;display:inline-block;border-radius:2px;"></span> O(n) — linear</span>
+    <span style="display:flex;align-items:center;gap:5px;"><span style="width:18px;height:3px;background:#e34948;display:inline-block;border-radius:2px;"></span> O(n²) — quadratic</span>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+const pts = 40;
+const labels = Array.from({length: pts}, (_,i) => i+1);
+
+const chart = new Chart(document.getElementById('chart'), {
+  type: 'line',
+  data: {
+    labels,
+    datasets: [
+      { label: 'O(1)', data: labels.map(() => 1), borderColor: '#008300', borderWidth: 2, pointRadius: 0, tension: 0 },
+      { label: 'O(log n)', data: labels.map(x => Math.log2(x)), borderColor: '#2a78d6', borderWidth: 2, pointRadius: 0, tension: 0.3 },
+      { label: 'O(n)', data: labels.map(x => x), borderColor: '#eb6834', borderWidth: 2, pointRadius: 0, tension: 0 },
+      { label: 'O(n²)', data: labels.map(x => x*x), borderColor: '#e34948', borderWidth: 2, pointRadius: 0, tension: 0 },
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    animation: false,
+    plugins: { legend: { display: false }, tooltip: { mode: 'index', intersect: false } },
+    scales: {
+      x: { title: { display: true, text: 'input size (n)', color: '#898781', font: { size: 11 } }, ticks: { color: '#898781', maxTicksLimit: 8 }, grid: { color: 'rgba(128,128,128,0.12)' } },
+      y: { title: { display: true, text: 'operations', color: '#898781', font: { size: 11 } }, ticks: { color: '#898781', maxTicksLimit: 6 }, grid: { color: 'rgba(128,128,128,0.12)' }, max: 200 }
+    }
+  }
+});
+
+const marker = { data: [], borderColor: 'rgba(0,0,0,0)', backgroundColor: 'rgba(0,0,0,0.15)', pointRadius: 7, pointStyle: 'circle', showLine: false };
+
+function update(n) {
+  document.getElementById('nVal').textContent = n;
+  document.getElementById('c1').textContent = '1';
+  document.getElementById('clog').textContent = Math.round(Math.log2(n));
+  document.getElementById('cn').textContent = n;
+  document.getElementById('cn2').textContent = n * n;
+
+  chart.data.datasets.forEach((ds, i) => {
+    const vals = [1, Math.log2(n), n, n*n];
+    if (ds.pointRadius === 7) return;
+    ds.pointRadius = labels.map((x,j) => x === n ? 5 : 0);
+  });
+  chart.update('none');
+}
+
+document.getElementById('nSlider').addEventListener('input', e => update(+e.target.value));
+update(20);
+</script>
+</body>
+</html>

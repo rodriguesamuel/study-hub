@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>React Study Recap</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+  <style>
+    :root {
+      --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      --font-mono: 'Cascadia Code', 'Fira Code', 'JetBrains Mono', Menlo, Consolas, monospace;
+      --border: #e2e8f0;
+      --border-strong: #cbd5e1;
+      --text-primary: #0f172a;
+      --text-secondary: #475569;
+      --text-muted: #94a3b8;
+      --text-accent: #0284c7;
+      --surface-0: #f8fafc;
+      --surface-1: #f1f5f9;
+      --surface-2: #ffffff;
+    }
+    html { background: #f1f5f9; min-height: 100vh; }
+    body { max-width: 720px; margin: 0 auto; padding: 2rem; font-family: var(--font-sans); }
+  </style>
+</head>
+<body>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  .wrap { padding: 1rem 0 2rem; max-width: 680px; font-family: var(--font-sans); }
+  .hero { display: flex; align-items: center; gap: 12px; margin-bottom: 1.5rem; border-bottom: 0.5px solid var(--border); padding-bottom: 1rem; }
+  .hero-icon { width: 44px; height: 44px; background: #e0f2fe; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 22px; }
+  .hero h1 { font-size: 20px; font-weight: 500; color: var(--text-primary); }
+  .hero p { font-size: 13px; color: var(--text-secondary); margin-top: 2px; }
+  .tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 1.25rem; }
+  .tab { padding: 6px 14px; border-radius: 20px; border: 0.5px solid var(--border-strong); font-size: 13px; cursor: pointer; background: var(--surface-1); color: var(--text-secondary); transition: background 0.15s, color 0.15s; }
+  .tab:hover { background: var(--surface-2); color: var(--text-primary); }
+  .tab.active { background: #0284c7; color: #fff; border-color: #0284c7; }
+  .section { display: none; }
+  .section.visible { display: block; }
+  .card { background: var(--surface-2); border: 0.5px solid var(--border); border-radius: 12px; padding: 1rem 1.25rem; margin-bottom: 1rem; }
+  .card h3 { font-size: 15px; font-weight: 500; color: var(--text-primary); margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+  .card p { font-size: 14px; color: var(--text-secondary); line-height: 1.65; margin-bottom: 8px; }
+  .card p:last-child { margin-bottom: 0; }
+  pre { background: var(--surface-0); border: 0.5px solid var(--border); border-radius: 8px; padding: 12px 14px; font-family: var(--font-mono); font-size: 12.5px; color: var(--text-primary); overflow-x: auto; margin: 8px 0; line-height: 1.6; white-space: pre; }
+  .kw { color: #0284c7; font-weight: 500; }
+  .fn { color: #7c3aed; }
+  .cm { color: var(--text-muted); font-style: italic; }
+  .st { color: #16a34a; }
+  .num { color: #d97706; }
+  .jsx { color: #0369a1; }
+  .badge { display: inline-block; font-size: 11px; padding: 2px 8px; border-radius: 20px; font-weight: 500; margin: 2px 2px 2px 0; }
+  .b-cyan { background: #e0f2fe; color: #0c4a6e; }
+  .b-purple { background: #f3e5f5; color: #4a148c; }
+  .b-blue { background: #e3f2fd; color: #0d47a1; }
+  .b-green { background: #e8f5e9; color: #1b5e20; }
+  .b-amber { background: #fff8e1; color: #e65100; }
+  .b-red { background: #fce4ec; color: #880e4f; }
+  .grid2 { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 10px; }
+  .tip { background: #e0f2fe; border-left: 3px solid #0284c7; border-radius: 0 8px 8px 0; padding: 10px 12px; margin: 8px 0; font-size: 13px; color: #0c4a6e; }
+  .warn { background: #fff3e0; border-left: 3px solid #fb8c00; border-radius: 0 8px 8px 0; padding: 10px 12px; margin: 8px 0; font-size: 13px; color: #e65100; }
+  .danger { background: #fce4ec; border-left: 3px solid #e91e63; border-radius: 0 8px 8px 0; padding: 10px 12px; margin: 8px 0; font-size: 13px; color: #880e4f; }
+  .progress-bar { height: 3px; background: var(--border); border-radius: 3px; margin-bottom: 1.5rem; }
+  .progress-fill { height: 100%; background: #0284c7; border-radius: 3px; transition: width 0.3s; }
+  .topic-label { font-size: 12px; color: var(--text-muted); margin-bottom: 6px; }
+  .tag-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+  .tag { font-size: 12px; padding: 3px 10px; border-radius: 20px; background: var(--surface-1); border: 0.5px solid var(--border); color: var(--text-secondary); }
+  h2.sh { font-size: 16px; font-weight: 500; color: var(--text-primary); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+  .ic { font-family: var(--font-mono); font-size: 12.5px; background: var(--surface-1); border: 0.5px solid var(--border); border-radius: 4px; padding: 1px 5px; color: var(--text-primary); }
+</style>
+
+<div class="wrap">
+  <h2 style="position:absolute;width:1px;height:1px;overflow:hidden">React study recap — 8 topics covering components, state, effects, hooks, context, performance, routing, and patterns</h2>
+  <div class="hero">
+    <div class="hero-icon">⚛</div>
+    <div>
+      <h1>React study recap</h1>
+      <p>Core concepts every React developer needs to know</p>
+    </div>
+  </div>
+
+  <div class="progress-bar"><div class="progress-fill" id="prog" style="width:12.5%"></div></div>
+  <div class="topic-label" id="prog-lbl">Topic 1 of 8 — Components &amp; Props</div>
+
+  <div class="tabs">
+    <div class="tab active" onclick="show(0)">Components</div>
+    <div class="tab" onclick="show(1)">State</div>
+    <div class="tab" onclick="show(2)">Effects</div>
+    <div class="tab" onclick="show(3)">Hooks</div>
+    <div class="tab" onclick="show(4)">Context</div>
+    <div class="tab" onclick="show(5)">Performance</div>
+    <div class="tab" onclick="show(6)">Routing</div>
+    <div class="tab" onclick="show(7)">Patterns</div>
+  </div>
+
+  <!-- COMPONENTS -->
+  <div class="section visible" id="s0">
+    <h2 class="sh"><i class="ti ti-components" aria-hidden="true"></i> Components &amp; Props</h2>
+    <div class="card">
+      <h3>Functional component anatomy</h3>
+      <pre><span class="cm">// Props typed with an interface</span>
+<span class="kw">interface</span> ButtonProps {
+  label: <span class="kw">string</span>;
+  onClick: () => <span class="kw">void</span>;
+  disabled?: <span class="kw">boolean</span>;   <span class="cm">// optional</span>
+}
+
+<span class="kw">function</span> <span class="fn">Button</span>({ label, onClick, disabled = <span class="kw">false</span> }: ButtonProps) {
+  <span class="kw">return</span> (
+    <span class="jsx">&lt;button</span> onClick={onClick} disabled={disabled}<span class="jsx">&gt;</span>
+      {label}
+    <span class="jsx">&lt;/button&gt;</span>
+  );
+}</pre>
+      <div class="tip">Prefer destructuring props directly in the function signature. Default values replace <span class="ic">defaultProps</span>, which is deprecated.</div>
+    </div>
+    <div class="card">
+      <h3>JSX rules</h3>
+      <pre><span class="cm">// 1. Must return a single root — use Fragment if needed</span>
+<span class="kw">return</span> (
+  <span class="jsx">&lt;&gt;</span>
+    <span class="jsx">&lt;h1&gt;</span>Title<span class="jsx">&lt;/h1&gt;</span>
+    <span class="jsx">&lt;p&gt;</span>Body<span class="jsx">&lt;/p&gt;</span>
+  <span class="jsx">&lt;/&gt;</span>
+);
+
+<span class="cm">// 2. className not class, htmlFor not for</span>
+<span class="jsx">&lt;label</span> htmlFor=<span class="st">"email"</span><span class="jsx">&gt;</span>Email<span class="jsx">&lt;/label&gt;</span>
+
+<span class="cm">// 3. Self-close empty tags</span>
+<span class="jsx">&lt;img</span> src={url} alt=<span class="st">"hero"</span> <span class="jsx">/&gt;</span>
+
+<span class="cm">// 4. Expressions in {}, not statements</span>
+<span class="jsx">&lt;p&gt;</span>{isAdmin ? <span class="st">'Admin'</span> : <span class="st">'User'</span>}<span class="jsx">&lt;/p&gt;</span></pre>
+    </div>
+    <div class="card">
+      <h3>children & composition</h3>
+      <pre><span class="cm">// Accepts any renderable children</span>
+<span class="kw">function</span> <span class="fn">Card</span>({ children, title }: { children: React.ReactNode; title: <span class="kw">string</span> }) {
+  <span class="kw">return</span> (
+    <span class="jsx">&lt;div</span> className=<span class="st">"card"</span><span class="jsx">&gt;</span>
+      <span class="jsx">&lt;h2&gt;</span>{title}<span class="jsx">&lt;/h2&gt;</span>
+      {children}
+    <span class="jsx">&lt;/div&gt;</span>
+  );
+}
+
+<span class="cm">// Usage</span>
+<span class="jsx">&lt;Card</span> title=<span class="st">"Hello"</span><span class="jsx">&gt;</span>
+  <span class="jsx">&lt;p&gt;</span>Content here<span class="jsx">&lt;/p&gt;</span>
+<span class="jsx">&lt;/Card&gt;</span></pre>
+      <div class="tip">Prefer composition (passing <span class="ic">children</span>) over deeply nested props drilling. It avoids coupling and makes components reusable.</div>
+    </div>
+    <div class="card">
+      <h3>Lists &amp; keys</h3>
+      <pre>const items = [<span class="st">'Apple'</span>, <span class="st">'Banana'</span>, <span class="st">'Cherry'</span>];
+
+<span class="jsx">&lt;ul&gt;</span>
+  {items.<span class="fn">map</span>((item, i) => (
+    <span class="jsx">&lt;li</span> key={item}<span class="jsx">&gt;</span>{item}<span class="jsx">&lt;/li&gt;</span>   <span class="cm">// stable id &gt; index</span>
+  ))}
+<span class="jsx">&lt;/ul&gt;</span></pre>
+      <div class="warn">Never use array index as key when items can be reordered or deleted — it confuses React's reconciler and causes bugs.</div>
+    </div>
+  </div>
+
+  <!-- STATE -->
+  <div class="section" id="s1">
+    <h2 class="sh"><i class="ti ti-database" aria-hidden="true"></i> State &amp; useState</h2>
+    <div class="card">
+      <h3>useState basics</h3>
+      <pre><span class="kw">import</span> { useState } <span class="kw">from</span> <span class="st">'react'</span>;
+
+<span class="kw">function</span> <span class="fn">Counter</span>() {
+  <span class="kw">const</span> [count, setCount] = <span class="fn">useState</span>(<span class="num">0</span>);
+
+  <span class="kw">return</span> (
+    <span class="jsx">&lt;button</span> onClick={() => setCount(c => c + <span class="num">1</span>)}<span class="jsx">&gt;</span>
+      Count: {count}
+    <span class="jsx">&lt;/button&gt;</span>
+  );
+}</pre>
+      <div class="tip">Use the functional updater <span class="ic">setCount(c => c + 1)</span> when next state depends on previous — avoids stale closure bugs.</div>
+    </div>
+    <div class="card">
+      <h3>Object &amp; array state — never mutate!</h3>
+      <pre><span class="cm">// ❌ Wrong — mutates existing state</span>
+state.name = <span class="st">'Ana'</span>;
+setState(state);
+
+<span class="cm">// ✅ Correct — spread to create new reference</span>
+setState(prev => ({ ...prev, name: <span class="st">'Ana'</span> }));
+
+<span class="cm">// ✅ Arrays — filter / map / spread</span>
+setItems(prev => [...prev, newItem]);           <span class="cm">// add</span>
+setItems(prev => prev.<span class="fn">filter</span>(i => i.id !== id)); <span class="cm">// remove</span>
+setItems(prev => prev.<span class="fn">map</span>(i =>
+  i.id === id ? { ...i, done: <span class="kw">true</span> } : i      <span class="cm">// update one</span>
+));</pre>
+    </div>
+    <div class="card">
+      <h3>Controlled forms</h3>
+      <pre><span class="kw">const</span> [email, setEmail] = <span class="fn">useState</span>(<span class="st">''</span>);
+
+<span class="jsx">&lt;input</span>
+  type=<span class="st">"email"</span>
+  value={email}
+  onChange={e => <span class="fn">setEmail</span>(e.target.value)}
+<span class="jsx">/&gt;</span></pre>
+      <p>State drives the input value; every keystroke updates state and re-renders. The input is always in sync with the model.</p>
+    </div>
+    <div class="card">
+      <h3>State rules</h3>
+      <div class="tag-row">
+        <span class="tag">State triggers a re-render</span>
+        <span class="tag">State is local to the component instance</span>
+        <span class="tag">Lift state up to share it between siblings</span>
+        <span class="tag">Don't derive state — compute it from existing state</span>
+        <span class="tag">useState initializer runs only on first render</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- EFFECTS -->
+  <div class="section" id="s2">
+    <h2 class="sh"><i class="ti ti-refresh" aria-hidden="true"></i> Effects &amp; useEffect</h2>
+    <div class="card">
+      <h3>useEffect patterns</h3>
+      <pre><span class="kw">import</span> { useEffect } <span class="kw">from</span> <span class="st">'react'</span>;
+
+<span class="cm">// Runs after every render</span>
+<span class="fn">useEffect</span>(() => { document.title = title; });
+
+<span class="cm">// Runs once on mount</span>
+<span class="fn">useEffect</span>(() => { <span class="fn">fetchData</span>(); }, []);
+
+<span class="cm">// Runs when userId changes</span>
+<span class="fn">useEffect</span>(() => { <span class="fn">fetchUser</span>(userId); }, [userId]);
+
+<span class="cm">// Cleanup — runs before next effect or on unmount</span>
+<span class="fn">useEffect</span>(() => {
+  <span class="kw">const</span> id = setInterval(tick, <span class="num">1000</span>);
+  <span class="kw">return</span> () => clearInterval(id);   <span class="cm">// cleanup</span>
+}, []);</pre>
+      <div class="warn">Include every reactive value used inside the effect in the dependency array, or the effect will read stale values.</div>
+    </div>
+    <div class="card">
+      <h3>Data fetching with useEffect</h3>
+      <pre><span class="kw">const</span> [data, setData] = <span class="fn">useState</span>(<span class="kw">null</span>);
+<span class="kw">const</span> [loading, setLoading] = <span class="fn">useState</span>(<span class="kw">true</span>);
+
+<span class="fn">useEffect</span>(() => {
+  <span class="kw">let</span> cancelled = <span class="kw">false</span>;       <span class="cm">// prevent stale update</span>
+
+  fetch(<span class="st">`/api/posts/${id}`</span>)
+    .then(r => r.json())
+    .then(d => { <span class="kw">if</span> (!cancelled) <span class="fn">setData</span>(d); })
+    .finally(() => { <span class="kw">if</span> (!cancelled) <span class="fn">setLoading</span>(<span class="kw">false</span>); });
+
+  <span class="kw">return</span> () => { cancelled = <span class="kw">true</span>; };
+}, [id]);</pre>
+      <div class="tip">In React 18+ with Strict Mode, effects run twice in development. Design effects to be idempotent and always provide cleanup.</div>
+    </div>
+    <div class="card">
+      <h3>When NOT to use useEffect</h3>
+      <div class="grid2">
+        <div><span class="badge b-red">Don't</span><p style="margin-top:6px">Derive state from props — compute it directly in render.</p></div>
+        <div><span class="badge b-red">Don't</span><p style="margin-top:6px">Sync parent state — use event handlers instead.</p></div>
+        <div><span class="badge b-green">Do</span><p style="margin-top:6px">Sync with external systems (timers, subscriptions, DOM).</p></div>
+        <div><span class="badge b-green">Do</span><p style="margin-top:6px">Fetch data that depends on component lifecycle.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HOOKS -->
+  <div class="section" id="s3">
+    <h2 class="sh"><i class="ti ti-hook" aria-hidden="true"></i> Essential hooks</h2>
+    <div class="card">
+      <h3>useRef</h3>
+      <pre><span class="cm">// 1. DOM access</span>
+<span class="kw">const</span> inputRef = <span class="fn">useRef</span>&lt;HTMLInputElement&gt;(<span class="kw">null</span>);
+<span class="jsx">&lt;input</span> ref={inputRef} <span class="jsx">/&gt;</span>
+<span class="kw">const</span> <span class="fn">focus</span> = () => inputRef.current?.<span class="fn">focus</span>();
+
+<span class="cm">// 2. Mutable value that doesn't trigger re-render</span>
+<span class="kw">const</span> renderCount = <span class="fn">useRef</span>(<span class="num">0</span>);
+renderCount.current++;   <span class="cm">// persists across renders, no re-render</span></pre>
+    </div>
+    <div class="card">
+      <h3>useMemo &amp; useCallback</h3>
+      <pre><span class="cm">// useMemo — memoize expensive computation</span>
+<span class="kw">const</span> sorted = <span class="fn">useMemo</span>(
+  () => [...items].<span class="fn">sort</span>((a, b) => a.name.localeCompare(b.name)),
+  [items]   <span class="cm">// recompute only when items changes</span>
+);
+
+<span class="cm">// useCallback — stable function reference</span>
+<span class="kw">const</span> handleDelete = <span class="fn">useCallback</span>(
+  (id: <span class="kw">number</span>) => <span class="fn">setItems</span>(prev => prev.<span class="fn">filter</span>(i => i.id !== id)),
+  []   <span class="cm">// no dependencies — function is created once</span>
+);</pre>
+      <div class="tip">Don't premature-optimise. Only add <span class="ic">useMemo</span>/<span class="ic">useCallback</span> when you can measure a performance problem — they add complexity and cost memory.</div>
+    </div>
+    <div class="card">
+      <h3>Custom hooks</h3>
+      <pre><span class="cm">// Extract reusable stateful logic into a hook</span>
+<span class="kw">function</span> <span class="fn">useLocalStorage</span>&lt;T&gt;(key: <span class="kw">string</span>, initial: T) {
+  <span class="kw">const</span> [value, setValue] = <span class="fn">useState</span>&lt;T&gt;(() => {
+    <span class="kw">const</span> stored = localStorage.<span class="fn">getItem</span>(key);
+    <span class="kw">return</span> stored ? JSON.<span class="fn">parse</span>(stored) : initial;
+  });
+
+  <span class="kw">const</span> set = <span class="fn">useCallback</span>((v: T) => {
+    <span class="fn">setValue</span>(v);
+    localStorage.<span class="fn">setItem</span>(key, JSON.<span class="fn">stringify</span>(v));
+  }, [key]);
+
+  <span class="kw">return</span> [value, set] <span class="kw">as const</span>;
+}
+
+<span class="cm">// Usage</span>
+<span class="kw">const</span> [theme, setTheme] = <span class="fn">useLocalStorage</span>(<span class="st">'theme'</span>, <span class="st">'light'</span>);</pre>
+      <div class="tip">Hook names must start with <span class="ic">use</span>. Hooks can call other hooks — this is how you compose behaviour.</div>
+    </div>
+    <div class="card">
+      <h3>Hook rules</h3>
+      <div class="tag-row">
+        <span class="tag">Only call hooks at the top level — no conditions or loops</span>
+        <span class="tag">Only call hooks inside React functions or custom hooks</span>
+        <span class="tag">Same hook order every render (React relies on call order)</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTEXT -->
+  <div class="section" id="s4">
+    <h2 class="sh"><i class="ti ti-topology-star" aria-hidden="true"></i> Context &amp; useReducer</h2>
+    <div class="card">
+      <h3>Context — share state without prop drilling</h3>
+      <pre><span class="cm">// 1. Create</span>
+<span class="kw">const</span> ThemeContext = <span class="fn">createContext</span>&lt;<span class="st">'light'</span> | <span class="st">'dark'</span>&gt;(<span class="st">'light'</span>);
+
+<span class="cm">// 2. Provide</span>
+<span class="kw">function</span> <span class="fn">App</span>() {
+  <span class="kw">const</span> [theme, setTheme] = <span class="fn">useState</span>&lt;<span class="st">'light'</span> | <span class="st">'dark'</span>&gt;(<span class="st">'light'</span>);
+  <span class="kw">return</span> (
+    <span class="jsx">&lt;ThemeContext.Provider</span> value={theme}<span class="jsx">&gt;</span>
+      <span class="jsx">&lt;Layout /&gt;</span>
+    <span class="jsx">&lt;/ThemeContext.Provider&gt;</span>
+  );
+}
+
+<span class="cm">// 3. Consume (anywhere in the tree)</span>
+<span class="kw">function</span> <span class="fn">Header</span>() {
+  <span class="kw">const</span> theme = <span class="fn">useContext</span>(ThemeContext);
+  <span class="kw">return</span> <span class="jsx">&lt;header</span> className={theme}<span class="jsx">&gt;</span>...<span class="jsx">&lt;/header&gt;</span>;
+}</pre>
+      <div class="warn">Context re-renders every consumer when the value changes. Split contexts by concern (AuthContext, ThemeContext) to limit unnecessary re-renders.</div>
+    </div>
+    <div class="card">
+      <h3>useReducer — for complex state logic</h3>
+      <pre><span class="kw">type</span> Action =
+  | { type: <span class="st">'increment'</span> }
+  | { type: <span class="st">'decrement'</span> }
+  | { type: <span class="st">'reset'</span>; payload: <span class="kw">number</span> };
+
+<span class="kw">function</span> <span class="fn">reducer</span>(state: <span class="kw">number</span>, action: Action): <span class="kw">number</span> {
+  <span class="kw">switch</span> (action.type) {
+    <span class="kw">case</span> <span class="st">'increment'</span>: <span class="kw">return</span> state + <span class="num">1</span>;
+    <span class="kw">case</span> <span class="st">'decrement'</span>: <span class="kw">return</span> state - <span class="num">1</span>;
+    <span class="kw">case</span> <span class="st">'reset'</span>:     <span class="kw">return</span> action.payload;
+    <span class="kw">default</span>: <span class="kw">return</span> state;
+  }
+}
+
+<span class="kw">const</span> [count, dispatch] = <span class="fn">useReducer</span>(reducer, <span class="num">0</span>);
+<span class="fn">dispatch</span>({ type: <span class="st">'increment'</span> });</pre>
+      <div class="tip">Use <span class="ic">useReducer</span> when state has multiple sub-values or when the next state depends on the previous in complex ways. Combine with Context to avoid a full Redux setup for local-ish state.</div>
+    </div>
+    <div class="card">
+      <h3>Context + useReducer pattern (lightweight global state)</h3>
+      <pre><span class="kw">const</span> StateContext = <span class="fn">createContext</span>&lt;State&gt;(<span class="kw">null</span>!);
+<span class="kw">const</span> DispatchContext = <span class="fn">createContext</span>&lt;Dispatch&lt;Action&gt;&gt;(<span class="kw">null</span>!);
+
+<span class="kw">function</span> <span class="fn">StoreProvider</span>({ children }: { children: React.ReactNode }) {
+  <span class="kw">const</span> [state, dispatch] = <span class="fn">useReducer</span>(reducer, initialState);
+  <span class="kw">return</span> (
+    <span class="jsx">&lt;StateContext.Provider</span> value={state}<span class="jsx">&gt;</span>
+      <span class="jsx">&lt;DispatchContext.Provider</span> value={dispatch}<span class="jsx">&gt;</span>
+        {children}
+      <span class="jsx">&lt;/DispatchContext.Provider&gt;</span>
+    <span class="jsx">&lt;/StateContext.Provider&gt;</span>
+  );
+}</pre>
+    </div>
+  </div>
+
+  <!-- PERFORMANCE -->
+  <div class="section" id="s5">
+    <h2 class="sh"><i class="ti ti-bolt" aria-hidden="true"></i> Performance</h2>
+    <div class="card">
+      <h3>React.memo — skip re-renders of pure components</h3>
+      <pre><span class="cm">// Without memo: re-renders whenever parent re-renders</span>
+<span class="cm">// With memo: re-renders only when props change (shallow compare)</span>
+<span class="kw">const</span> Avatar = <span class="fn">React.memo</span>(<span class="kw">function</span> <span class="fn">Avatar</span>({ url, size }: AvatarProps) {
+  <span class="kw">return</span> <span class="jsx">&lt;img</span> src={url} width={size} <span class="jsx">/&gt;</span>;
+});
+
+<span class="cm">// Custom comparison — return true to SKIP re-render</span>
+<span class="kw">const</span> Row = <span class="fn">React.memo</span>(Component, (prev, next) =>
+  prev.id === next.id &amp;&amp; prev.selected === next.selected
+);</pre>
+      <div class="tip"><span class="ic">React.memo</span> + <span class="ic">useCallback</span> for the handler + <span class="ic">useMemo</span> for derived data is the trio for memoisation. Use together or the benefit disappears.</div>
+    </div>
+    <div class="card">
+      <h3>Code splitting &amp; lazy loading</h3>
+      <pre><span class="kw">import</span> { lazy, Suspense } <span class="kw">from</span> <span class="st">'react'</span>;
+
+<span class="cm">// Bundle is split — loaded only when component is rendered</span>
+<span class="kw">const</span> Dashboard = <span class="fn">lazy</span>(() => import(<span class="st">'./pages/Dashboard'</span>));
+
+<span class="kw">function</span> <span class="fn">App</span>() {
+  <span class="kw">return</span> (
+    <span class="jsx">&lt;Suspense</span> fallback={<span class="jsx">&lt;Spinner /&gt;</span>}<span class="jsx">&gt;</span>
+      <span class="jsx">&lt;Dashboard /&gt;</span>
+    <span class="jsx">&lt;/Suspense&gt;</span>
+  );
+}</pre>
+    </div>
+    <div class="card">
+      <h3>What causes a re-render?</h3>
+      <div class="grid2">
+        <div><span class="badge b-amber">Triggers</span>
+          <p style="margin-top:6px">setState called · parent re-renders · context value changes · useReducer dispatch</p>
+        </div>
+        <div><span class="badge b-green">Prevent</span>
+          <p style="margin-top:6px">React.memo · stable props via useCallback/useMemo · split context · key stability</p>
+        </div>
+      </div>
+      <div class="warn" style="margin-top:10px">Profile first with React DevTools Profiler before optimising — premature memoisation adds complexity with no benefit.</div>
+    </div>
+    <div class="card">
+      <h3>useTransition &amp; useDeferredValue (React 18+)</h3>
+      <pre><span class="cm">// Mark a state update as non-urgent</span>
+<span class="kw">const</span> [isPending, startTransition] = <span class="fn">useTransition</span>();
+<span class="fn">startTransition</span>(() => <span class="fn">setSearchQuery</span>(input));
+
+<span class="cm">// Defer an expensive derived value</span>
+<span class="kw">const</span> deferred = <span class="fn">useDeferredValue</span>(searchQuery);</pre>
+      <div class="tip">React renders urgent updates (typing) first and defers slow ones (filtering a huge list), keeping the UI responsive.</div>
+    </div>
+  </div>
+
+  <!-- ROUTING -->
+  <div class="section" id="s6">
+    <h2 class="sh"><i class="ti ti-route" aria-hidden="true"></i> Routing (React Router v6)</h2>
+    <div class="card">
+      <h3>Route configuration</h3>
+      <pre><span class="cm">// main.tsx</span>
+<span class="fn">createBrowserRouter</span>([
+  {
+    path: <span class="st">'/'</span>,
+    element: <span class="jsx">&lt;RootLayout /&gt;</span>,
+    children: [
+      { index: <span class="kw">true</span>, element: <span class="jsx">&lt;Home /&gt;</span> },
+      { path: <span class="st">'users/:id'</span>, element: <span class="jsx">&lt;UserDetail /&gt;</span> },
+      {
+        path: <span class="st">'admin'</span>,
+        element: <span class="jsx">&lt;ProtectedRoute /&gt;</span>,
+        children: [
+          { path: <span class="st">'dashboard'</span>, element: <span class="jsx">&lt;Dashboard /&gt;</span> },
+        ]
+      },
+      { path: <span class="st">'*'</span>, element: <span class="jsx">&lt;NotFound /&gt;</span> },
+    ]
+  }
+])</pre>
+    </div>
+    <div class="card">
+      <h3>Navigation &amp; params</h3>
+      <pre><span class="kw">import</span> { useNavigate, useParams, Link } <span class="kw">from</span> <span class="st">'react-router-dom'</span>;
+
+<span class="kw">function</span> <span class="fn">UserDetail</span>() {
+  <span class="kw">const</span> { id } = <span class="fn">useParams</span>();          <span class="cm">// /users/42 → id = "42"</span>
+  <span class="kw">const</span> navigate = <span class="fn">useNavigate</span>();
+
+  <span class="kw">return</span> (
+    <span class="jsx">&lt;&gt;</span>
+      <span class="jsx">&lt;p&gt;</span>User {id}<span class="jsx">&lt;/p&gt;</span>
+      <span class="jsx">&lt;Link</span> to=<span class="st">"/"</span><span class="jsx">&gt;</span>Home<span class="jsx">&lt;/Link&gt;</span>
+      <span class="jsx">&lt;button</span> onClick={() => <span class="fn">navigate</span>(-<span class="num">1</span>)}<span class="jsx">&gt;</span>Back<span class="jsx">&lt;/button&gt;</span>
+    <span class="jsx">&lt;/&gt;</span>
+  );
+}</pre>
+      <div class="tip">Use <span class="ic">&lt;Link&gt;</span> for declarative navigation (renders an <span class="ic">&lt;a&gt;</span>) and <span class="ic">useNavigate</span> for programmatic navigation after form submit, auth, etc.</div>
+    </div>
+    <div class="card">
+      <h3>Protected routes &amp; loaders</h3>
+      <pre><span class="cm">// Protected route wrapper</span>
+<span class="kw">function</span> <span class="fn">ProtectedRoute</span>() {
+  <span class="kw">const</span> { user } = <span class="fn">useAuth</span>();
+  <span class="kw">return</span> user ? <span class="jsx">&lt;Outlet /&gt;</span> : <span class="jsx">&lt;Navigate</span> to=<span class="st">"/login"</span> replace <span class="jsx">/&gt;</span>;
+}
+
+<span class="cm">// Data loader (React Router 6.4+)</span>
+{ path: <span class="st">'users/:id'</span>, element: <span class="jsx">&lt;UserDetail /&gt;</span>,
+  loader: ({ params }) => fetch(<span class="st">`/api/users/${params.id}`</span>) }
+
+<span class="cm">// In component</span>
+<span class="kw">const</span> user = <span class="fn">useLoaderData</span>() <span class="kw">as</span> User;</pre>
+    </div>
+  </div>
+
+  <!-- PATTERNS -->
+  <div class="section" id="s7">
+    <h2 class="sh"><i class="ti ti-puzzle" aria-hidden="true"></i> Patterns to know</h2>
+    <div class="card">
+      <h3>Error boundaries</h3>
+      <pre><span class="cm">// Class component — only way to catch render errors</span>
+<span class="kw">class</span> <span class="fn">ErrorBoundary</span> <span class="kw">extends</span> Component {
+  state = { hasError: <span class="kw">false</span> };
+  <span class="kw">static</span> <span class="fn">getDerivedStateFromError</span>() { <span class="kw">return</span> { hasError: <span class="kw">true</span> }; }
+  <span class="fn">componentDidCatch</span>(err: Error, info: ErrorInfo) { <span class="fn">logError</span>(err, info); }
+  render() {
+    <span class="kw">return this</span>.state.hasError
+      ? <span class="jsx">&lt;h2&gt;</span>Something went wrong.<span class="jsx">&lt;/h2&gt;</span>
+      : <span class="kw">this</span>.props.children;
+  }
+}
+
+<span class="cm">// Usage — wrap subtrees you want to isolate</span>
+<span class="jsx">&lt;ErrorBoundary&gt;&lt;Dashboard /&gt;&lt;/ErrorBoundary&gt;</span></pre>
+      <div class="tip">Use <span class="ic">react-error-boundary</span> on npm for a hooks-friendly version with reset callbacks.</div>
+    </div>
+    <div class="card">
+      <h3>Compound components</h3>
+      <pre><span class="cm">// Components that share implicit state via Context</span>
+<span class="jsx">&lt;Select</span> value={val} onChange={setVal}<span class="jsx">&gt;</span>
+  <span class="jsx">&lt;Select.Option</span> value=<span class="st">"a"</span><span class="jsx">&gt;</span>Alpha<span class="jsx">&lt;/Select.Option&gt;</span>
+  <span class="jsx">&lt;Select.Option</span> value=<span class="st">"b"</span><span class="jsx">&gt;</span>Beta<span class="jsx">&lt;/Select.Option&gt;</span>
+<span class="jsx">&lt;/Select&gt;</span>
+
+<span class="cm">// Each Select.Option reads the parent's context</span>
+<span class="cm">// to know if it's currently selected</span></pre>
+    </div>
+    <div class="card">
+      <h3>Render props vs. hooks</h3>
+      <p>Render props were the pattern before hooks. Hooks replaced most use cases but render props are still useful for inversion of control (e.g. virtualised lists, animation libraries).</p>
+      <pre><span class="cm">// Old render-prop pattern</span>
+<span class="jsx">&lt;Mouse</span> render={({ x, y }) => <span class="jsx">&lt;p&gt;</span>{x}, {y}<span class="jsx">&lt;/p&gt;} /&gt;</span>
+
+<span class="cm">// Modern hook equivalent</span>
+<span class="kw">const</span> { x, y } = <span class="fn">useMouse</span>();</pre>
+    </div>
+    <div class="card">
+      <h3>Other essentials to study</h3>
+      <div class="tag-row">
+        <span class="tag">forwardRef — pass ref to child DOM element</span>
+        <span class="tag">useImperativeHandle — expose methods via ref</span>
+        <span class="tag">Portal — render outside parent DOM node</span>
+        <span class="tag">StrictMode — double-invoke effects to find bugs</span>
+        <span class="tag">Server Components (Next.js) — no useState/useEffect</span>
+        <span class="tag">Suspense for data — async component loading</span>
+        <span class="tag">Zustand / Jotai — lightweight global state</span>
+        <span class="tag">React Query / SWR — server state management</span>
+      </div>
+      <div class="danger" style="margin-top:10px">Avoid <span class="ic">useEffect</span> to sync state with other state — derive it instead. Most <span class="ic">useEffect</span> bugs come from unnecessary effects.</div>
+    </div>
+  </div>
+</div>
+
+<script>
+const labels = ["Components & Props","State & useState","Effects & useEffect","Essential hooks","Context & useReducer","Performance","Routing (React Router v6)","Patterns to know"];
+function show(i) {
+  document.querySelectorAll('.section').forEach((s,j) => s.classList.toggle('visible', j===i));
+  document.querySelectorAll('.tab').forEach((t,j) => t.classList.toggle('active', j===i));
+  document.getElementById('prog').style.width = ((i+1)/8*100)+'%';
+  document.getElementById('prog-lbl').textContent = 'Topic '+(i+1)+' of 8 — '+labels[i];
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,1312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Senior Full-Stack Interview Prep</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+  <style>
+    :root {
+      --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      --font-mono: 'Cascadia Code', 'Fira Code', 'JetBrains Mono', Menlo, Consolas, monospace;
+      --border: #e2e8f0;
+      --border-strong: #cbd5e1;
+      --text-primary: #0f172a;
+      --text-secondary: #475569;
+      --text-muted: #94a3b8;
+      --surface-0: #f8fafc;
+      --surface-1: #f1f5f9;
+      --surface-2: #ffffff;
+      --accent: #4f46e5;
+    }
+    html { background: #f1f5f9; min-height: 100vh; }
+    body { max-width: 760px; margin: 0 auto; padding: 2rem; font-family: var(--font-sans); }
+  </style>
+</head>
+<body>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  .wrap { padding: 1rem 0 2rem; }
+  .hero { display: flex; align-items: center; gap: 12px; margin-bottom: 1.5rem; border-bottom: 0.5px solid var(--border); padding-bottom: 1rem; }
+  .hero-icon { width: 44px; height: 44px; background: #ede9fe; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+  .hero h1 { font-size: 20px; font-weight: 500; color: var(--text-primary); }
+  .hero p { font-size: 13px; color: var(--text-secondary); margin-top: 2px; }
+  .tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 1.25rem; }
+  .tab { padding: 6px 14px; border-radius: 20px; border: 0.5px solid var(--border-strong); font-size: 13px; cursor: pointer; background: var(--surface-1); color: var(--text-secondary); transition: background 0.15s, color 0.15s; }
+  .tab:hover { background: var(--surface-2); color: var(--text-primary); }
+  .tab.active { background: #4f46e5; color: #fff; border-color: #4f46e5; }
+  .section { display: none; }
+  .section.visible { display: block; }
+  .progress-bar { height: 3px; background: var(--border); border-radius: 3px; margin-bottom: 1.5rem; }
+  .progress-fill { height: 100%; background: #4f46e5; border-radius: 3px; transition: width 0.3s; }
+  .topic-label { font-size: 12px; color: var(--text-muted); margin-bottom: 6px; }
+
+  /* Q&A cards */
+  .qcard { background: var(--surface-2); border: 0.5px solid var(--border); border-radius: 12px; padding: 1.1rem 1.25rem; margin-bottom: 1rem; }
+  .qcard .q { font-size: 14px; font-weight: 600; color: var(--text-primary); margin-bottom: 10px; display: flex; gap: 10px; align-items: flex-start; }
+  .qcard .q .qnum { flex-shrink: 0; width: 22px; height: 22px; border-radius: 50%; background: #4f46e5; color: #fff; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; margin-top: 1px; }
+  .qcard .q.java .qnum { background: #1a56db; }
+  .qcard .q.angular .qnum { background: #c2185b; }
+  .qcard .q.react .qnum { background: #0284c7; }
+  .qcard .q.fullstack .qnum { background: #059669; }
+  .qcard .q.sysdesign .qnum { background: #d97706; }
+  .qcard .q.behavioral .qnum { background: #7c3aed; }
+  .answer { font-size: 13.5px; color: var(--text-secondary); line-height: 1.7; }
+  .answer p { margin-bottom: 8px; }
+  .answer p:last-child { margin-bottom: 0; }
+  .answer strong { color: var(--text-primary); font-weight: 600; }
+  pre { background: var(--surface-0); border: 0.5px solid var(--border); border-radius: 8px; padding: 11px 13px; font-family: var(--font-mono); font-size: 12px; color: var(--text-primary); overflow-x: auto; margin: 8px 0; line-height: 1.6; white-space: pre; }
+  .kw { color: #4f46e5; font-weight: 500; }
+  .kw-java { color: #1a56db; font-weight: 500; }
+  .kw-ng { color: #c2185b; font-weight: 500; }
+  .kw-react { color: #0284c7; font-weight: 500; }
+  .fn { color: #7c3aed; }
+  .cm { color: var(--text-muted); font-style: italic; }
+  .st { color: #16a34a; }
+  .num { color: #d97706; }
+  .tip { background: #ede9fe; border-left: 3px solid #4f46e5; border-radius: 0 8px 8px 0; padding: 9px 12px; margin: 8px 0; font-size: 13px; color: #312e81; }
+  .tip.java { background: #dbeafe; border-color: #1a56db; color: #1e3a8a; }
+  .tip.angular { background: #fce4ec; border-color: #c2185b; color: #880e4f; }
+  .tip.react { background: #e0f2fe; border-color: #0284c7; color: #0c4a6e; }
+  .tip.green { background: #e8f5e9; border-color: #43a047; color: #1b5e20; }
+  .warn { background: #fff3e0; border-left: 3px solid #fb8c00; border-radius: 0 8px 8px 0; padding: 9px 12px; margin: 8px 0; font-size: 13px; color: #e65100; }
+  .followup { background: var(--surface-1); border: 0.5px solid var(--border); border-radius: 8px; padding: 9px 12px; margin: 8px 0; font-size: 12.5px; color: var(--text-muted); }
+  .followup strong { color: var(--text-secondary); }
+  .badge { display: inline-block; font-size: 11px; padding: 2px 8px; border-radius: 20px; font-weight: 500; margin: 2px 2px 2px 0; }
+  .b-in { background: #ede9fe; color: #3730a3; }
+  .b-java { background: #dbeafe; color: #1e3a8a; }
+  .b-ng { background: #fce4ec; color: #880e4f; }
+  .b-react { background: #e0f2fe; color: #0c4a6e; }
+  .b-green { background: #e8f5e9; color: #1b5e20; }
+  .b-amber { background: #fff8e1; color: #e65100; }
+  .b-red { background: #fee2e2; color: #991b1b; }
+  .tag-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+  .tag { font-size: 12px; padding: 3px 10px; border-radius: 20px; background: var(--surface-1); border: 0.5px solid var(--border); color: var(--text-secondary); }
+  h2.sh { font-size: 16px; font-weight: 500; color: var(--text-primary); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+  .ic { font-family: var(--font-mono); font-size: 12px; background: var(--surface-1); border: 0.5px solid var(--border); border-radius: 4px; padding: 1px 5px; color: var(--text-primary); }
+  .difficulty { display: inline-block; font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 20px; margin-left: 8px; vertical-align: middle; letter-spacing: 0.03em; }
+  .hard { background: #fee2e2; color: #991b1b; }
+  .medium { background: #fff8e1; color: #92400e; }
+  .easy { background: #dcfce7; color: #166534; }
+</style>
+
+<div class="wrap">
+  <div class="hero">
+    <div class="hero-icon">🎯</div>
+    <div>
+      <h1>Senior Full-Stack Interview Prep</h1>
+      <p>Java · Angular · React — most asked questions for senior roles</p>
+    </div>
+  </div>
+
+  <div class="progress-bar"><div class="progress-fill" id="prog" style="width:16.6%"></div></div>
+  <div class="topic-label" id="prog-lbl">Section 1 of 6 — Java</div>
+
+  <div class="tabs">
+    <div class="tab active" onclick="show(0)">☕ Java</div>
+    <div class="tab" onclick="show(1)">▲ Angular</div>
+    <div class="tab" onclick="show(2)">⚛ React</div>
+    <div class="tab" onclick="show(3)">🌐 Full-Stack</div>
+    <div class="tab" onclick="show(4)">🏗 System Design</div>
+    <div class="tab" onclick="show(5)">💬 Behavioral</div>
+  </div>
+
+  <!-- ===== JAVA ===== -->
+  <div class="section visible" id="s0">
+    <h2 class="sh"><i class="ti ti-coffee" aria-hidden="true"></i> Java</h2>
+
+    <div class="qcard">
+      <div class="q java">
+        <span class="qnum">1</span>
+        <span>How does HashMap work internally? What happens during a hash collision? <span class="difficulty hard">Hard</span></span>
+      </div>
+      <div class="answer">
+        <p><strong>Hashing:</strong> <span class="ic">HashMap</span> stores entries in an array of <em>buckets</em>. When you call <span class="ic">put(key, value)</span>, it computes <span class="ic">key.hashCode()</span>, applies a secondary hash to spread bits, then uses <span class="ic">index = hash & (capacity - 1)</span> to find the bucket.</p>
+        <p><strong>Collision:</strong> Two keys landing in the same bucket are stored in a linked list (chain). Since Java 8, if a bucket's chain exceeds <strong>8 nodes</strong> and the array has ≥ 64 slots, it converts to a <strong>red-black tree</strong> (O(log n) instead of O(n)).</p>
+        <p><strong>Resize:</strong> When load factor exceeds 0.75 (default), the array doubles and all entries are rehashed.</p>
+        <pre><span class="cm">// equals() + hashCode() contract — critical!</span>
+<span class="cm">// Objects that are .equals() MUST return the same hashCode()</span>
+<span class="cm">// Violating this breaks HashMap/HashSet behavior</span></pre>
+        <div class="tip java">Follow-up: <em>"What's the worst-case complexity of get() in a HashMap?"</em> — O(n) with many collisions on the same bucket (pre-Java-8 or bad hashCode). O(log n) after tree conversion. O(1) average.</div>
+      </div>
+    </div>
+
+    <div class="qcard">
+      <div class="q java">
+        <span class="qnum">2</span>
+        <span>What is the difference between <code>synchronized</code>, <code>volatile</code>, and <code>AtomicInteger</code>? <span class="difficulty hard">Hard</span></span>
+      </div>
+      <div class="answer">
+        <p><strong>volatile</strong> — guarantees <em>visibility</em>: all threads see the latest write. Does NOT guarantee atomicity. Use for a single flag/state read by multiple threads.</p>
+        <p><strong>synchronized</strong> — guarantees <em>visibility + atomicity + mutual exclusion</em>. One thread at a time. Heavier than volatile; involves monitor lock.</p>
+        <p><strong>AtomicInteger</strong> — uses CPU-level <em>Compare-And-Swap (CAS)</em> instructions. Lock-free, faster than synchronized for single variable updates.</p>
+        <pre><span class="kw-java">volatile boolean</span> running = <span class="kw-java">true</span>;    <span class="cm">// safe flag</span>
+AtomicInteger counter = <span class="kw-java">new</span> AtomicInteger(<span class="num">0</span>);
+counter.incrementAndGet();           <span class="cm">// atomic, no lock</span>
+
+<span class="kw-java">synchronized</span> (<span class="kw-java">this</span>) { <span class="cm">// needed for compound actions</span>
+  <span class="kw-java">if</span> (map.containsKey(k)) map.put(k, map.get(k) + <span class="num">1</span>);
+}</pre>
+        <div class="tip java">Rule: use <span class="ic">volatile</span> for single reads/writes, <span class="ic">Atomic*</span> for single-variable arithmetic, <span class="ic">synchronized</span> for compound operations or when guarding multiple variables together.</div>
+      </div>
+    </div>
+
+    <div class="qcard">
+      <div class="q java">
+        <span class="qnum">3</span>
+        <span>Explain Java's memory model: heap, stack, GC, and memory leaks. <span class="difficulty medium">Medium</span></span>
+      </div>
+      <div class="answer">
+        <p><strong>Stack</strong> — per-thread. Stores primitives and object references (not objects themselves). LIFO, fast, limited. Freed automatically when method returns.</p>
+        <p><strong>Heap</strong> — shared across threads. All objects live here. Managed by the Garbage Collector. Divided into <em>Young Gen</em> (Eden + Survivor) and <em>Old Gen</em>.</p>
+        <p><strong>GC basics:</strong> Minor GC collects Young Gen (fast, frequent). Major/Full GC collects Old Gen (slower). G1GC (default in Java 9+) divides heap into equal-size regions for predictable pause times.</p>
+        <p><strong>Memory leaks in Java</strong> happen when objects are still referenced but logically unused: static collections that grow forever, listeners never removed, unclosed streams/connections, ThreadLocal not cleared.</p>
+        <div class="warn">A common senior question: <em>"Java has GC, can you still have memory leaks?"</em> — Yes. GC only collects unreachable objects. A reachable-but-unused reference is a leak.</div>
+      </div>
+    </div>
+
+    <div class="qcard">
+      <div class="q java">
+        <span class="qnum">4</span>
+        <span>What is the difference between <code>CompletableFuture</code> and <code>Future</code>? <span class="difficulty medium">Medium</span></span>
+      </div>
+      <div class="answer">
+        <p><strong>Future</strong> (Java 5) — blocking. <span class="ic">get()</span> blocks the calling thread until the result is ready. Cannot be composed or chained. No built-in exception handling.</p>
+        <p><strong>CompletableFuture</strong> (Java 8) — non-blocking. Supports chaining (<span class="ic">thenApply</span>, <span class="ic">thenCompose</span>), combining (<span class="ic">allOf</span>, <span class="ic">anyOf</span>), and exception handling (<span class="ic">exceptionally</span>, <span class="ic">handle</span>).</p>
+        <pre>CompletableFuture
+  .<span class="fn">supplyAsync</span>(() -> fetchUser(id))          <span class="cm">// async</span>
+  .<span class="fn">thenApply</span>(user -> enrich(user))            <span class="cm">// transform</span>
+  .<span class="fn">thenCompose</span>(user -> fetchOrders(user.id))  <span class="cm">// flatMap</span>
+  .<span class="fn">exceptionally</span>(ex -> fallback());          <span class="cm">// recover</span></pre>
+      </div>
+    </div>
+
+    <div class="qcard">
+      <div class="q java">
+        <span class="qnum">5</span>
+        <span>Explain SOLID principles with practical examples. <span class="difficulty medium">Medium</span></span>
+      </div>
+      <div class="answer">
+        <p><strong>S — Single Responsibility:</strong> A class should have one reason to change. Don't mix business logic with persistence or HTTP concerns.</p>
+        <p><strong>O — Open/Closed:</strong> Open for extension, closed for modification. Add new payment methods via a new class implementing <span class="ic">PaymentStrategy</span>, not by modifying existing code.</p>
+        <p><strong>L — Liskov Substitution:</strong> A subclass must be usable wherever its parent is used without breaking behaviour. <em>Square extends Rectangle</em> violates this because <span class="ic">setWidth()</span> changes height too.</p>
+        <p><strong>I — Interface Segregation:</strong> Don't force clients to implement methods they don't need. Split a fat <span class="ic">Worker</span> interface into <span class="ic">Workable</span> and <span class="ic">Feedable</span>.</p>
+        <p><strong>D — Dependency Inversion:</strong> Depend on abstractions, not concretions. Inject <span class="ic">UserRepository</span> (interface), not <span class="ic">MySQLUserRepository</span> (class).</p>
+        <div class="tip java">Senior interviewers will ask for examples of violations you've seen in production code, not just definitions. Have a story ready.</div>
+      </div>
+    </div>
+
+    <div class="qcard">
+      <div class="q java">
+        <span class="qnum">6</span>
+        <span>When would you use a Stream vs a for-loop? What are lazy evaluation and short-circuiting? <span class="difficulty medium">Medium</span></span>
+      </div>
+      <div class="answer">
+        <p><strong>Streams</strong> are ideal for declarative data transformation pipelines (filter → map → collect). They support parallel processing via <span class="ic">parallelStream()</span>. For-loops are better when you need early exit with complex logic, index access, or mutating external state.</p>
+        <p><strong>Lazy evaluation:</strong> Intermediate operations (<span class="ic">filter</span>, <span class="ic">map</span>) are not executed until a terminal operation (<span class="ic">collect</span>, <span class="ic">findFirst</span>) is called. No unnecessary work is done.</p>
+        <p><strong>Short-circuiting:</strong> <span class="ic">findFirst()</span>, <span class="ic">anyMatch()</span>, <span class="ic">limit()</span> stop processing as soon as the result is determined — even on infinite streams.</p>
+        <pre>Stream.iterate(<span class="num">1</span>, n -> n + <span class="num">1</span>)  <span class="cm">// infinite stream</span>
+  .<span class="fn">filter</span>(n -> n % <span class="num">2</span> == <span class="num">0</span>)
+  .<span class="fn">limit</span>(<span class="num">5</span>)                  <span class="cm">// short-circuit — stops at 5</span>
+  .<span class="fn">collect</span>(Collectors.toList()); <span class="cm">// → [2, 4, 6, 8, 10]</span></pre>
+      </div>
+    </div>
+
+    <div class="qcard">
+      <div class="q java">
+        <span class="qnum">7</span>
+        <span>What design patterns do you use most and why? <span class="difficulty medium">Medium</span></span>
+      </div>
+      <div class="answer">
+        <p>A strong senior answer names patterns with real use cases, not just definitions:</p>
+        <div class="tag-row">
+          <span class="tag"><strong>Builder</strong> — complex object construction (DTO, query builders)</span>
+          <span class="tag"><strong>Factory/Strategy</strong> — swap implementations at runtime (payment, auth)</span>
+          <span class="tag"><strong>Observer</strong> — event-driven code (Spring events, listeners)</span>
+          <span class="tag"><strong>Decorator</strong> — add behaviour without modifying class (logging, caching wrappers)</span>
+          <span class="tag"><strong>Repository</strong> — abstract data access from business logic</span>
+          <span class="tag"><strong>Singleton</strong> — managed by Spring container, not hand-rolled</span>
+        </div>
+        <div class="tip java" style="margin-top:10px">Interviewers often ask: <em>"Give me an example of a pattern you used that solved a real problem."</em> Prepare a concrete story.</div>
+      </div>
+    </div>
+
+    <div class="qcard">
+      <div class="q java">
+        <span class="qnum">8</span>
+        <span>Why is String immutable in Java? What is the String pool? <span class="difficulty medium">Medium</span></span>
+      </div>
+      <div class="answer">
+        <p><strong>Immutability</strong> — once created, a String's value never changes. Benefits: thread-safe without synchronization; safe as HashMap key (hashCode never changes); security (class names passed to ClassLoader can't be tampered with).</p>
+        <p><strong>String pool</strong> — the JVM maintains a pool of string literals. When you write <span class="ic">"hello"</span>, the JVM checks the pool; if it exists, the same reference is reused — saving memory.</p>
+        <pre><span class="kw-java">String</span> a = <span class="st">"hello"</span>;              <span class="cm">// from pool</span>
+<span class="kw-java">String</span> b = <span class="st">"hello"</span>;              <span class="cm">// same pool reference</span>
+<span class="kw-java">String</span> c = <span class="kw-java">new</span> String(<span class="st">"hello"</span>);  <span class="cm">// new heap object, bypasses pool</span>
+System.out.println(a == b);      <span class="cm">// true  — same reference</span>
+System.out.println(a == c);      <span class="cm">// false — different reference</span>
+System.out.println(a.equals(c)); <span class="cm">// true  — same value</span>
+c = c.intern();                  <span class="cm">// add to pool, return pool ref</span></pre>
+        <div class="warn">Never compare Strings with <span class="ic">==</span> — always use <span class="ic">.equals()</span>. <span class="ic">==</span> compares references, not values. This is one of the most common Java interview traps.</div>
+      </div>
+    </div>
+
+    <div class="qcard">
+      <div class="q java">
+        <span class="qnum">9</span>
+        <span>Explain Java generics: wildcards (<code>?</code>, <code>extends</code>, <code>super</code>) and type erasure. <span class="difficulty hard">Hard</span></span>
+      </div>
+      <div class="answer">
+        <p><strong>Generics</strong> — parameterize types at compile time, eliminating unsafe casts and enabling type-safe collections.</p>
+        <p><strong>PECS rule</strong> — Producer Extends, Consumer Super:</p>
+        <pre><span class="cm">// Upper bound — read from it (produces T)</span>
+<span class="kw-java">void</span> printAll(List&lt;? <span class="kw-java">extends</span> Number&gt; list) { <span class="cm">/* can read, not add */</span> }
+
+<span class="cm">// Lower bound — write to it (consumes T)</span>
+<span class="kw-java">void</span> addNumbers(List&lt;? <span class="kw-java">super</span> Integer&gt; list) { list.add(<span class="num">42</span>); }
+
+<span class="cm">// Unbounded — only Object methods available</span>
+<span class="kw-java">void</span> printSize(List&lt;?&gt; list) { System.out.println(list.size()); }
+
+<span class="cm">// Real example from java.util.Collections</span>
+<span class="kw-java">public static</span> &lt;T&gt; <span class="kw-java">void</span> copy(List&lt;? <span class="kw-java">super</span> T&gt; dest, List&lt;? <span class="kw-java">extends</span> T&gt; src) {}</pre>
+        <p><strong>Type erasure</strong> — generic type information is removed at compile time. At runtime, <span class="ic">List&lt;String&gt;</span> and <span class="ic">List&lt;Integer&gt;</span> are both just <span class="ic">List</span>. This is why you cannot use <span class="ic">instanceof List&lt;String&gt;</span> or do <span class="ic">new T()</span>.</p>
+        <div class="tip java">PECS: if the structure gives you data → <span class="ic">extends</span>. If you put data in → <span class="ic">super</span>. If you both read and write → use the concrete type <span class="ic">T</span>.</div>
+      </div>
+    </div>
+
+    <div class="qcard">
+      <div class="q java">
+        <span class="qnum">10</span>
+        <span>What modern Java features (16–21) should a senior developer know? <span class="difficulty medium">Medium</span></span>
+      </div>
+      <div class="answer">
+        <pre><span class="cm">// Records (Java 16) — immutable data carrier, auto constructor/equals/hashCode</span>
+<span class="kw-java">record</span> Point(<span class="kw-java">int</span> x, <span class="kw-java">int</span> y) {}
+
+<span class="cm">// Sealed classes (Java 17) — restrict which classes can extend</span>
+<span class="kw-java">sealed interface</span> Shape <span class="kw-java">permits</span> Circle, Rectangle {}
+
+<span class="cm">// Pattern matching instanceof (Java 16)</span>
+<span class="kw-java">if</span> (obj <span class="kw-java">instanceof</span> String s) { System.out.println(s.length()); }
+
+<span class="cm">// Switch expressions (Java 14)</span>
+<span class="kw-java">int</span> val = <span class="kw-java">switch</span> (day) {
+  <span class="kw-java">case</span> MON, TUE -> <span class="num">1</span>;
+  <span class="kw-java">default</span>       -> <span class="num">0</span>;
+};
+
+<span class="cm">// Text blocks (Java 15)</span>
+<span class="kw-java">String</span> json = <span class="st">"""
+    {"name": "Ana", "age": 30}
+    """</span>;
+
+<span class="cm">// Virtual threads / Project Loom (Java 21) — millions of cheap threads</span>
+Thread.ofVirtual().start(() -> handleRequest());</pre>
+        <div class="tip java">Virtual threads (Java 21) are the most impactful change for server-side Java in years — blocking I/O becomes cheap, removing the need for reactive frameworks like WebFlux in many use cases. Know why this matters architecturally.</div>
+      </div>
+    </div>
+
+    <div class="qcard">
+      <div class="q java">
+        <span class="qnum">11</span>
+        <span>What is <code>Optional</code> and how should (and shouldn't) you use it? <span class="difficulty medium">Medium</span></span>
+      </div>
+      <div class="answer">
+        <p><strong>Optional&lt;T&gt;</strong> is a container that explicitly signals a method may return no value. It was designed for return types — not to replace every nullable variable.</p>
+        <pre><span class="cm">// ✅ Correct — return type that may have no result</span>
+Optional&lt;User&gt; findByEmail(<span class="kw-java">String</span> email) { ... }
+
+findByEmail(<span class="st">"a@b.com"</span>)
+  .map(User::getName)
+  .filter(n -> n.startsWith(<span class="st">"A"</span>))
+  .orElse(<span class="st">"Unknown"</span>);
+
+opt.ifPresent(u -> save(u));
+opt.orElseGet(() -> expensiveFallback()); <span class="cm">// lazy</span>
+opt.orElseThrow(() -> <span class="kw-java">new</span> NotFoundException());
+
+<span class="cm">// ❌ Anti-patterns</span>
+<span class="kw-java">if</span> (opt.isPresent()) { opt.get(); }  <span class="cm">// same as null check — use map/ifPresent</span>
+opt.get();                            <span class="cm">// throws NoSuchElementException if empty</span>
+Optional&lt;T&gt; field;                    <span class="cm">// don't use in fields, params, or collections</span></pre>
+        <div class="warn">Never use <span class="ic">Optional</span> as method parameters, field types, or inside collections. It adds overhead without benefit there. It's purely a return type contract that says "this might be absent — handle it explicitly."</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== ANGULAR ===== -->
+  <div class="section" id="s1">
+    <h2 class="sh"><i class="ti ti-brand-angular" aria-hidden="true"></i> Angular</h2>
+
+    <div class="qcard">
+      <div class="q angular">
+        <span class="qnum">1</span>
+        <span>How does Angular change detection work? When would you use <code>OnPush</code>? <span class="difficulty hard">Hard</span></span>
+      </div>
+      <div class="answer">
+        <p><strong>Default strategy:</strong> Angular runs change detection on every component in the tree after any async event (click, timer, HTTP response). It checks every binding from root to leaf.</p>
+        <p><strong>OnPush strategy:</strong> Angular only checks a component when:
+          <br>① Its <strong>input references change</strong> (not just mutated values)
+          <br>② An <strong>event originates inside</strong> the component
+          <br>③ An Observable it subscribes to via <span class="ic">async</span> pipe emits
+          <br>④ <span class="ic">ChangeDetectorRef.markForCheck()</span> is called manually
+        </p>
+        <pre><span class="kw-ng">@Component</span>({
+  changeDetection: ChangeDetectionStrategy.<span class="kw-ng">OnPush</span>
+})
+<span class="kw-ng">export class</span> ProductCardComponent {
+  <span class="kw-ng">@Input</span>() product!: Product; <span class="cm">// must pass new reference</span>
+}</pre>
+        <div class="tip angular">OnPush dramatically reduces the number of checks in a large component tree. Combine it with immutable data patterns (spread/map) and Observables for maximum performance.</div>
+      </div>
+    </div>
+
+    <div class="qcard">
+      <div class="q angular">
+        <span class="qnum">2</span>
+        <span>Explain Subject, BehaviorSubject, and ReplaySubject. When do you use each? <span class="difficulty hard">Hard</span></span>
+      </div>
+      <div class="answer">
+        <p><strong>Subject</strong> — hot observable. Multicasts to all current subscribers. Late subscribers miss previous values. Use for events (button clicks, user actions).</p>
+        <p><strong>BehaviorSubject</strong> — requires an initial value. Emits the <em>latest value</em> immediately to new subscribers. Use for state (current user, selected item, theme).</p>
+        <p><strong>ReplaySubject(n)</strong> — buffers the last <em>n</em> values. New subscribers receive the buffer immediately. Use for activity logs, recent searches.</p>
+        <pre><span class="cm">// BehaviorSubject — most common for state</span>
+<span class="kw-ng">private</span> user$ = <span class="kw-ng">new</span> BehaviorSubject&lt;User | null&gt;(<span class="kw-ng">null</span>);
+
+setUser(u: User) { <span class="kw-ng">this</span>.user$.next(u); }
+getUser$() { <span class="kw-ng">return this</span>.user$.asObservable(); } <span class="cm">// hide .next()</span></pre>
+        <div class="followup"><strong>Follow-up:</strong> <em>"Why do you expose asObservable() from a service?"</em> — Prevents consumers from calling <span class="ic">.next()</span> directly; only the service controls state mutations.</div>
+      </div>
+    </div>
+
+    <div class="qcard">
+      <div class="q angular">
+        <span class="qnum">3</span>
+        <span>What is the difference between <code>switchMap</code>, <code>mergeMap</code>, <code>concatMap</code>, and <code>exhaustMap</code>? <span class="difficulty hard">Hard</span></span>
+      </div>
+      <div class="answer">
+        <p>All four operators project each source emission into an inner Observable, but differ in how they handle overlapping inner observables:</p>
+        <div class="tag-row" style="margin-bottom:10px">
+          <span class="badge b-red">switchMap</span>
+          <span class="badge b-ng">mergeMap</span>
+          <span class="badge b-java">concatMap</span>
+          <span class="badge b-green">exhaustMap</span>
+        </div>
+        <p><strong>switchMap</strong> — cancels the previous inner observable when a new emission arrives. Best for search/autocomplete (cancel stale requests).</p>
+        <p><strong>mergeMap</strong> — runs all inner observables concurrently. Best for independent parallel tasks (upload multiple files).</p>
+        <p><strong>concatMap</strong> — queues inner observables; waits for each to finish before starting the next. Best for ordered sequential operations.</p>
+        <p><strong>exhaustMap</strong> — ignores new emissions while an inner observable is active. Best for form submit (prevent double-submit).</p>
+        <div class="tip angular">Mental model: switchMap = "latest wins", mergeMap = "all at once", concatMap = "queue them", exhaustMap = "busy, ignore".</div>
+      </div>
+    </div>
+
+    <div class="qcard">
+      <div class="q angular">
+        <span class="qnum">4</span>
+        <span>How does Angular's dependency injection hierarchy work? <span class="difficulty hard">Hard</span></span>
+      </div>
+      <div class="answer">
+        <p>Angular has a <strong>hierarchical injector tree</strong>. When a component requests a service, Angular walks up the injector tree until it finds a provider:</p>
+        <p><strong>Root injector</strong> (<span class="ic">providedIn: 'root'</span>) — one singleton for the whole app. Most services go here.</p>
+        <p><strong>Module injector</strong> — services provided in a lazy-loaded module are scoped to that module. Each module gets its own injector child.</p>
+        <p><strong>Component injector</strong> (<span class="ic">providers: [MyService]</span> on a component) — creates a new instance per component. Children share this instance; sibling components get their own.</p>
+        <pre><span class="kw-ng">@Component</span>({
+  providers: [CartService]  <span class="cm">// new instance per this component subtree</span>
+})
+<span class="kw-ng">export class</span> CheckoutComponent {}</pre>
+        <div class="followup"><strong>Follow-up:</strong> <em>"How would you provide a service only for a specific route?"</em> — Use a lazy-loaded module or <span class="ic">Route.providers</span> (Angular 14+).</div>
+      </div>
+    </div>
+
+    <div class="qcard">
+      <div class="q angular">
+        <span class="qnum">5</span>
+        <span>How do you prevent memory leaks from RxJS subscriptions? <span class="difficulty medium">Medium</span></span>
+      </div>
+      <div class="answer">
+        <p>Subscriptions that are never unsubscribed keep the component alive in memory even after it's destroyed — a classic Angular memory leak.</p>
+        <p><strong>Option 1 — async pipe (recommended):</strong> Angular auto-subscribes and auto-unsubscribes. No manual cleanup needed.</p>
+        <p><strong>Option 2 — takeUntilDestroyed (Angular 16+):</strong></p>
+        <pre>data$ = interval(<span class="num">1000</span>).<span class="fn">pipe</span>(
+  <span class="fn">takeUntilDestroyed</span>()  <span class="cm">// auto-completes when component destroys</span>
+);</pre>
+        <p><strong>Option 3 — takeUntil with destroy subject (classic):</strong></p>
+        <pre><span class="kw-ng">private</span> destroy$ = <span class="kw-ng">new</span> Subject&lt;<span class="kw-ng">void</span>&gt;();
+
+ngOnDestroy() { <span class="kw-ng">this</span>.destroy$.next(); <span class="kw-ng">this</span>.destroy$.complete(); }
+
+this.service.data$.<span class="fn">pipe</span>(<span class="fn">takeUntil</span>(<span class="kw-ng">this</span>.destroy$))
+  .<span class="fn">subscribe</span>(d => <span class="kw-ng">this</span>.data = d);</pre>
+      </div>
+    </div>
+
+    <div class="qcard">
+      <div class="q angular">
+        <span class="qnum">6</span>
+        <span>Reactive Forms vs Template-driven Forms — when do you use each? <span class="difficulty easy">Easy</span></span>
+      </div>
+      <div class="answer">
+        <p><strong>Reactive Forms</strong> — form model defined in the component class using <span class="ic">FormGroup</span> / <span class="ic">FormControl</span>. Strongly typed (Angular 14+). Easier to test, compose validators, and react to value changes programmatically. <em>Preferred for any non-trivial form.</em></p>
+        <p><strong>Template-driven Forms</strong> — model defined in the template via <span class="ic">ngModel</span>. Less boilerplate for very simple forms. Harder to test and compose complex validation. Depends on FormsModule.</p>
+        <div class="tip angular">Senior answer: always use Reactive Forms in enterprise apps. Template-driven forms lack composability and are harder to unit-test without a DOM.</div>
+      </div>
+    </div>
+
+    <div class="qcard">
+      <div class="q angular">
+        <span class="qnum">7</span>
+        <span>What are Angular Signals and how do they compare to RxJS Observables? <span class="difficulty hard">Hard</span></span>
+      </div>
+      <div class="answer">
+        <p><strong>Signals</strong> (Angular 16+) are synchronous reactive primitives that always hold a current value and notify consumers when it changes. Unlike Observables, they require no subscription management.</p>
+        <pre><span class="cm">// Writable signal</span>
+<span class="kw-ng">const</span> count = signal(<span class="num">0</span>);
+count.set(<span class="num">5</span>);
+count.update(v => v + <span class="num">1</span>);
+count();  <span class="cm">// read value — calling it like a function</span>
+
+<span class="cm">// Computed — derived, read-only, memoized</span>
+<span class="kw-ng">const</span> double = computed(() => count() * <span class="num">2</span>);
+
+<span class="cm">// Effect — side effect that runs when signals change</span>
+effect(() => console.log(<span class="st">`Count: ${count()}`</span>));</pre>
+        <div class="tag-row" style="margin-top:10px">
+          <span class="badge b-ng">Signals</span>
+          <span class="tag">Synchronous, always have a value</span>
+          <span class="tag">Auto dependency tracking</span>
+          <span class="tag">No subscribe/unsubscribe</span>
+          <span class="tag">Fine-grained change detection</span>
+          <span class="badge b-ng">RxJS</span>
+          <span class="tag">Async &amp; event streams</span>
+          <span class="tag">Powerful operators (switchMap, debounce)</span>
+          <span class="tag">Best for HTTP &amp; WebSocket</span>
+        </div>
+        <div class="tip angular">Signals enable <strong>fine-grained reactivity</strong> — Angular tracks exactly which signals a template reads and only re-evaluates those expressions. This makes the OnPush performance strategy largely automatic.</div>
+      </div>
+    </div>
+
+    <div class="qcard">
+      <div class="q angular">
+        <span class="qnum">8</span>
+        <span>How does lazy loading work in Angular and what are preloading strategies? <span class="difficulty medium">Medium</span></span>
+      </div>
+      <div class="answer">
+        <p>Lazy loading defers downloading a route's JavaScript bundle until the user navigates there. The initial bundle stays small, improving Time to Interactive (TTI) for large apps.</p>
+        <pre><span class="cm">// Standalone component — lazy loaded per route</span>
+{
+  path: <span class="st">'dashboard'</span>,
+  loadComponent: () => import(<span class="st">'./dashboard.component'</span>)
+    .then(m => m.DashboardComponent)
+},
+<span class="cm">// Feature routes — lazy load entire route set</span>
+{
+  path: <span class="st">'admin'</span>,
+  loadChildren: () => import(<span class="st">'./admin/admin.routes'</span>)
+    .then(m => m.adminRoutes)
+}</pre>
+        <p><strong>Preloading strategies</strong> — after the app boots, Angular can preload lazy bundles in the background so navigation feels instant:</p>
+        <pre><span class="cm">// Preload all lazy modules silently after initial boot</span>
+provideRouter(routes, withPreloading(PreloadAllModules))</pre>
+        <div class="tip angular">Analyze your bundle with <span class="ic">ng build --stats-json</span> + <span class="ic">webpack-bundle-analyzer</span>. Every route not needed on the landing page is a lazy-loading candidate. Aim to keep the initial bundle under 200 KB gzipped.</div>
+      </div>
+    </div>
+
+    <div class="qcard">
+      <div class="q angular">
+        <span class="qnum">9</span>
+        <span>What are all the ways components can communicate in Angular? <span class="difficulty medium">Medium</span></span>
+      </div>
+      <div class="answer">
+        <div class="tag-row" style="margin-bottom:10px">
+          <span class="badge b-ng">Parent → Child</span>
+          <span class="tag"><span class="ic">@Input()</span> — pass data down the tree</span>
+          <span class="badge b-ng">Child → Parent</span>
+          <span class="tag"><span class="ic">@Output()</span> + EventEmitter — emit events up</span>
+          <span class="badge b-ng">Parent reads child</span>
+          <span class="tag"><span class="ic">@ViewChild</span> — direct access to child instance or DOM</span>
+          <span class="badge b-ng">Unrelated components</span>
+          <span class="tag">Shared service with BehaviorSubject or Signal</span>
+          <span class="badge b-ng">App-wide state</span>
+          <span class="tag">NgRx store or Signals store</span>
+        </div>
+        <pre><span class="cm">// Shared service — most common for cross-tree communication</span>
+<span class="kw-ng">@Injectable</span>({ providedIn: <span class="st">'root'</span> })
+<span class="kw-ng">export class</span> SelectionService {
+  selectedId = signal&lt;<span class="kw-ng">number</span> | <span class="kw-ng">null</span>&gt;(<span class="kw-ng">null</span>); <span class="cm">// Signal (Angular 17+)</span>
+  <span class="cm">// or: selectedId$ = new BehaviorSubject&lt;number|null&gt;(null);</span>
+}</pre>
+        <div class="tip angular">For Angular 17+, prefer Signals in a shared service over BehaviorSubject for simple state — no subscription to manage, automatic change detection, and less boilerplate.</div>
+      </div>
+    </div>
+
+    <div class="qcard">
+      <div class="q angular">
+        <span class="qnum">10</span>
+        <span>What are standalone components and why are they the preferred approach now? <span class="difficulty medium">Medium</span></span>
+      </div>
+      <div class="answer">
+        <p><strong>Standalone components</strong> (Angular 14+, default in 17+) eliminate NgModules. Each component declares its own imports directly, making them self-contained and simpler to understand, lazy-load, and test.</p>
+        <pre><span class="kw-ng">@Component</span>({
+  standalone: <span class="kw-ng">true</span>,                                 <span class="cm">// no NgModule needed</span>
+  selector: <span class="st">'app-user-card'</span>,
+  imports: [CommonModule, RouterLink, DatePipe],  <span class="cm">// explicit, tree-shakable</span>
+  template: <span class="st">`
+    &lt;a [routerLink]="['/user', user.id]"&gt;
+      {{ user.name }} · {{ user.createdAt | date }}
+    &lt;/a&gt;`</span>
+})
+<span class="kw-ng">export class</span> UserCardComponent {
+  <span class="kw-ng">@Input</span>() user!: User;
+}</pre>
+        <p><strong>Benefits:</strong> Better tree-shaking (unused imports are visible), per-component lazy loading, less boilerplate, simpler unit tests (no full TestBed module setup).</p>
+        <div class="tip angular">Interviewers at companies using Angular 17+ expect you to know standalone. NgModules still work but are the legacy path. New code should always use standalone.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== REACT ===== -->
+  <div class="section" id="s2">
+    <h2 class="sh"><i class="ti ti-atom" aria-hidden="true"></i> React</h2>
+
+    <div class="qcard">
+      <div class="q react">
+        <span class="qnum">1</span>
+        <span>What is the Virtual DOM and how does reconciliation work? <span class="difficulty medium">Medium</span></span>
+      </div>
+      <div class="answer">
+        <p>The <strong>Virtual DOM</strong> is a lightweight in-memory representation of the real DOM tree. React builds a new VDOM on every render, then <strong>diffs</strong> it against the previous one (reconciliation) to find the minimal set of real DOM changes needed.</p>
+        <p><strong>Reconciliation algorithm (Fiber):</strong> React compares nodes by type and key. Same type → update props. Different type → unmount old, mount new. Keys let React match list items across renders without re-mounting all of them.</p>
+        <p><strong>Batching (React 18):</strong> Multiple state updates in the same event are batched into one render automatically — including inside timeouts and promises.</p>
+        <div class="tip react">Follow-up: <em>"Why is the key prop important in lists?"</em> — Without stable keys, React may incorrectly reuse DOM nodes, causing wrong component state to appear on wrong items.</div>
+      </div>
+    </div>
+
+    <div class="qcard">
+      <div class="q react">
+        <span class="qnum">2</span>
+        <span>What is a stale closure in React hooks and how do you avoid it? <span class="difficulty hard">Hard</span></span>
+      </div>
+      <div class="answer">
+        <p>A stale closure happens when a function inside <span class="ic">useEffect</span> (or <span class="ic">useCallback</span>) captures a variable from a previous render because the dependency array was incomplete or empty.</p>
+        <pre><span class="cm">// ❌ Stale closure — count is always 0 inside setInterval</span>
+<span class="fn">useEffect</span>(() => {
+  <span class="kw-react">const</span> id = setInterval(() => console.<span class="fn">log</span>(count), <span class="num">1000</span>);
+  <span class="kw-react">return</span> () => clearInterval(id);
+}, []);  <span class="cm">// empty dep — count captured at mount (0)</span>
+
+<span class="cm">// ✅ Fix 1 — add count to deps (restarts interval each change)</span>
+}, [count]);
+
+<span class="cm">// ✅ Fix 2 — functional updater (no need to read count)</span>
+setInterval(() => <span class="fn">setCount</span>(c => c + <span class="num">1</span>), <span class="num">1000</span>);</pre>
+        <div class="warn">The ESLint rule <span class="ic">react-hooks/exhaustive-deps</span> catches most stale closure bugs. Never disable it without a clear reason.</div>
+      </div>
+    </div>
+
+    <div class="qcard">
+      <div class="q react">
+        <span class="qnum">3</span>
+        <span>What is the difference between <code>useEffect</code> and <code>useLayoutEffect</code>? <span class="difficulty medium">Medium</span></span>
+      </div>
+      <div class="answer">
+        <p><strong>useEffect</strong> — runs <em>after</em> the browser has painted. Asynchronous. The user sees the new render before the effect runs. Suitable for data fetching, subscriptions, analytics.</p>
+        <p><strong>useLayoutEffect</strong> — runs <em>synchronously after DOM mutations but before the browser paints</em>. Blocks paint until the effect completes. Use only when you need to measure DOM elements or perform DOM mutations that must be invisible to the user (avoiding flicker).</p>
+        <pre><span class="cm">// useLayoutEffect — measure DOM before paint</span>
+<span class="fn">useLayoutEffect</span>(() => {
+  <span class="kw-react">const</span> { width } = ref.current.<span class="fn">getBoundingClientRect</span>();
+  <span class="fn">setWidth</span>(width);  <span class="cm">// update before browser paints — no flicker</span>
+}, []);</pre>
+        <div class="tip react">Default to <span class="ic">useEffect</span>. Switch to <span class="ic">useLayoutEffect</span> only if you see visual flickering caused by a DOM read/write that happens after paint.</div>
+      </div>
+    </div>
+
+    <div class="qcard">
+      <div class="q react">
+        <span class="qnum">4</span>
+        <span>How do <code>React.memo</code>, <code>useCallback</code>, and <code>useMemo</code> work together? <span class="difficulty hard">Hard</span></span>
+      </div>
+      <div class="answer">
+        <p><strong>React.memo</strong> wraps a component and skips re-rendering if its props are shallowly equal. But it breaks if a parent passes a new function or array reference every render — because objects are never <span class="ic">===</span> by reference.</p>
+        <p><strong>useCallback</strong> memoizes a function so its reference is stable across renders. Needed when passing callbacks to memo-wrapped children.</p>
+        <p><strong>useMemo</strong> memoizes a computed value so its reference is stable. Needed when passing objects/arrays as props to memo-wrapped children.</p>
+        <pre><span class="cm">// All three work together or the optimization is useless</span>
+<span class="kw-react">const</span> handleClick = <span class="fn">useCallback</span>(() => <span class="fn">doSomething</span>(id), [id]);
+<span class="kw-react">const</span> config = <span class="fn">useMemo</span>(() => ({ theme, lang }), [theme, lang]);
+
+<span class="kw-react">return</span> <span class="jsx">&lt;MemoizedChild</span> onClick={handleClick} config={config} <span class="jsx">/&gt;</span>;</pre>
+        <div class="warn">If you add React.memo but forget useCallback/useMemo, the child still re-renders on every parent render because the prop references change. All three must be used together.</div>
+      </div>
+    </div>
+
+    <div class="qcard">
+      <div class="q react">
+        <span class="qnum">5</span>
+        <span>When would you reach for an external state manager (Redux, Zustand, Jotai) vs React's built-in state? <span class="difficulty medium">Medium</span></span>
+      </div>
+      <div class="answer">
+        <p><strong>Built-in state is enough when:</strong> state is local to a component or a small subtree; sharing is solved by lifting state or Context; the app is small-to-medium.</p>
+        <p><strong>Reach for external state when:</strong></p>
+        <div class="tag-row">
+          <span class="tag">Many components across the tree need the same state</span>
+          <span class="tag">State updates from server (WebSocket, polling) need to reach many components</span>
+          <span class="tag">You need time-travel debugging or strict state audit trails</span>
+          <span class="tag">Context re-renders are causing performance issues</span>
+          <span class="tag">State logic is complex and needs to be testable in isolation</span>
+        </div>
+        <div class="tip react">Prefer Zustand for simplicity, Jotai for atom-level granularity, Redux Toolkit for large teams that need strict conventions. Avoid Redux for small/medium apps.</div>
+      </div>
+    </div>
+
+    <div class="qcard">
+      <div class="q react">
+        <span class="qnum">6</span>
+        <span>What are React Server Components (RSC) and how do they differ from client components? <span class="difficulty hard">Hard</span></span>
+      </div>
+      <div class="answer">
+        <p><strong>Server Components</strong> run only on the server. They can directly access databases, file system, and secrets. They produce zero JavaScript in the client bundle. They cannot use <span class="ic">useState</span>, <span class="ic">useEffect</span>, or browser APIs.</p>
+        <p><strong>Client Components</strong> (<span class="ic">'use client'</span>) are pre-rendered on the server and then hydrated on the client. They can use all hooks and browser events.</p>
+        <p><strong>The model:</strong> Server Components are the default in Next.js App Router. They fetch data and compose the shell; they pass serializable props down to Client Components for interactivity.</p>
+        <pre><span class="cm">// page.tsx — Server Component, runs on server only</span>
+<span class="kw-react">export default async function</span> <span class="fn">ProductPage</span>({ params }) {
+  <span class="kw-react">const</span> product = <span class="kw-react">await</span> db.products.<span class="fn">find</span>(params.id); <span class="cm">// direct DB!</span>
+  <span class="kw-react">return</span> <span class="jsx">&lt;ProductDetail</span> product={product} <span class="jsx">/&gt;</span>; <span class="cm">// may be client</span>
+}</pre>
+      </div>
+    </div>
+
+    <div class="qcard">
+      <div class="q react">
+        <span class="qnum">7</span>
+        <span>What are <code>forwardRef</code> and <code>useImperativeHandle</code> and when do you need them? <span class="difficulty medium">Medium</span></span>
+      </div>
+      <div class="answer">
+        <p><strong>forwardRef</strong> — by default a <span class="ic">ref</span> on a custom component does nothing. <span class="ic">forwardRef</span> lets a parent reach inside a child to attach a ref to a specific DOM element.</p>
+        <pre><span class="cm">// Child forwards the ref to its internal input</span>
+<span class="kw-react">const</span> FancyInput = React.<span class="fn">forwardRef</span>((props, ref) => (
+  <span class="jsx">&lt;input</span> ref={ref} className=<span class="st">"fancy"</span> {...props} <span class="jsx">/&gt;</span>
+));
+
+<span class="cm">// Parent focuses the internal DOM input directly</span>
+<span class="kw-react">const</span> ref = <span class="fn">useRef</span>(null);
+<span class="jsx">&lt;FancyInput</span> ref={ref} <span class="jsx">/&gt;</span>
+ref.current?.<span class="fn">focus</span>();</pre>
+        <p><strong>useImperativeHandle</strong> — instead of exposing the raw DOM node, expose a custom controlled API:</p>
+        <pre><span class="fn">useImperativeHandle</span>(ref, () => ({
+  focus: () => inputRef.current?.<span class="fn">focus</span>(),
+  clear: () => <span class="fn">setValue</span>(<span class="st">''</span>),
+}));</pre>
+        <div class="tip react">Prefer props and callbacks over refs for communication. Use <span class="ic">forwardRef</span> only when you genuinely need imperative DOM control — focus management, scroll, animations, measuring layout.</div>
+      </div>
+    </div>
+
+    <div class="qcard">
+      <div class="q react">
+        <span class="qnum">8</span>
+        <span>How do you test React components effectively? What makes a good test? <span class="difficulty medium">Medium</span></span>
+      </div>
+      <div class="answer">
+        <p>The standard stack is <strong>Vitest</strong> (or Jest) + <strong>React Testing Library (RTL)</strong>. RTL's core principle: test what the user sees and does — not component internals like state values or method calls.</p>
+        <pre><span class="cm">// ✅ Test behavior, not implementation details</span>
+<span class="fn">it</span>(<span class="st">'shows error when email is invalid'</span>, <span class="kw-react">async</span> () => {
+  <span class="fn">render</span>(<span class="jsx">&lt;LoginForm /&gt;</span>);
+  <span class="kw-react">await</span> userEvent.<span class="fn">type</span>(screen.<span class="fn">getByLabelText</span>(<span class="st">'Email'</span>), <span class="st">'not-valid'</span>);
+  <span class="kw-react">await</span> userEvent.<span class="fn">click</span>(screen.<span class="fn">getByRole</span>(<span class="st">'button'</span>, { name: <span class="st">'Log in'</span> }));
+  <span class="fn">expect</span>(screen.<span class="fn">getByText</span>(<span class="st">'Invalid email'</span>)).<span class="fn">toBeInTheDocument</span>();
+});</pre>
+        <div class="tag-row">
+          <span class="tag"><strong>getByRole</strong> — preferred, tests accessibility too</span>
+          <span class="tag"><strong>getByLabelText</strong> — for form inputs</span>
+          <span class="tag"><strong>queryBy*</strong> — when element may not exist</span>
+          <span class="tag"><strong>findBy*</strong> — for async content (returns promise)</span>
+        </div>
+        <div class="tip react">Use <strong>MSW (Mock Service Worker)</strong> to intercept HTTP at the network level. Your components and hooks run with real fetch/axios — tests are realistic and resilient to implementation changes.</div>
+      </div>
+    </div>
+
+    <div class="qcard">
+      <div class="q react">
+        <span class="qnum">9</span>
+        <span>Controlled vs uncontrolled components — when do you use each? <span class="difficulty easy">Easy</span></span>
+      </div>
+      <div class="answer">
+        <p><strong>Controlled</strong> — React state is the single source of truth. Every keystroke fires <span class="ic">onChange</span> → <span class="ic">setState</span>. Enables instant validation, conditional logic, and derived UI.</p>
+        <p><strong>Uncontrolled</strong> — the DOM manages its own state. React reads the value via <span class="ic">useRef</span> only when needed (e.g., on submit). Fewer re-renders, simpler for basic forms.</p>
+        <pre><span class="cm">// Controlled</span>
+<span class="kw-react">const</span> [email, setEmail] = <span class="fn">useState</span>(<span class="st">''</span>);
+<span class="jsx">&lt;input</span> value={email} onChange={e => <span class="fn">setEmail</span>(e.target.value)} <span class="jsx">/&gt;</span>
+
+<span class="cm">// Uncontrolled — read on submit</span>
+<span class="kw-react">const</span> emailRef = <span class="fn">useRef</span>&lt;HTMLInputElement&gt;(null);
+<span class="jsx">&lt;input</span> ref={emailRef} defaultValue=<span class="st">""</span> <span class="jsx">/&gt;</span>
+<span class="cm">// on submit: emailRef.current?.value</span></pre>
+        <div class="tip react">Use <strong>React Hook Form</strong> for large forms — it uses uncontrolled inputs internally for performance but exposes a controlled-like ergonomic API with validation built in.</div>
+      </div>
+    </div>
+
+    <div class="qcard">
+      <div class="q react">
+        <span class="qnum">10</span>
+        <span>How does concurrent rendering work in React 18 and what problems does it solve? <span class="difficulty hard">Hard</span></span>
+      </div>
+      <div class="answer">
+        <p>Before React 18, rendering was <strong>synchronous</strong> — once started, React had to finish before the browser could respond to input. Large trees or expensive computations blocked the UI thread.</p>
+        <p><strong>Concurrent rendering</strong> makes renders interruptible. React can pause a low-priority render to handle a high-priority update (a keystroke), then resume. The UI stays responsive even during heavy computation.</p>
+        <pre><span class="cm">// useTransition — mark expensive update as non-urgent</span>
+<span class="kw-react">const</span> [isPending, startTransition] = <span class="fn">useTransition</span>();
+<span class="jsx">&lt;input</span> onChange={e => {
+  <span class="fn">setInputValue</span>(e.target.value);           <span class="cm">// urgent — immediate</span>
+  <span class="fn">startTransition</span>(() =>
+    <span class="fn">setFilteredList</span>(<span class="fn">filterItems</span>(e.target.value)) <span class="cm">// deferred</span>
+  );
+}} <span class="jsx">/&gt;</span>
+{isPending &amp;&amp; <span class="jsx">&lt;Spinner /&gt;</span>}
+
+<span class="cm">// useDeferredValue — defer a value derived from props</span>
+<span class="kw-react">const</span> deferredQuery = <span class="fn">useDeferredValue</span>(searchQuery);</pre>
+        <div class="tip react">Add <span class="ic">useTransition</span> and <span class="ic">useDeferredValue</span> only where you've measured a real responsiveness problem. They add complexity — don't reach for them preemptively.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== FULL-STACK ===== -->
+  <div class="section" id="s3">
+    <h2 class="sh"><i class="ti ti-world" aria-hidden="true"></i> Full-Stack &amp; API</h2>
+
+    <div class="qcard">
+      <div class="q fullstack">
+        <span class="qnum">1</span>
+        <span>JWT vs session-based authentication — trade-offs. <span class="difficulty hard">Hard</span></span>
+      </div>
+      <div class="answer">
+        <p><strong>Session-based:</strong> Server stores session in memory/database. Client gets a session ID cookie. Easy to revoke (delete the session). Stateful — problematic at scale across multiple servers (need sticky sessions or shared store like Redis).</p>
+        <p><strong>JWT:</strong> Stateless — server encodes claims in a signed token. No server storage needed. Scales horizontally with no shared state. Hard to revoke before expiry (need a blocklist or short expiry + refresh tokens).</p>
+        <div class="tag-row">
+          <span class="badge b-green">JWT Pros</span>
+          <span class="tag">Stateless, scales easily</span>
+          <span class="tag">Works across microservices / domains</span>
+          <span class="badge b-red">JWT Cons</span>
+          <span class="tag">Can't revoke without extra infrastructure</span>
+          <span class="tag">Token size in every request</span>
+        </div>
+        <div class="warn">Never store JWTs in localStorage (XSS risk). Use HttpOnly cookies. Keep expiry short (15 min) and implement refresh tokens stored in HttpOnly cookies.</div>
+      </div>
+    </div>
+
+    <div class="qcard">
+      <div class="q fullstack">
+        <span class="qnum">2</span>
+        <span>What is the N+1 query problem and how do you solve it? <span class="difficulty medium">Medium</span></span>
+      </div>
+      <div class="answer">
+        <p>The N+1 problem occurs when fetching a list of N records then executing a separate query per record to fetch related data — resulting in 1 + N queries total.</p>
+        <pre><span class="cm">// ❌ N+1: 1 query for orders, then 1 per order for user</span>
+List&lt;Order&gt; orders = orderRepo.<span class="fn">findAll</span>();   <span class="cm">// 1 query</span>
+<span class="kw-java">for</span> (Order o : orders) {
+    User u = userRepo.<span class="fn">findById</span>(o.getUserId()); <span class="cm">// N queries!</span>
+}
+
+<span class="cm">// ✅ Fix: JOIN FETCH (JPA) or batch loading</span>
+<span class="st">@Query("SELECT o FROM Order o JOIN FETCH o.user"</span>)</pre>
+        <p><strong>Solutions:</strong> JOIN FETCH (JPA), <span class="ic">@EntityGraph</span>, batch loading, DataLoader (GraphQL), or projecting only the needed fields from the start.</p>
+        <div class="tip green">Always log SQL in development (<span class="ic">show-sql: true</span> in Spring). N+1 is invisible until you look at the query log or use a profiler like Hibernate Statistics.</div>
+      </div>
+    </div>
+
+    <div class="qcard">
+      <div class="q fullstack">
+        <span class="qnum">3</span>
+        <span>What caching strategies do you know and when do you apply them? <span class="difficulty hard">Hard</span></span>
+      </div>
+      <div class="answer">
+        <p><strong>Cache-aside (Lazy loading):</strong> App checks cache first; on miss, loads from DB and populates cache. Most common. Risk: cache stampede on cold start.</p>
+        <p><strong>Write-through:</strong> Every write goes to cache and DB together. Cache is always fresh. Higher write latency.</p>
+        <p><strong>Write-behind (Write-back):</strong> Write to cache, async flush to DB. Fast writes, risk of data loss on crash.</p>
+        <p><strong>Read-through:</strong> Cache is in front of DB. App only talks to cache; cache handles DB reads.</p>
+        <div class="tag-row">
+          <span class="tag">CDN — static assets, public pages</span>
+          <span class="tag">Redis — sessions, rate limiting, leaderboards</span>
+          <span class="tag">HTTP Cache-Control — browser and proxy caching</span>
+          <span class="tag">Spring @Cacheable — method-level result caching</span>
+          <span class="tag">DB query cache — repeated read-heavy queries</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="qcard">
+      <div class="q fullstack">
+        <span class="qnum">4</span>
+        <span>How do you design a secure REST API? <span class="difficulty hard">Hard</span></span>
+      </div>
+      <div class="answer">
+        <p>Security is layered. A strong senior answer covers all layers:</p>
+        <p><strong>Auth & AuthZ:</strong> JWT/OAuth2 for authentication. Role-based or attribute-based access control on every endpoint. Never trust the client for authorization decisions.</p>
+        <p><strong>Transport:</strong> HTTPS everywhere. HSTS headers. No sensitive data in URLs (goes to logs).</p>
+        <p><strong>Input validation:</strong> Validate and sanitize all input at the boundary. Use parameterized queries — never build SQL from strings. Reject unexpected fields.</p>
+        <p><strong>Rate limiting:</strong> Throttle by IP and by user to prevent brute-force and DDoS.</p>
+        <p><strong>Sensitive data:</strong> Never log passwords, tokens, PII. Encrypt at rest. Hash passwords with bcrypt/Argon2.</p>
+        <p><strong>Headers:</strong> <span class="ic">Content-Security-Policy</span>, <span class="ic">X-Content-Type-Options</span>, <span class="ic">X-Frame-Options</span>, <span class="ic">CORS</span> restricted to known origins.</p>
+        <div class="warn">OWASP Top 10 is a reliable checklist. Interviewers expect you to name broken access control, injection, security misconfiguration, and insecure design.</div>
+      </div>
+    </div>
+
+    <div class="qcard">
+      <div class="q fullstack">
+        <span class="qnum">5</span>
+        <span>SQL vs NoSQL — how do you choose? <span class="difficulty medium">Medium</span></span>
+      </div>
+      <div class="answer">
+        <p><strong>Choose SQL (PostgreSQL, MySQL) when:</strong> data is relational and normalized; you need ACID transactions across multiple tables; schema is well-defined and stable; complex queries with joins are needed.</p>
+        <p><strong>Choose NoSQL when:</strong> schema is flexible or evolves rapidly; horizontal scale and high write throughput are priorities; data naturally fits documents (MongoDB), key-value (Redis), wide-column (Cassandra), or graphs (Neo4j).</p>
+        <div class="tip green">Senior answer: <em>"I've used both in the same system."</em> PostgreSQL for transactional data, Redis for caching/sessions, Elasticsearch for full-text search. The database type should match the access pattern, not company preference.</div>
+      </div>
+    </div>
+
+    <div class="qcard">
+      <div class="q fullstack">
+        <span class="qnum">6</span>
+        <span>What is CORS and how do you configure it correctly? <span class="difficulty medium">Medium</span></span>
+      </div>
+      <div class="answer">
+        <p><strong>CORS (Cross-Origin Resource Sharing)</strong> is a browser security policy that blocks requests from one origin (domain/port/protocol) to another unless the server explicitly permits it via HTTP response headers.</p>
+        <p><strong>Simple requests</strong> (GET, POST with form types) are sent directly and the browser checks the response. <strong>Preflighted requests</strong> (PUT, DELETE, JSON body, custom headers) send an <span class="ic">OPTIONS</span> check first.</p>
+        <pre><span class="cm">// Spring Boot — global CORS configuration</span>
+<span class="kw-java">@Bean</span>
+CorsConfigurationSource corsConfig() {
+  <span class="kw-java">var</span> config = <span class="kw-java">new</span> CorsConfiguration();
+  config.setAllowedOrigins(List.of(<span class="st">"https://myapp.com"</span>)); <span class="cm">// never use * with credentials</span>
+  config.setAllowedMethods(List.of(<span class="st">"GET"</span>, <span class="st">"POST"</span>, <span class="st">"PUT"</span>, <span class="st">"DELETE"</span>));
+  config.setAllowedHeaders(List.of(<span class="st">"Authorization"</span>, <span class="st">"Content-Type"</span>));
+  config.setAllowCredentials(<span class="kw-java">true</span>);
+  <span class="kw-java">var</span> source = <span class="kw-java">new</span> UrlBasedCorsConfigurationSource();
+  source.registerCorsConfiguration(<span class="st">"/**"</span>, config);
+  <span class="kw-java">return</span> source;
+}</pre>
+        <div class="warn">Never combine <span class="ic">Access-Control-Allow-Origin: *</span> with <span class="ic">Access-Control-Allow-Credentials: true</span> — browsers reject this. Credentials require an explicit origin, not a wildcard.</div>
+      </div>
+    </div>
+
+    <div class="qcard">
+      <div class="q fullstack">
+        <span class="qnum">7</span>
+        <span>REST vs GraphQL vs gRPC — when do you choose each? <span class="difficulty hard">Hard</span></span>
+      </div>
+      <div class="answer">
+        <p><strong>REST</strong> — resource-based, uses HTTP methods and standard status codes. Ubiquitous, cacheable, browser-native. Suffers from over-fetching (too much data) and under-fetching (too many requests). Best for: public APIs, simple CRUD, standard web apps.</p>
+        <p><strong>GraphQL</strong> — client specifies exactly what data it needs in one query. Eliminates over/under-fetching. Single endpoint. Best for: complex frontend data needs, multiple clients (mobile vs web) needing different shapes, rapid UI iteration.</p>
+        <p><strong>gRPC</strong> — binary protocol (Protocol Buffers), HTTP/2, strict contract via <span class="ic">.proto</span> files. Extremely fast and efficient. Best for: internal microservice-to-service communication, high-throughput systems, polyglot environments where type safety across languages matters.</p>
+        <div class="tip green">The common pattern: REST for public/external APIs, GraphQL when the frontend has complex varied data needs, gRPC for internal service communication. Many mature systems use all three in different layers.</div>
+      </div>
+    </div>
+
+    <div class="qcard">
+      <div class="q fullstack">
+        <span class="qnum">8</span>
+        <span>How do you handle database migrations safely in a live production system? <span class="difficulty hard">Hard</span></span>
+      </div>
+      <div class="answer">
+        <p>Migrations on a live system risk downtime, data loss, or table locks. The senior approach is the <strong>expand-contract pattern</strong> (also called online migrations).</p>
+        <div class="tag-row" style="margin-bottom:10px">
+          <span class="tag"><strong>1. Expand</strong> — add new column/table as nullable, backward-compatible</span>
+          <span class="tag"><strong>2. Migrate</strong> — backfill data; app writes to both old and new</span>
+          <span class="tag"><strong>3. Contract</strong> — remove old column in a later release after all code updated</span>
+        </div>
+        <p><strong>Tools:</strong> Flyway or Liquibase for versioned migrations — each migration is a numbered SQL file in version control, run automatically on deploy.</p>
+        <pre><span class="cm">-- Always add indexes CONCURRENTLY in PostgreSQL — no table lock</span>
+CREATE INDEX CONCURRENTLY idx_users_email ON users(email);
+
+<span class="cm">-- Never rename a column directly — use expand-contract instead</span>
+<span class="cm">-- Step 1: ALTER TABLE users ADD COLUMN email_address TEXT;</span>
+<span class="cm">-- Step 2: backfill + update app</span>
+<span class="cm">-- Step 3: ALTER TABLE users DROP COLUMN email;</span></pre>
+        <div class="warn">Never rename a column in one step on a live system — old code deployments will break. Expand-contract ensures every deployment stage is backward-compatible.</div>
+      </div>
+    </div>
+
+    <div class="qcard">
+      <div class="q fullstack">
+        <span class="qnum">9</span>
+        <span>What is optimistic vs pessimistic locking and when do you use each? <span class="difficulty hard">Hard</span></span>
+      </div>
+      <div class="answer">
+        <p><strong>Pessimistic locking</strong> — locks the row on read using <span class="ic">SELECT FOR UPDATE</span>. No other transaction can modify it until you commit. Guarantees consistency but reduces throughput and risks deadlocks under high concurrency.</p>
+        <p><strong>Optimistic locking</strong> — no lock on read. On update, check a <span class="ic">version</span> or <span class="ic">updated_at</span> column; if it changed since you read it, abort and retry. High throughput, no deadlocks, but requires retry logic.</p>
+        <pre><span class="cm">-- Pessimistic: lock the row for the duration of the transaction</span>
+SELECT * FROM orders WHERE id = 1 FOR UPDATE;
+UPDATE orders SET status = <span class="st">'SHIPPED'</span> WHERE id = 1;
+
+<span class="cm">-- Optimistic: JPA @Version handles it automatically</span>
+<span class="kw-java">@Entity class</span> Order {
+  <span class="kw-java">@Version private long</span> version; <span class="cm">// auto-checked and incremented on save</span>
+}
+<span class="cm">// Throws OptimisticLockException if another transaction updated first</span></pre>
+        <div class="tip green">Rule of thumb: use optimistic locking when conflicts are rare (most web apps). Use pessimistic locking when conflicts are frequent or the cost of retrying is high — inventory reservation, seat booking, financial transactions.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SYSTEM DESIGN ===== -->
+  <div class="section" id="s4">
+    <h2 class="sh"><i class="ti ti-building-arch" aria-hidden="true"></i> System Design &amp; Architecture</h2>
+
+    <div class="qcard">
+      <div class="q sysdesign">
+        <span class="qnum">1</span>
+        <span>How would you design a URL shortener (like bit.ly)? <span class="difficulty hard">Hard</span></span>
+      </div>
+      <div class="answer">
+        <p><strong>Core flow:</strong> User submits long URL → generate unique short code → store mapping → redirect on access.</p>
+        <p><strong>Short code generation:</strong> Base62 encoding of an auto-incremented ID, or hash (MD5/SHA256) of the URL truncated to 6–8 chars (check collision). Distributed: use a dedicated ID generator service (Snowflake-style) to avoid DB contention.</p>
+        <p><strong>Storage:</strong> Key-value store (Redis or DynamoDB) for ultra-fast reads. Key = short code, value = long URL.</p>
+        <p><strong>Redirect:</strong> HTTP 301 (permanent, cached by browser) vs 302 (temporary, every request hits server — better for analytics).</p>
+        <p><strong>Scale:</strong> Cache hot URLs in memory. CDN at the edge for the most popular codes. Read replicas for DB. Shard by first character of code.</p>
+        <div class="tip">Interviewer evaluates: requirements clarification, estimation (QPS, storage), trade-offs, not "the perfect answer".</div>
+      </div>
+    </div>
+
+    <div class="qcard">
+      <div class="q sysdesign">
+        <span class="qnum">2</span>
+        <span>Explain CAP theorem and where your past projects landed. <span class="difficulty hard">Hard</span></span>
+      </div>
+      <div class="answer">
+        <p>In a distributed system you can guarantee at most <strong>two</strong> of three properties simultaneously:</p>
+        <p><strong>C — Consistency:</strong> Every read returns the most recent write or an error.</p>
+        <p><strong>A — Availability:</strong> Every request receives a response (may not be the latest data).</p>
+        <p><strong>P — Partition tolerance:</strong> System keeps working even if some nodes can't communicate.</p>
+        <p>Since network partitions happen in production, you must choose CP or AP:</p>
+        <div class="grid2" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:8px 0">
+          <div><span class="badge b-java">CP systems</span><p style="margin-top:6px;font-size:13px">HBase, Zookeeper, MongoDB (w/ strong consistency). Refuse requests during partition.</p></div>
+          <div><span class="badge b-amber">AP systems</span><p style="margin-top:6px;font-size:13px">Cassandra, CouchDB. Always available but may return stale data. Eventual consistency.</p></div>
+        </div>
+        <div class="tip">Be ready to say where your past project sat: "We used PostgreSQL — CP. During a partition we preferred correctness over availability. That was fine for our banking use case."</div>
+      </div>
+    </div>
+
+    <div class="qcard">
+      <div class="q sysdesign">
+        <span class="qnum">3</span>
+        <span>How do you implement rate limiting? <span class="difficulty medium">Medium</span></span>
+      </div>
+      <div class="answer">
+        <p><strong>Token bucket:</strong> Each user has a bucket of N tokens refilled at a fixed rate. Each request consumes a token. Allows bursts up to bucket size. Most common algorithm.</p>
+        <p><strong>Sliding window counter:</strong> Track request counts in rolling time windows. More accurate than fixed window (which allows 2× burst at window boundaries).</p>
+        <p><strong>Implementation:</strong> Redis with atomic Lua scripts or <span class="ic">INCR</span> + <span class="ic">EXPIRE</span> for distributed rate limiting. Apply in an API gateway (Kong, AWS API Gateway) or in a Spring filter.</p>
+        <pre><span class="cm">// Redis token bucket — atomic INCR with TTL</span>
+MULTI
+  INCR user:123:requests
+  EXPIRE user:123:requests 60  <span class="cm">// 60-second window</span>
+EXEC
+<span class="cm">// Return 429 if count > limit</span></pre>
+      </div>
+    </div>
+
+    <div class="qcard">
+      <div class="q sysdesign">
+        <span class="qnum">4</span>
+        <span>What is eventual consistency and how do you handle it in the frontend? <span class="difficulty hard">Hard</span></span>
+      </div>
+      <div class="answer">
+        <p><strong>Eventual consistency</strong> means all replicas of data will converge to the same value <em>eventually</em>, but a read immediately after a write might return stale data. Common in distributed databases (Cassandra, DynamoDB), CDNs, and microservice event-driven architectures.</p>
+        <p><strong>Frontend strategies:</strong></p>
+        <div class="tag-row">
+          <span class="tag">Optimistic updates — update UI immediately, rollback on error</span>
+          <span class="tag">Polling — re-fetch after a delay to get the settled value</span>
+          <span class="tag">WebSocket — push updates when server settles</span>
+          <span class="tag">Read-your-writes — route reads back to the same replica as writes</span>
+          <span class="tag">Version tokens — server returns a version; client retries until version matches</span>
+        </div>
+        <div class="tip">React Query and SWR implement optimistic updates and automatic refetch out of the box — mention these as production-ready solutions.</div>
+      </div>
+    </div>
+
+    <div class="qcard">
+      <div class="q sysdesign">
+        <span class="qnum">5</span>
+        <span>Microservices vs Monolith — how do you choose and how do you decompose? <span class="difficulty hard">Hard</span></span>
+      </div>
+      <div class="answer">
+        <p><strong>Start with a monolith</strong> unless you have clear scale or team-autonomy requirements. A monolith is simpler to develop, test, deploy, and reason about. Premature decomposition is one of the most expensive architectural mistakes.</p>
+        <p><strong>Decompose when:</strong> teams are large enough to own services independently; a specific domain needs different scaling, deployment cadence, or tech stack; bounded contexts are clearly identified.</p>
+        <p><strong>Decomposition strategies:</strong> by business capability (Orders, Inventory, Auth), by bounded context (DDD), by subdomain volatility (stable core vs frequently-changing modules).</p>
+        <p><strong>Hidden costs of microservices:</strong> network latency, distributed transactions (Saga pattern), observability complexity, service discovery, data consistency across services.</p>
+        <div class="tip">The senior answer: "We started with a modular monolith, identified the two services with different scaling profiles, and extracted only those." Avoid "we did microservices from day one."</div>
+      </div>
+    </div>
+
+    <div class="qcard">
+      <div class="q sysdesign">
+        <span class="qnum">6</span>
+        <span>How would you design a real-time notification system (like Slack or Gmail alerts)? <span class="difficulty hard">Hard</span></span>
+      </div>
+      <div class="answer">
+        <p><strong>Clarify first:</strong> What channels (in-app, email, push, SMS)? What latency is acceptable? What's the volume? Are notifications per-user or broadcast?</p>
+        <p><strong>Core architecture:</strong></p>
+        <div class="tag-row">
+          <span class="tag"><strong>1.</strong> Event producer — service emits event (order shipped, mention, etc.)</span>
+          <span class="tag"><strong>2.</strong> Message queue (Kafka/SQS) — decouples producers from notification service</span>
+          <span class="tag"><strong>3.</strong> Notification service — reads queue, applies user preferences, routes to channel</span>
+          <span class="tag"><strong>4.</strong> Channel workers — email (SES), push (FCM/APNs), SMS (Twilio)</span>
+          <span class="tag"><strong>5.</strong> Real-time delivery — WebSocket or SSE for in-app live updates</span>
+        </div>
+        <p><strong>Real-time delivery:</strong> Each user's browser holds a <strong>WebSocket</strong> connection to a notification gateway. The gateway subscribes to a Redis pub/sub channel keyed by user ID. When an event arrives, Redis fans it out to the right gateway instance.</p>
+        <div class="tip">Show production awareness: deduplication (idempotency keys), user preferences (mute, digest mode), delivery tracking, retry with exponential backoff, dead-letter queues for failed channels.</div>
+      </div>
+    </div>
+
+    <div class="qcard">
+      <div class="q sysdesign">
+        <span class="qnum">7</span>
+        <span>What is a message queue and when should you use one instead of a direct API call? <span class="difficulty medium">Medium</span></span>
+      </div>
+      <div class="answer">
+        <p>A message queue (Kafka, RabbitMQ, SQS) stores messages durably until they're processed. The producer fires and forgets — it doesn't wait for the consumer to finish.</p>
+        <div class="tag-row" style="margin-bottom:10px">
+          <span class="badge b-green">Use a queue when</span>
+          <span class="tag">Consumer is slow or doesn't need to respond immediately</span>
+          <span class="tag">Absorbing traffic spikes (order processing, email, image resize)</span>
+          <span class="tag">Multiple services react to the same event (fan-out)</span>
+          <span class="tag">Guaranteed delivery &amp; retry on failure is required</span>
+          <span class="tag">Work can be distributed across multiple consumer instances</span>
+        </div>
+        <div class="tag-row">
+          <span class="badge b-amber">Keep as direct API when</span>
+          <span class="tag">Caller needs the result synchronously</span>
+          <span class="tag">Strong consistency is required across the call</span>
+          <span class="tag">The request-response model fits naturally</span>
+        </div>
+        <div class="tip">Queues add operational complexity: ordering guarantees, dead-letter queues, idempotency, at-least-once delivery. Don't add a queue just because it sounds modern — justify the trade-off.</div>
+      </div>
+    </div>
+
+    <div class="qcard">
+      <div class="q sysdesign">
+        <span class="qnum">8</span>
+        <span>Explain database indexing strategies — when to add, what to index, trade-offs. <span class="difficulty hard">Hard</span></span>
+      </div>
+      <div class="answer">
+        <p>An index (typically a B-tree) lets the database find rows without scanning the full table. Every index speeds reads but slows writes and consumes storage.</p>
+        <div class="tag-row" style="margin-bottom:10px">
+          <span class="tag">Columns in WHERE clauses (high-cardinality first)</span>
+          <span class="tag">Foreign key columns (avoid full scans on JOINs)</span>
+          <span class="tag">Columns in ORDER BY / GROUP BY</span>
+          <span class="tag">Composite index — column order must match query pattern (leftmost prefix)</span>
+        </div>
+        <pre><span class="cm">-- Composite index — order matters for query coverage</span>
+CREATE INDEX idx_orders ON orders(user_id, status, created_at);
+<span class="cm">-- ✅ WHERE user_id = ? AND status = ?  (uses index)</span>
+<span class="cm">-- ✅ WHERE user_id = ?                (uses index — leftmost prefix)</span>
+<span class="cm">-- ❌ WHERE status = ?                 (skips first column — no index use)</span>
+
+<span class="cm">-- Covering index — entire query satisfied from the index alone</span>
+CREATE INDEX idx_cover ON orders(user_id) INCLUDE (total, status);
+<span class="cm">-- SELECT total, status WHERE user_id = ? — no table heap access</span></pre>
+        <div class="warn">Too many indexes on a write-heavy table kills write performance. Profile with <span class="ic">EXPLAIN ANALYZE</span> (PostgreSQL) before and after. Only add indexes you can justify with query evidence.</div>
+      </div>
+    </div>
+
+    <div class="qcard">
+      <div class="q sysdesign">
+        <span class="qnum">9</span>
+        <span>How do you design a system for high availability (99.9%+)? <span class="difficulty hard">Hard</span></span>
+      </div>
+      <div class="answer">
+        <p><strong>HA means the system stays operational despite component failures.</strong> 99.9% = ~8.7 hours downtime/year. 99.99% = ~52 minutes/year.</p>
+        <div class="tag-row">
+          <span class="tag">Eliminate single points of failure — every layer is redundant</span>
+          <span class="tag">Load balancers with health checks — remove unhealthy instances</span>
+          <span class="tag">DB primary + read replicas with automatic failover</span>
+          <span class="tag">Multi-AZ deployment — survive a full datacenter failure</span>
+          <span class="tag">Circuit breakers — stop cascade failures (Resilience4j, Hystrix)</span>
+          <span class="tag">Graceful degradation — serve partial content when a dependency fails</span>
+          <span class="tag">Kubernetes self-healing — restarts crashed pods automatically</span>
+          <span class="tag">Chaos engineering — inject failures in staging to test resilience</span>
+        </div>
+        <div class="tip">Senior framing: calculate your error budget (e.g. 99.9% SLA = 43 min/month allowable downtime), identify which failure scenarios consume the most of that budget, and invest engineering effort there first — not evenly across all failure modes.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== BEHAVIORAL ===== -->
+  <div class="section" id="s5">
+    <h2 class="sh"><i class="ti ti-message-circle" aria-hidden="true"></i> Behavioral &amp; Leadership</h2>
+
+    <div class="qcard">
+      <div class="q behavioral">
+        <span class="qnum">1</span>
+        <span>Tell me about a time you had to refactor a large legacy codebase. <span class="difficulty hard">Hard</span></span>
+      </div>
+      <div class="answer">
+        <p>Use the <strong>STAR method</strong>: Situation → Task → Action → Result. Strong answers show judgment, not just technical skill.</p>
+        <div class="tag-row" style="margin-bottom:10px">
+          <span class="badge b-in">STAR</span>
+        </div>
+        <p><strong>What interviewers look for:</strong> Did you assess risk before acting? Did you refactor incrementally (strangler fig / parallel implementation) or all at once? Did you add tests first (characterization tests)? How did you handle team alignment and deployment risk?</p>
+        <p><strong>Key talking points for senior level:</strong> How you built a business case for the refactor; how you kept features shipping while refactoring; what metrics you used to validate the outcome (performance, error rate, deploy frequency, team velocity).</p>
+        <div class="tip">Avoid: "We rewrote everything in 3 months." That's a red flag. Say: "We used the strangler-fig pattern, extracting module by module while the old system stayed live."</div>
+      </div>
+    </div>
+
+    <div class="qcard">
+      <div class="q behavioral">
+        <span class="qnum">2</span>
+        <span>How do you handle technical debt? <span class="difficulty medium">Medium</span></span>
+      </div>
+      <div class="answer">
+        <p>Technical debt is normal — the problem is <em>untracked</em> or <em>accumulating</em> debt. A senior engineer manages it deliberately:</p>
+        <div class="tag-row">
+          <span class="tag">Track it — create tickets, don't just mention it in standups</span>
+          <span class="tag">Classify it — deliberate vs accidental vs outdated</span>
+          <span class="tag">Quantify the cost — "this adds 2 hours to every feature in module X"</span>
+          <span class="tag">Negotiate time — "20% capacity for tech debt every sprint"</span>
+          <span class="tag">Boy-scout rule — always leave the code cleaner than you found it</span>
+          <span class="tag">Pay it down incrementally — avoid big bang rewrites</span>
+        </div>
+        <div class="tip">The business-savvy answer: frame technical debt in terms of delivery speed and risk, not code quality. "This debt is adding 30% to every estimate in this area — here's my proposal to address it in two sprints."</div>
+      </div>
+    </div>
+
+    <div class="qcard">
+      <div class="q behavioral">
+        <span class="qnum">3</span>
+        <span>How do you mentor junior developers on your team? <span class="difficulty medium">Medium</span></span>
+      </div>
+      <div class="answer">
+        <p>Strong senior answers show systematic, empathetic mentoring — not just "I help when they ask."</p>
+        <div class="tag-row">
+          <span class="tag">Pair programming on real tasks, not toy examples</span>
+          <span class="tag">Detailed, constructive code reviews with explanations (not just change requests)</span>
+          <span class="tag">Ask guiding questions instead of giving direct answers — build problem-solving skills</span>
+          <span class="tag">Give ownership of a full small feature end-to-end</span>
+          <span class="tag">Share articles, patterns, post-mortems with context on why they matter</span>
+          <span class="tag">Make it safe to make mistakes and ask "stupid" questions</span>
+        </div>
+        <div class="tip">Tell a specific story: "I noticed a junior engineer was stuck on async bugs. I set up a 30-minute session on the event loop using their own code as the example. Afterward their PR quality improved noticeably." Concrete beats abstract.</div>
+      </div>
+    </div>
+
+    <div class="qcard">
+      <div class="q behavioral">
+        <span class="qnum">4</span>
+        <span>Describe a technical disagreement with a colleague. How did you resolve it? <span class="difficulty hard">Hard</span></span>
+      </div>
+      <div class="answer">
+        <p>Interviewers are testing emotional intelligence, collaboration skills, and ability to influence without authority.</p>
+        <p><strong>What a strong answer looks like:</strong></p>
+        <div class="tag-row">
+          <span class="tag">Sought to understand their perspective first, not win the argument</span>
+          <span class="tag">Used data or a proof of concept to make it objective ("let's build a small spike")</span>
+          <span class="tag">Acknowledged valid points in their approach</span>
+          <span class="tag">Escalated to the team (RFC, design doc) rather than going above their head</span>
+          <span class="tag">Accepted the outcome even when overruled, and committed fully</span>
+        </div>
+        <div class="warn">Never: "I was right and convinced them." Always: "We aligned on shared goals and found a middle ground" or "The team decided on their approach and we made it work well."</div>
+      </div>
+    </div>
+
+    <div class="qcard">
+      <div class="q behavioral">
+        <span class="qnum">5</span>
+        <span>How do you make architectural decisions and get buy-in? <span class="difficulty hard">Hard</span></span>
+      </div>
+      <div class="answer">
+        <p>This is a core senior competency — moving from "I write good code" to "I shape how the team builds software."</p>
+        <p><strong>Decision process:</strong> Define the problem and success criteria first. Research alternatives with trade-offs documented. Write an RFC or Architecture Decision Record (ADR). Present to stakeholders with a recommendation, not a list of options.</p>
+        <p><strong>Getting buy-in:</strong> Involve seniors early (don't present a finished plan). Connect the decision to business goals (cost, speed, risk). Address concerns directly. Time-box the decision to avoid analysis paralysis.</p>
+        <pre><span class="cm">// ADR structure (Architecture Decision Record)</span>
+<span class="cm">Title: Use Redis for session storage</span>
+<span class="cm">Status: Accepted | Proposed | Deprecated</span>
+<span class="cm">Context: why this decision is needed</span>
+<span class="cm">Decision: what we chose</span>
+<span class="cm">Alternatives: what we rejected and why</span>
+<span class="cm">Consequences: trade-offs accepted</span></pre>
+        <div class="tip">Mention ADRs by name — they signal that you think in terms of documented, reversible decisions, not tribal knowledge.</div>
+      </div>
+    </div>
+
+    <div class="qcard">
+      <div class="q behavioral">
+        <span class="qnum">6</span>
+        <span>Why are you looking for a new role? / Where do you want to be in 3 years? <span class="difficulty easy">Easy</span></span>
+      </div>
+      <div class="answer">
+        <p>These questions assess self-awareness and alignment with the company's direction. Authenticity matters more than a "correct" answer.</p>
+        <p><strong>"Why leaving"</strong> — frame positively. Focus on what you're moving toward, not running from. Growth, impact, tech stack, team culture, problem space are all valid. Avoid: "my boss is terrible", even if true.</p>
+        <p><strong>"3-year vision"</strong> — be specific enough to show ambition, vague enough not to box yourself in. Good options: technical leadership, staff/principal engineer track, deep domain expertise, or growing into architecture. Research the company's career ladder first.</p>
+        <div class="tip">Prepare a story: "I've grown a lot in [X area], and I'm looking for a role where I can [Y — lead architecture decisions / own a product area / work on larger-scale problems]." Align Y with what the company actually offers.</div>
+      </div>
+    </div>
+
+    <div class="qcard">
+      <div class="q behavioral">
+        <span class="qnum">7</span>
+        <span>How do you approach code reviews — giving and receiving feedback? <span class="difficulty medium">Medium</span></span>
+      </div>
+      <div class="answer">
+        <p><strong>Giving reviews:</strong> Start with the goal — is this safe to ship? Does it meet requirements? Prioritize correctness and security over style. Use questions instead of demands: <em>"What happens if this value is null?"</em> vs <em>"Handle the null case."</em> Be explicit about what's a blocker vs a suggestion.</p>
+        <div class="tag-row" style="margin-bottom:10px">
+          <span class="tag"><strong>Blocker:</strong> correctness bugs, security issues, breaking API changes</span>
+          <span class="tag"><strong>Suggestion:</strong> readability, performance (non-critical), style</span>
+          <span class="tag"><strong>Praise:</strong> note elegant solutions — builds a healthy review culture</span>
+        </div>
+        <p><strong>Receiving reviews:</strong> Treat feedback as feedback on the code, not on you. Ask for clarification on vague comments. If you disagree, explain your reasoning — don't just quietly comply or dig in. Acknowledge when someone caught something real.</p>
+        <div class="tip">At the senior level, the best code reviews teach the author something — even when you're approving. That's how standards spread across a team without being mandated.</div>
+      </div>
+    </div>
+
+    <div class="qcard">
+      <div class="q behavioral">
+        <span class="qnum">8</span>
+        <span>Describe how you've handled a production incident. <span class="difficulty hard">Hard</span></span>
+      </div>
+      <div class="answer">
+        <p>This question tests ownership, communication under pressure, and systematic thinking. Use STAR — but frame it around incident response, not just debugging.</p>
+        <p><strong>What interviewers listen for:</strong></p>
+        <div class="tag-row">
+          <span class="tag">How you detected it — alert, user report, monitoring dashboard</span>
+          <span class="tag">How you communicated status to stakeholders under pressure</span>
+          <span class="tag">Mitigation first (rollback / feature flag) before root cause analysis</span>
+          <span class="tag">How you diagnosed — logs, metrics, distributed traces</span>
+          <span class="tag">The postmortem — blameless, focused on systemic fixes, not individuals</span>
+          <span class="tag">What changed to prevent recurrence — not just "we fixed it"</span>
+        </div>
+        <div class="tip">The strongest signal: you prioritized restoring service <em>before</em> fully understanding the cause. Senior engineers know "rollback now, diagnose later" is almost always the right call. They don't let perfect be the enemy of fast.</div>
+        <div class="warn">Never say "we fixed it and moved on." Always have a postmortem with a concrete action item. No postmortem = no learning culture. That's a red flag to interviewers at good companies.</div>
+      </div>
+    </div>
+
+    <div class="qcard">
+      <div class="q behavioral">
+        <span class="qnum">9</span>
+        <span>How do you keep your technical skills sharp and stay current? <span class="difficulty easy">Easy</span></span>
+      </div>
+      <div class="answer">
+        <p>Interviewers want genuine curiosity, not a rehearsed answer. Be specific about what you actually do — vague answers ("I read tech blogs") are forgettable.</p>
+        <div class="tag-row">
+          <span class="tag">Follow release notes and RFCs for frameworks you use day-to-day</span>
+          <span class="tag">Read open-source code — especially libraries you depend on</span>
+          <span class="tag">Build small side projects to experiment before using in production</span>
+          <span class="tag">Write about what you learn — blog posts, internal wiki, team talks</span>
+          <span class="tag">Do deliberate code review across teams — exposes you to new patterns</span>
+          <span class="tag">Solve algorithmic problems periodically to keep fundamentals sharp</span>
+          <span class="tag">Attend or watch conference talks — GOTO, Devoxx, React Summit, NgConf</span>
+        </div>
+        <div class="tip">The best answer is specific: <em>"I tracked the Angular 17 Signals RFC from proposal to release, built a small app with it, and gave a 20-minute lightning talk to the team before we adopted it."</em> That shows initiative and knowledge transfer — both senior-level behaviors.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const labels = [
+  "Java","Angular","React",
+  "Full-Stack & API","System Design & Architecture","Behavioral & Leadership"
+];
+function show(i) {
+  document.querySelectorAll('.section').forEach((s,j) => s.classList.toggle('visible', j===i));
+  document.querySelectorAll('.tab').forEach((t,j) => t.classList.toggle('active', j===i));
+  document.getElementById('prog').style.width = ((i+1)/6*100)+'%';
+  document.getElementById('prog-lbl').textContent = 'Section '+(i+1)+' of 6 — '+labels[i];
+}
+</script>
+</body>
+</html>
